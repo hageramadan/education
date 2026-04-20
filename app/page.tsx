@@ -16,7 +16,7 @@ export default function Home() {
    <BestProducts/>
    <AdsHome/>
    <BestProducts/>
-   <Footer/>
+   {/* <Footer/> */}
    </div>
   );
 }
