@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Heart, ShoppingCart, User, Search, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { useFavorites } from "@/contexts/FavoritesContext";
+import { PiUserBold  } from "react-icons/pi";
+// import { useFavorites } from "@/contexts/FavoritesContext";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 const navLinks = [
   { name: "الرئيسية", href: "/" },
   { name: "الفئات", href: "/categories", hasDropdown: true },
   { name: "تواصل معنا", href: "/contact" },
-  { name: "تواصل معنا", href: "/contactUs" },
 ];
 
 // Categories dropdown items
@@ -29,7 +30,7 @@ const categories = [
 export function Navbar() {
   const pathname = usePathname();
   const { cartCount } = useCart();
-  const { favoritesCount } = useFavorites();
+  // const { favoritesCount } = useFavorites();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -51,6 +52,7 @@ export function Navbar() {
       window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
       setShowSearchInput(false);
       setSearchQuery("");
+      setMobileMenuOpen(false);
     }
   };
 
@@ -96,7 +98,10 @@ export function Navbar() {
   }, [showSearchInput, showCategoriesDropdown]);
 
   return (
-    <header className="sticky top-0 z-50 w-full" style={{ backgroundColor: 'white' }}>
+    <header 
+      className="sticky top-0 z-50 w-full shadow-md" 
+      style={{ backgroundColor: 'white', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
+    >
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -114,6 +119,7 @@ export function Navbar() {
               link.hasDropdown ? (
                 <div key={link.href} className="relative" ref={categoriesRef}>
                   <button
+                  aria-label="search"
                     className="flex items-center gap-1 text-[16px] transition-colors hover:text-[#23A6F0]"
                     style={{ 
                       color: pathname.startsWith('/categories') ? '#23A6F0' : '#112B40',
@@ -167,13 +173,14 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1 shrink-0">
+          {/* Actions - Desktop فقط، في الموبايل تختفي */}
+          <div className="hidden md:flex items-center gap-1 shrink-0">
             {/* Search Button & Overlay Input */}
             <div className="relative" ref={searchContainerRef}>
               <Button 
                 variant="ghost" 
                 size="icon" 
+                aria-label="search"
                 onClick={() => setShowSearchInput(!showSearchInput)}
                 className="relative z-10 hover:bg-gray-100"
                 style={{ color: '#195073' }}
@@ -183,16 +190,16 @@ export function Navbar() {
 
               {/* Search Overlay for Desktop */}
               {showSearchInput && (
-                <div className="hidden md:block absolute top-full left-1/2 -translate-x-1/2 mt-2 w-screen max-w-md px-4">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-screen max-w-md px-4">
                   <div className="relative">
                     <form onSubmit={handleSearch}>
-                      <div className="relative bg-white rounded-lg border shadow-xl" style={{ borderColor: '#e2e8f0' }}>
+                      <div className="relative bg-transparent " >
                         <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#94a3b8' }} />
                         <Input
                           ref={searchInputRef}
                           type="search"
                           placeholder="ابحث عن منتج..."
-                          className="w-full h-11 pr-9 border-0 bg-transparent focus-visible:ring-1 focus-visible:ring-offset-0"
+                          className="w-full h-11 pr-9 border-0 bg-white focus-visible:ring-1 focus-visible:ring-offset-0"
                           style={{ 
                             color: '#195073',
                             '--tw-ring-color': '#23A6F0'
@@ -203,6 +210,7 @@ export function Navbar() {
                         {searchQuery && (
                           <button
                             type="button"
+                            aria-label="search"
                             onClick={() => setSearchQuery("")}
                             className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors"
                             style={{ color: '#94a3b8' }}
@@ -214,7 +222,6 @@ export function Navbar() {
                         )}
                       </div>
                     </form>
-                    {/* Arrow */}
                     <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-l border-t" style={{ borderColor: '#e2e8f0' }}></div>
                   </div>
                 </div>
@@ -226,105 +233,144 @@ export function Navbar() {
               size="icon" 
               asChild 
               className="relative hover:bg-gray-100"
+              aria-label="favorites"
               style={{ color: '#195073' }}
             >
               <Link href="/favorites">
-                <Heart className="h-5 w-5" />
-                {favoritesCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full text-[10px] text-white flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+              {/* {favoritesCount > 0 && (
+                  <span className="  text-[12px] text-[#195073] me-1 font-bold " >
                     {favoritesCount}
                   </span>
-                )}
+                )} */}
+                <span className="  text-[12px] text-[#195073] me-1 font-bold " >
+                    1
+                  </span>
+                <Heart className="h-[20px] w-[20px]" />
+                
               </Link>
             </Button>
 
             <Button 
               variant="ghost" 
+              aria-label="cart"
               size="icon" 
               asChild 
               className="relative hover:bg-gray-100"
               style={{ color: '#195073' }}
             >
               <Link href="/cart">
+               <span className="  text-[12px] text-[#195073] me-1 font-bold " >
+                    1
+                  </span>
                 <ShoppingCart className="h-5 w-5" />
-                {cartCount > 0 && (
+                {/* {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full text-[10px] text-white flex items-center justify-center" style={{ backgroundColor: '#23A6F0' }}>
                     {cartCount}
                   </span>
-                )}
+                )} */}
               </Link>
             </Button>
 
             <Button 
               variant="ghost" 
               asChild 
+              aria-label="search"
               className="hidden sm:inline-flex hover:bg-gray-100 gap-2"
               style={{ color: '#195073' }}
             >
               <Link href="/auth/login">
-                <User className="h-5 w-5" />
-               <span className="text-[14px] font-bold "> تسجيل دخول</span>
+                <PiUserBold  className="h-5 w-5" />
+                <span className="text-[14px] font-bold">تسجيل دخول</span>
               </Link>
             </Button>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden hover:bg-gray-100"
-              style={{ color: '#195073' }}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
           </div>
+
+          {/* Mobile Menu Button - يظهر فقط في الموبايل */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="show menu"
+            className="md:hidden hover:bg-gray-100"
+            style={{ color: '#195073' }}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Image src="/images/Menu.png" alt="Menu" className="w-[24px] h-[24x]" width={120} height={120} />}
+          </Button>
         </div>
 
-        {/* Mobile Search Overlay */}
-        {showSearchInput && (
-          <div className="md:hidden fixed inset-x-0 top-16 z-50 bg-white border-b shadow-xl animate-in slide-in-from-top-2 duration-200" style={{ borderColor: '#e2e8f0' }}>
-            <div className="container-custom py-3">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#94a3b8' }} />
-                <Input
-                  ref={searchInputRef}
-                  type="search"
-                  placeholder="ابحث عن منتج..."
-                  className="w-full h-11 pr-9 bg-gray-50 focus-visible:ring-1 focus-visible:ring-offset-0"
-                  style={{ 
-                    color: '#112B40',
-                    borderColor: '#e2e8f0',
-                    '--tw-ring-color': '#23A6F0'
-                  } as React.CSSProperties}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors"
-                    style={{ color: '#94a3b8' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#112B40'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Mobile Menu */}
+        {/* Mobile Menu - يحتوي على البحث والمفضلة والسلة */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-4 space-y-4 animate-in slide-in-from-top-2 duration-200" style={{ borderColor: '#e2e8f0' }}>
-            <div className="flex flex-col gap-2">
+            {/* Search in mobile menu */}
+            <form onSubmit={handleSearch} className="relative px-3">
+              <Search className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#94a3b8' }} />
+              <Input
+                type="search"
+                placeholder="ابحث عن منتج..."
+                className="w-full h-10 pr-9 bg-gray-50"
+                style={{ 
+                  color: '#112B40',
+                  borderColor: '#e2e8f0'
+                }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
+
+            {/* Favorites and Cart in mobile menu */}
+            <div className="flex items-center justify-around px-3 py-2 border-b border-gray-100">
+              <Link 
+                href="/favorites" 
+                className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <div className="relative">
+                   <span className="  text-[12px] text-[#195073] me-1 font-bold " >
+                    1
+                  </span>
+                  <Heart className="h-5 w-5" style={{ color: '#195073' }} />
+                  {/* {favoritesCount > 0 && (
+                    <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full text-[10px] text-white flex items-center justify-center" style={{ backgroundColor: '#ef4444' }}>
+                      {favoritesCount}
+                    </span>
+                  )} */}
+                </div>
+                <span className="text-xs" style={{ color: '#112B40' }}>المفضلة</span>
+              </Link>
+              
+              <Link 
+                href="/cart" 
+                className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <div className="relative">
+                  <ShoppingCart className="h-5 w-5" style={{ color: '#195073' }} />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 h-4 w-4 rounded-full text-[10px] text-white flex items-center justify-center" style={{ backgroundColor: '#23A6F0' }}>
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs" style={{ color: '#112B40' }}>السلة</span>
+              </Link>
+
+              <Link 
+                href="/auth/login" 
+                className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5" style={{ color: '#195073' }} />
+                <span className="text-xs" style={{ color: '#112B40' }}>تسجيل دخول</span>
+              </Link>
+            </div>
+
+            {/* Navigation Links in mobile menu */}
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 link.hasDropdown ? (
                   <div key={link.href} className="space-y-2">
                     <button
+                    aria-label="search"
                       className="px-3 py-3 text-[16px] font-medium rounded-md transition-colors hover:bg-gray-50 flex items-center justify-between w-full"
                       style={{ color: '#112B40' }}
                       onClick={() => setShowCategoriesDropdown(!showCategoriesDropdown)}

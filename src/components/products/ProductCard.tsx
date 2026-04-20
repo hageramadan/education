@@ -50,6 +50,8 @@ export function ProductCard({
 
   return (
     <div
+      role="article"
+      aria-labelledby={`product-name-${id}`}
       className="group relative bg-white transition-all duration-300 hover:shadow-lg"
       style={{
         width: '308px',
@@ -61,18 +63,28 @@ export function ProductCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={href} className="block h-full">
+      <Link href={href} className="block h-full" aria-label={`عرض تفاصيل ${name}`}>
         {/* Image Container */}
         <div 
           className="relative mx-auto transition-colors duration-300"
           style={{
             width: 'calc(100% - 32px)',
             height: 'calc(100% - 80px)',
-            backgroundColor: isHovered ? '#E4F0FA' : '#f3f4f6',
             borderRadius: '8px',
             margin: '0 16px'
           }}
         >
+          {/* Heart Icon - Top Left Corner (New) */}
+          <button
+            onClick={handleFavoriteClick}
+            className="block md:hidden absolute top-2 left-2 z-10 bg-white rounded-full p-1.5 shadow-md hover:bg-red-50 transition-all duration-200 hover:scale-110"
+            style={{ color: isFavorite ? '#ef4444' : '#112B40' }}
+              aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+            aria-pressed={isFavorite}
+          >
+            <Heart className="h-4 w-4" fill={isFavorite ? '#ef4444' : 'none'} />
+          </button>
+
           <Image
             src={image}
             alt={name}
@@ -81,67 +93,63 @@ export function ProductCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
+          {/* الطبقة المظللة التي تظهر عند hover */}
+          {isHovered && (
+            <div 
+              className="absolute inset-0 rounded-[8px] transition-colors duration-300 pointer-events-none"
+              style={{ backgroundColor: '#0000001A' }}
+            />
+          )}
+
           {/* Icons Overlay - appears at bottom center on hover */}
           {isHovered && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 animate-in fade-in zoom-in-95 duration-200">
+            <div className="absolute bottom-3 left-0 right-0 justify-center -translate-y-1/2 flex gap-2 animate-in fade-in zoom-in-95 pointer-events-auto">
               {/* Eye Icon - Quick View */}
               <button
                 onClick={handleQuickView}
-                className="bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                className="bg-white rounded-full p-2 shadow-lg hover:bg-[#23A6F0] transition-all duration-200 hover:scale-110"
                 style={{ color: '#112B40' }}
                 aria-label="معاينة سريعة"
               >
-                <Eye className="h-5 w-5" />
+                <Eye className="h-5 w-5 hover:text-white" />
               </button>
 
               {/* Shopping Cart Icon - Add to Cart */}
               <button
                 onClick={handleAddToCart}
-                className="bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                className="bg-white rounded-full p-2 shadow-lg hover:bg-[#23A6F0] transition-all duration-200 hover:scale-110"
                 style={{ color: '#112B40' }}
                 aria-label="أضف إلى السلة"
               >
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className="h-5 w-5 hover:text-white" />
               </button>
 
-              {/* Heart Icon - Add to Favorites */}
+              {/* Heart Icon - Add to Favorites (kept original) */}
               <button
                 onClick={handleFavoriteClick}
-                className="bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                className="bg-white rounded-full p-2 shadow-lg hover:bg-[#23A6F0] transition-all duration-200 hover:scale-110"
                 style={{ color: isFavorite ? '#ef4444' : '#112B40' }}
                 aria-label="أضف إلى المفضلة"
               >
-                <Heart className="h-5 w-5" fill={isFavorite ? '#ef4444' : 'none'} />
+                <Heart className="h-5 w-5 hover:text-white" fill={isFavorite ? '#ef4444' : 'none'} />
               </button>
             </div>
           )}
         </div>
 
         {/* Product Info */}
-        <div className="px-4 mt-3 text-center">
+        <div className="px-4 mt-3 ">
           {/* Product Name */}
-          <h3 className="text-sm font-medium line-clamp-2 mb-1" style={{ color: '#112B40' }}>
+          <h3 className="text-[16px] font-medium line-clamp-2 mb-1" style={{ color: '#112B40' }}>
             {name}
           </h3>
 
           {/* Price */}
-          <div className="flex items-center  gap-2">
-            {/* {originalPrice && (
-              <span className="text-sm text-gray-400 line-through">
-                {originalPrice.toLocaleString()} EGP
-              </span>
-            )} */}
-            <span className="text-lg font-bold" style={{ color: '#23A6F0' }}>
-              {price.toLocaleString()} EGP
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-bold relative" style={{ color: '#23A6F0' }}>
+              {price.toLocaleString()} <span className="text-xs absolute top-1 me-1">EGP</span>
             </span>
           </div>
-
-          {/* Discount Badge */}
-          {/* {discount && discount > 0 && (
-            <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              -{discount}%
-            </div>
-          )} */}
         </div>
       </Link>
     </div>

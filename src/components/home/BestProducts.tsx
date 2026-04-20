@@ -83,7 +83,7 @@ const latestProducts: Product[] = [
   },
 ];
 
-export function LatestProducts() {
+export function BestProducts() {
   const [displayCount, setDisplayCount] = useState(8);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -103,9 +103,9 @@ export function LatestProducts() {
     <section className="py-12 bg-white">
       <div className="container-custom">
         {/* Header */}
-        <div className=" mb-10 flex justify-between">
+        <div className=" mb-10 flex  justify-between">
           <h2 className="text-2xl md:text-3xl  font-bold mb-3" style={{ color: '#112B40' }}>
-            أحدث المنتجات
+           الأكثر طلبا
           </h2>
         <p className="text-[#23A6F0]">
           عرض المزيد

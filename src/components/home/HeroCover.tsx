@@ -99,7 +99,7 @@ export function Hero() {
                 priority={index === 0}
               />
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-black/50" />
+              <div className="absolute inset-0 bg-black/20" />
             </div>
 
             {/* Content */}
@@ -112,19 +112,19 @@ export function Hero() {
                   {slide.description}
                 </p>
               <Button
-  asChild
-  className="animate-in text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl"
-  style={{ 
-    backgroundColor: '#23A6F0',
-    width: '177px',
-    height: '56px'
-  }}
->
-  <Link href={slide.buttonLink} className="flex items-center justify-center gap-2">
-    {slide.buttonText}
-    <FaArrowLeft  className="h-4 w-4" />
-  </Link>
-</Button>
+              asChild
+              className="animate-in text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl"
+              style={{ 
+                backgroundColor: '#23A6F0',
+                width: '177px',
+                height: '56px'
+              }}
+            >
+              <Link href={slide.buttonLink} className="flex items-center justify-center gap-2">
+                {slide.buttonText}
+                <FaArrowLeft  className="h-4 w-4" />
+              </Link>
+            </Button>
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ export function Hero() {
       {/* Navigation Arrows */}
       <button
         onClick={goToPrevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30  hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:scale-110"
+        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-30  hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:scale-110"
         aria-label="Previous slide"
       >
         <ChevronLeft className="h-8 w-8 text-white" />
@@ -142,7 +142,7 @@ export function Hero() {
 
       <button
         onClick={goToNextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30  hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:scale-110"
+        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-30  hover:bg-white/30 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:scale-110"
         aria-label="Next slide"
       >
         <ChevronRight className="h-8 w-8 text-white" />

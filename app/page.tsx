@@ -1,8 +1,11 @@
+import { AdsHome } from "@/components/home/AdsHome";
+import { BestProducts } from "@/components/home/BestProducts";
 import { CategoriesDragDrop } from "@/components/home/CategoriesDragDrop";
 import { Hero } from "@/components/home/HeroCover";
 import { LatestProducts, } from "@/components/home/LatestProducts";
-import { ProductCard, ProductsGrid } from "@/components/products/ProductCard";
-import Image from "next/image";
+import { Footer } from "@/components/layout/Footer";
+// import { ProductsGrid } from "@/components/products/ProductCard";
+
 
 export default function Home() {
   return (
@@ -10,7 +13,10 @@ export default function Home() {
     <Hero />
     <CategoriesDragDrop />
    <LatestProducts />
-{/* <ProductsGrid /> */}
+   <BestProducts/>
+   <AdsHome/>
+   <BestProducts/>
+   <Footer/>
    </div>
   );
 }
