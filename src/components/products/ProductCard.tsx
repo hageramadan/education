@@ -39,14 +39,12 @@ export function ProductCard({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Add to cart logic here
     console.log("Added to cart:", id);
   };
 
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Quick view logic here
     console.log("Quick view:", id);
   };
 
@@ -54,7 +52,7 @@ export function ProductCard({
     <div
       role="article"
       aria-labelledby={`product-name-${id}`}
-      className="group w-[150px] sm:w-[160px] md:w-[308px] h-[310px] md:h-[494px] relative bg-white transition-all duration-500 ease-out hover:shadow-2xl"
+      className="group w-full max-w-[340px] sm:max-w-[350px] md:max-w-[308px] lg:max-w-[308px] mx-auto h-auto relative bg-white transition-all duration-500 ease-out hover:shadow-2xl"
       style={{
         borderRadius: '16px',
         border: '1px solid #E4E7E9',
@@ -69,26 +67,25 @@ export function ProductCard({
       <Link href={href} className="block h-full" aria-label={`عرض تفاصيل ${name}`}>
         {/* Image Container */}
         <div 
-          className="relative mx-auto transition-all duration-500"
+          className="relative mx-auto transition-all duration-500 w-full"
           style={{
-            width: '100%',
             borderRadius: '5px',
           }}
         >
           {/* Heart Icon - Top Left Corner */}
           <button
             onClick={handleFavoriteClick}
-            className="absolute top-1 bg-white shadow left-2 z-10 rounded-full p-1.5 hover:bg-red-50 transition-all duration-200 hover:scale-110"
+            className="absolute top-1 left-2 z-10 rounded-full p-1.5 bg-white shadow hover:bg-red-50 transition-all duration-200 hover:scale-110"
             style={{ color: isFavorite ? '#ef4444' : '#112B40' }}
             aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
             aria-pressed={isFavorite}
           >
-            <Heart className="h-5 w-5 md:h-6 md:w-6" fill={isFavorite ? '#ef4444' : 'none'} />
+            <Heart className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" fill={isFavorite ? '#ef4444' : 'none'} />
           </button>
           
           {/* Best Seller Badge */}
           <div className="absolute top-2 right-2 z-10">
-            <p className="text-[9px] md:text-xs font-bold text-white bg-[#08B2A7] p-1 md:p-1.5 rounded">
+            <p className="text-[9px] sm:text-xs font-bold text-white bg-[#08B2A7] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded">
               الاكثر مبيعا
             </p>
           </div>
@@ -100,7 +97,7 @@ export function ProductCard({
               alt={name}
               width={340}
               height={340}
-              className="object-cover w-[166px] h-[166px] md:w-[308px] md:h-1/5 lg:h-1/2 transition-transform duration-500 ease-out group-hover:scale-105"
+              className="object-cover w-full h-auto aspect-square transition-transform duration-500 ease-out group-hover:scale-105"
               style={{
                 transform: isHovered ? 'scale(1.05)' : 'scale(1)',
               }}
@@ -110,49 +107,36 @@ export function ProductCard({
 
         {/* Product Info with slide up effect */}
         <div 
-          className="px-2 flex flex-col gap-0.5 sm:gap-2 mt-2 transition-all duration-500 ease-out"
+          className="px-2 sm:px-3 flex flex-col gap-1 sm:gap-2 mt-2 transition-all duration-500 ease-out"
           style={{
             transform: isHovered ? 'translateY(-4px)' : 'translateY(0px)',
           }}
         >
-          <div className="flex gap-1 items-center mb-1">
-            <p className="text-[#77878F] text-xs md:text-sm">(994)</p>
+          {/* Rating Section */}
+          <div className="flex gap-1 items-center mb-1 flex-wrap">
+            <p className="text-[#77878F] text-[10px] sm:text-xs md:text-sm">(994)</p>
             <div className="flex gap-0.5">
-              <FaRegStar className="text-[#77878F] w-3 h-3 md:w-4 md:h-4"/>
-              <FaStar className="text-[#FA8232] w-3 h-3 md:w-4 md:h-4" />
-              <FaStar className="text-[#FA8232] w-3 h-3 md:w-4 md:h-4" />
-              <FaStar className="text-[#FA8232] w-3 h-3 md:w-4 md:h-4" />
-              <FaStar className="text-[#FA8232] w-3 h-3 md:w-4 md:h-4" />
+              <FaRegStar className="text-[#77878F] w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4"/>
+              <FaStar className="text-[#FA8232] w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4" />
+              <FaStar className="text-[#FA8232] w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4" />
+              <FaStar className="text-[#FA8232] w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4" />
+              <FaStar className="text-[#FA8232] w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4" />
             </div>
           </div>
           
           {/* Product Name */}
-          <h3 className="text-[12px] md:text-[14px] font-medium line-clamp-2 mb-1" style={{ color: '#112B40' }}>
+          <h3 className="text-[11px] sm:text-[13px] md:text-[14px] font-medium line-clamp-2 mb-1" style={{ color: '#112B40' }}>
             {name}
           </h3>
 
           {/* Price */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm md:text-[17px] font-semibold relative" style={{ color: '#08B2A7' }}>
-              {price.toLocaleString()} <span className="text-[12px] font-semibold">EGP</span>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-sm sm:text-base md:text-[17px] font-semibold" style={{ color: '#08B2A7' }}>
+              {price.toLocaleString()} <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">EGP</span>
             </span>
-            {/* {originalPrice && (
-              <span className="text-xs md:text-sm text-gray-400 line-through">
-                {originalPrice.toLocaleString()} EGP
-              </span>
-            )} */}
           </div>
           
-          {/* Discount badge if exists */}
-          {/* {discount && (
-            <div className="absolute top-20 left-2 md:top-24 md:left-3 z-10">
-              <span className="bg-red-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded-full">
-                -{discount}%
-              </span>
-            </div>
-          )}
-           */}
-          {/* Add to cart button with slide/fade effect */}
+          {/* Add to cart button */}
           <div
             style={{
               opacity: isHovered ? 1 : 0.9,
@@ -161,11 +145,10 @@ export function ProductCard({
           >
             <Button
               onClick={handleAddToCart}
-              className="w-full text-[12px] md:text-[16px] font-semibold rounded-[24px] bg-[#C092BD] hover:bg-[#8C6D8A]
-               transition-all duration-300 text-white py-0 md:py-5 px-[32px] border-2 border-[#C092BD] hover:border-[#8C6D8A] flex items-center justify-center gap-2 hover:scale-[1.02]"  
+              className="w-full text-[11px] sm:text-[14px] md:text-[16px] font-semibold rounded-[24px] bg-[#C092BD] hover:bg-[#8C6D8A] transition-all duration-300 text-white py-1.5 sm:py-2 md:py-2.5 px-4 border-2 border-[#C092BD] hover:border-[#8C6D8A] flex items-center justify-center gap-2 hover:scale-[1.02] h-auto"  
             >
-              <ShoppingCart className="h-4 w-4 md:h-5 md:w-5" />
-              إضافة إلى السلة
+              <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+              <span>إضافة إلى السلة</span>
             </Button>
           </div>
         </div>
@@ -212,12 +195,12 @@ export function ProductsGrid() {
   ];
 
   return (
-    <section className="py-2 md:py-12 bg-gray-50">
-      <div className="container-custom">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8" style={{ color: '#112B40' }}>
+    <section className="py-4 sm:py-8 md:py-12 bg-gray-50">
+      <div className="container mx-auto px-3 sm:px-4">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8" style={{ color: '#112B40' }}>
           منتجات مميزة
         </h2>
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}

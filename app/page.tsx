@@ -1,5 +1,6 @@
 import { AdsHome } from "@/components/home/AdsHome";
 import { BestProducts } from "@/components/home/BestProducts";
+import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { Hero } from "@/components/home/HeroCover";
 import { LatestProducts, } from "@/components/home/LatestProducts";
 import { LatestProducts2 } from "@/components/home/LatestProducts2";
@@ -11,7 +12,7 @@ export default function Home() {
   return (
    <div>
     <Hero />
-    
+    <CategoriesSection />
    <LatestProducts />
    <BestProducts/>
    <AdsHome/>
