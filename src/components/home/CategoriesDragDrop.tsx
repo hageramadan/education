@@ -16,7 +16,7 @@ const initialCategories: Category[] = [
   {
     id: "1",
     name: "هواتف ذكية",
-    image: "/images/categories/cate1.png",
+    image: "/images/categories/c1.png",
     href: "/",
   },
   {
@@ -28,19 +28,19 @@ const initialCategories: Category[] = [
   {
     id: "3",
     name: " اكسسوارات",
-    image: "/images/categories/cate3.png",
+    image: "/images/categories/c3.png",
     href: "/",
   },
   {
     id: "4",
     name: " سماعات",
-    image: "/images/categories/cate4.png",
+    image: "/images/categories/c4.png",
     href: "/",
   },
   {
     id: "5",
     name: "هواتف ذكية",
-    image: "/images/categories/cate1.png",
+    image: "/images/categories/c1.png",
     href: "/",
   },
   {
@@ -52,13 +52,13 @@ const initialCategories: Category[] = [
   {
     id: "7",
     name: " اكسسوارات",
-    image: "/images/categories/cate3.png",
+    image: "/images/categories/c3.png",
     href: "/",
   },
   {
     id: "8",
     name: " سماعات",
-    image: "/images/categories/cate4.png",
+    image: "/images/categories/c4.png",
     href: "/",
   },
 ];
