@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 const categories = [
-  { id: 1, name: "كتب اطفال", image: "/images/categories/c1.png", slug: "electronics" },
-  { id: 2, name: "مستلزمات مدرسية", image: "/images/categories/c2.png", slug: "fashion" },
-  { id: 3, name: "كتب خارجية", image: "/images/categories/c3.png", slug: "home" },
-  { id: 4, name: " كتب خارجية", image: "/images/categories/c4.png", slug: "beauty" },
-  { id: 5, name: "ادوات تلوين", image: "/images/categories/c5.png", slug: "shoes" },
+  { id: 1, name: "كتب اطفال", image: "/images/categories/bg1.png", slug: "electronics" },
+  { id: 2, name: "مستلزمات مدرسية", image: "/images/categories/bg2.png", slug: "fashion" },
+  { id: 3, name: "كتب خارجية", image: "/images/categories/bg3.png", slug: "home" },
+  { id: 4, name: " كتب خارجية", image: "/images/categories/bg4.png", slug: "beauty" },
+  { id: 5, name: "ادوات تلوين", image: "/images/categories/bg5.png", slug: "shoes" },
 ];
 
 export function CategoriesSection() {
