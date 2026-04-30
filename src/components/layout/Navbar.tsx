@@ -1,3 +1,4 @@
+// components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -9,21 +10,13 @@ import { useCart } from "@/contexts/CartContext";
 import { PiUserBold } from "react-icons/pi";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { fetchCategories, Category } from "@/services/api";
 
+// Static nav links
 const navLinks = [
   { name: "الرئيسية", href: "/" },
   { name: "الفئات", href: "/categories", hasDropdown: true },
   { name: "تواصل معنا", href: "/contact" },
-];
-
-// Categories dropdown items
-const categories = [
-  { name: "إلكترونيات", href: "/categories/electronics" },
-  { name: "ملابس", href: "/categories/clothing" },
-  { name: "أحذية", href: "/categories/shoes" },
-  { name: "مستحضرات تجميل", href: "/categories/beauty" },
-  { name: "منزل ومطبخ", href: "/categories/home" },
-  { name: "رياضة", href: "/categories/sports" },
 ];
 
 export function Navbar() {
@@ -33,10 +26,47 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
-  const [showMobileCategoriesDropdown, setShowMobileCategoriesDropdown] = useState(false); // 🔴 حالة منفصلة للموبايل
+  const [showMobileCategoriesDropdown, setShowMobileCategoriesDropdown] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+  
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const categoriesRef = useRef<HTMLDivElement>(null);
+
+  // جلب التصنيفات من الـ API
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      setLoadingCategories(true);
+      const data = await fetchCategories();
+      setCategories(data);
+    } catch (error) {
+      console.error("Failed to load categories:", error);
+    } finally {
+      setLoadingCategories(false);
+    }
+  };
+
+  // بناء رابط الصورة الكامل للتصنيفات (اختياري)
+  const getFullImageUrl = (imagePath: string) => {
+    if (!imagePath) return "";
+    if (imagePath.startsWith('/storage')) {
+      return `https://education.admin.t-carts.com${imagePath}`;
+    }
+    return imagePath;
+  };
+
+  // تحويل التصنيفات إلى صيغة مناسبة للـ dropdown
+  const dropdownCategories = categories.map(category => ({
+    name: category.name,
+    href: `/categories/${category.id}`,
+    id: category.id,
+    image: category.image
+  }));
 
   // Focus on search input when shown
   useEffect(() => {
@@ -141,20 +171,26 @@ export function Navbar() {
                       style={{ borderColor: '#e2e8f0' }}
                       onMouseLeave={() => setShowCategoriesDropdown(false)}
                     >
-                      <div className="py-2">
-                        {categories.map((category) => (
-                          <Link
-                            key={category.href}
-                            href={category.href}
-                            className="block px-4 py-2 text-[14px] transition-colors hover:bg-gray-50"
-                            style={{ color: '#112B40' }}
-                            onClick={() => setShowCategoriesDropdown(false)}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#C092BD'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
-                          >
-                            {category.name}
-                          </Link>
-                        ))}
+                      <div className="py-2 max-h-96 overflow-y-auto">
+                        {loadingCategories ? (
+                          <div className="px-4 py-2 text-center text-gray-500">جاري التحميل...</div>
+                        ) : dropdownCategories.length > 0 ? (
+                          dropdownCategories.map((category) => (
+                            <Link
+                              key={category.id}
+                              href={category.href}
+                              className="block px-4 py-2 text-[14px] transition-colors hover:bg-gray-50"
+                              style={{ color: '#112B40' }}
+                              onClick={() => setShowCategoriesDropdown(false)}
+                              onMouseEnter={(e) => e.currentTarget.style.color = '#C092BD'}
+                              onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
+                            >
+                              {category.name}
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="px-4 py-2 text-center text-gray-500">لا توجد تصنيفات</div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -175,7 +211,7 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Actions - Desktop فقط، في الموبايل تختفي */}
+          {/* Actions - Desktop */}
           <div className="hidden md:flex items-center gap-1 shrink-0">
             {/* Search Button & Overlay Input */}
             <div className="relative" ref={searchContainerRef}>
@@ -271,7 +307,7 @@ export function Navbar() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button - يظهر فقط في الموبايل */}
+          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -280,14 +316,14 @@ export function Navbar() {
             style={{ color: '#195073' }}
             onClick={() => {
               setMobileMenuOpen(!mobileMenuOpen);
-              setShowMobileCategoriesDropdown(false); // إغلاق قائمة الفئات عند فتح/غلق القائمة
+              setShowMobileCategoriesDropdown(false);
             }}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Image src="/images/Menu.png" alt="Menu" className="w-[24px] h-[24px]" width={24} height={24} />}
           </Button>
         </div>
 
-        {/* Mobile Menu - يحتوي على البحث والمفضلة والسلة */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-4 space-y-4 animate-in slide-in-from-top-2 duration-200" style={{ borderColor: '#e2e8f0' }}>
             {/* Search in mobile menu */}
@@ -349,31 +385,36 @@ export function Navbar() {
                       aria-label="categories"
                       className="px-3 py-3 text-[16px] font-medium rounded-md transition-colors hover:bg-gray-50 flex items-center justify-between w-full"
                       style={{ color: '#112B40' }}
-                      onClick={() => setShowMobileCategoriesDropdown(!showMobileCategoriesDropdown)} // 🔴 استخدام الحالة المنفصلة
+                      onClick={() => setShowMobileCategoriesDropdown(!showMobileCategoriesDropdown)}
                     >
                       {link.name}
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showMobileCategoriesDropdown ? 'rotate-180' : ''}`} />
                     </button>
                     
-                    {/* 🔴 قائمة الفئات في الموبايل - تستخدم الحالة المنفصلة */}
                     {showMobileCategoriesDropdown && (
-                      <div className="mr-4 space-y-1">
-                        {categories.map((category) => (
-                          <Link
-                            key={category.href}
-                            href={category.href}
-                            className="block px-3 py-2 text-[14px] rounded-md transition-colors hover:bg-gray-50"
-                            style={{ color: '#112B40' }}
-                            onClick={() => {
-                              setMobileMenuOpen(false);
-                              setShowMobileCategoriesDropdown(false); // 🔴 إغلاق القائمة بعد الضغط
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = '#C092BD'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
-                          >
-                            {category.name}
-                          </Link>
-                        ))}
+                      <div className="mr-4 space-y-1 max-h-64 overflow-y-auto">
+                        {loadingCategories ? (
+                          <div className="px-3 py-2 text-gray-500">جاري التحميل...</div>
+                        ) : dropdownCategories.length > 0 ? (
+                          dropdownCategories.map((category) => (
+                            <Link
+                              key={category.id}
+                              href={category.href}
+                              className="block px-3 py-2 text-[14px] rounded-md transition-colors hover:bg-gray-50"
+                              style={{ color: '#112B40' }}
+                              onClick={() => {
+                                setMobileMenuOpen(false);
+                                setShowMobileCategoriesDropdown(false);
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.color = '#C092BD'}
+                              onMouseLeave={(e) => e.currentTarget.style.color = '#112B40'}
+                            >
+                              {category.name}
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-gray-500">لا توجد تصنيفات</div>
+                        )}
                       </div>
                     )}
                   </div>
