@@ -348,7 +348,7 @@ export default function PhoneInput({ value, onChange, required = false }: PhoneI
                     (localPhoneNumber.length === selectedCountry.minLength || 
                      localPhoneNumber.length === selectedCountry.minLength - 1)
                   ? "border-green-500 focus:border-green-500 focus:ring-green-500 foucs:ring-2"
-                  : "border-gray-200 focus:border-[#E60076] focus:ring-[#E60076] foucs:ring-2"
+                  : "border-gray-200 focus:border-[#1A834B] focus:ring-[#1A834B] foucs:ring-2"
                 }`}
               style={{
                 borderTopLeftRadius: 0,

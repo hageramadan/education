@@ -224,6 +224,7 @@
     "UAE": "الإمارات"
   },
   "search": {
+    "sortBy":"ترتيب",
     "title": "نتائج البحث",
     "placeholder": "ابحث عن منتجات...",
     "loading": "جاري البحث...",
@@ -1174,6 +1175,20 @@
     "loginNow": "تسجيل الدخول الآن",
     "backToHome": "العودة إلى الصفحة الرئيسية",
     "protectedSection": "هذا القسم محمي ويتطلب مصادقة"
+  },
+   "reviews": {
+    "productReviews": "تقييمات المنتج",
+    "reviews": "تقييم",
+    "addReview": "أضف تقييمًا",
+    "noReviews": "لا توجد تقييمات لهذا المنتج بعد",
+    "beFirst": "كن أول من يقيم المنتج",
+    "loadingReviews": "جاري تحميل التقييمات...",
+    "sortBy": "ترتيب حسب",
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "highest": "أعلى تقييم",
+    "lowest": "أقل تقييم",
+    "verified": "موثق"
   },
   "footer": {
     "categories": "الاقسام",

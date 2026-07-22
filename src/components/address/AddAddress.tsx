@@ -130,7 +130,7 @@ export default function AddAddress({
   const [isLoadingGovernorates, setIsLoadingGovernorates] = useState(true);
   const [isLoadingCities, setIsLoadingCities] = useState(false);
 
-  const API_URL = "https://beauty.admin.t-carts.com/api";
+  const API_URL = "https://fakeha.admin.t-carts.com/api";
 
   // --- جلب المحافظات من الـ API ---
   useEffect(() => {
@@ -762,7 +762,7 @@ export default function AddAddress({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-4 py-2 bg-[#E60076] text-white rounded-[8px] hover:bg-[#f0278f] transition disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition disabled:opacity-50"
                   >
                     {isSubmitting
                       ? t('address.saving')

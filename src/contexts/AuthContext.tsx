@@ -48,6 +48,7 @@ interface AuthContextType {
   loginWithPhone: (
     phone: string,
     country_code: string,
+    password:string
   ) => Promise<{ success: boolean; message: string }>;
   registerWithEmail: (
     name: string,
@@ -58,6 +59,7 @@ interface AuthContextType {
     name: string,
     phone: string,
     country_code: string,
+    password:string
   ) => Promise<{ success: boolean; message: string }>;
   logoutUser: () => Promise<void>;
   verifyOTPWithEmail: (
@@ -199,11 +201,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const handleLoginWithPhone = useCallback(
     async (
       phone: string,
-
+      password:string,
       country_code: string,
     ): Promise<{ success: boolean; message: string }> => {
       try {
-        const result = await loginWithPhone({ phone, country_code });
+        const result = await loginWithPhone({ phone, password, country_code });
 
         if (result.result) {
           //  حذف guest_token ومسح وضع الضيف
@@ -259,11 +261,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async (
       name: string,
       phone: string,
-      // password: string,
+      password: string,
       country_code: string,
     ): Promise<{ success: boolean; message: string }> => {
       try {
-        const result = await registerWithPhone({ name, phone, country_code });
+        const result = await registerWithPhone({ name, phone, country_code , password });
 
         if (result.result) {
           return { success: true, message: result.message };
@@ -286,7 +288,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string; token?: string }> => {
       try {
         const response = await fetch(
-          "https://beauty.admin.t-carts.com/api/auth/verify-otp",
+          "https://fakeha.admin.t-carts.com/api/auth/verify-otp",
           {
             method: "POST",
             headers: getHeaders(false),
@@ -339,7 +341,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string; token?: string }> => {
       try {
         const response = await fetch(
-          "https://beauty.admin.t-carts.com/api/auth/verify-otp",
+          "https://fakeha.admin.t-carts.com/api/auth/verify-otp",
           {
             method: "POST",
             headers: getHeaders(false),
@@ -418,7 +420,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string }> => {
       try {
         const response = await fetch(
-          "https://beauty.admin.t-carts.com/api/auth/resend-otp",
+          "https://fakeha.admin.t-carts.com/api/auth/resend-otp",
           {
             method: "POST",
             headers: getHeaders(),

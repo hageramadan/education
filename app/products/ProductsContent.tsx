@@ -147,7 +147,7 @@ export default function ProductsContent() {
       if (filters.brands && filters.brands.length > 0) {
         filterParams.brands = filters.brands;
       }
-      if (filters.minPrice !== undefined && filters.minPrice > 0) {
+      if (filters.minPrice !== undefined && filters.minPrice >= 0) {
         filterParams.price_range = [
           filters.minPrice,
           filters.maxPrice || 1000000,
@@ -258,9 +258,9 @@ export default function ProductsContent() {
     const cleanImageUrl = (url: string) => {
       if (!url) return "/placeholder-image.jpg";
       if (url.startsWith("/storage")) {
-        return `https://beauty.admin.t-carts.com${url}`;
+        return `https://fakeha.admin.t-carts.com${url}`;
       }
-      return `https://beauty.admin.t-carts.com/storage${url}`;
+      return `https://fakeha.admin.t-carts.com/storage${url}`;
     };
 
     return {
@@ -302,7 +302,7 @@ export default function ProductsContent() {
       count += filters.attribute_values.length;
     if (filters.brands && filters.brands.length > 0)
       count += filters.brands.length;
-    if (filters.minPrice !== undefined && filters.minPrice > 0) count++;
+    if (filters.minPrice !== undefined && filters.minPrice >= 0) count++;
     if (filters.maxPrice !== undefined && filters.maxPrice < 1000) count++;
     return count;
   };
@@ -329,7 +329,7 @@ export default function ProductsContent() {
                   onClick={() => {
                     setIsMobileFilterOpen(true);
                   }}
-                  className="md:hidden flex items-center gap-2 px-4 py-2 bg-[#E60076] rounded-[8px] hover:bg-gray-200 transition-colors"
+                  className="md:hidden flex items-center gap-2 px-4 py-2 bg-[#1A834B] rounded-[8px] hover:bg-gray-200 transition-colors"
                 >
                   <VscSettings className="w-6 h-6 text-white" />
                 </button>

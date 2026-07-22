@@ -21,15 +21,15 @@ const PageHeader = ({ title }: { title: string }) => {
     <div className="page-with-padding">
       <h1 className="text-xl font-bold text-gray-800">{title}</h1>
       <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-        <Link href="/" className="hover:text-[#E60076] transition">
+        <Link href="/" className="hover:text-[#1A834B] transition">
           {t("common.home")}
         </Link>
         <ChevronRight className="w-4 h-4" />
-        <Link href="/account" className="hover:text-[#E60076] transition">
+        <Link href="/account" className="hover:text-[#1A834B] transition">
           {t("common.myAccount")}
         </Link>
         <ChevronRight className="w-4 h-4" />
-        <span className="text-[#E60076]">{title}</span>
+        <span className="text-[#1A834B]">{title}</span>
       </div>
     </div>
   );
@@ -53,7 +53,7 @@ const WishlistEmpty = () => {
         <p className="text-gray-500 mb-6">{t("wishlist.emptyMessage")}</p>
         <Link
           href="/products"
-          className="inline-block bg-[#E60076] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
+          className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
         >
           {t("wishlist.exploreProducts")}
         </Link>
@@ -239,7 +239,7 @@ export default function WishlistPage() {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("http")) return url;
     if (url.startsWith("/storage")) {
-      return `https://beauty.admin.t-carts.com${url}`;
+      return `https://fakeha.admin.t-carts.com${url}`;
     }
     return url;
   }, []);
@@ -254,7 +254,7 @@ export default function WishlistPage() {
         <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 ">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
             </div>
           </div>
         </div>

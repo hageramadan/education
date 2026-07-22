@@ -301,7 +301,7 @@ export function ProductCard({
         }
 
         .favorite-button:hover {
-          background: rgba(239, 68, 68, 0.1);
+          // background: rgba(239, 68, 68, 0.1);
           transform: scale(1.1);
         }
 
@@ -341,7 +341,7 @@ export function ProductCard({
           font-size: 11px;
           font-weight: 600;
           border-radius: 8px;
-          background: #E60076;
+          background:#2ECC71 ;
           color: white;
           padding: 6px 12px;
           transition: all 0.3s ease;
@@ -360,7 +360,7 @@ export function ProductCard({
         }
 
         .add-to-cart-button:hover {
-          background: #cc0068;
+          background: #1A834B;
           transform: scale(1.05);
         }
 
@@ -445,7 +445,7 @@ export function ProductCard({
         .current-price {
           font-size: 14px;
           font-weight: 700;
-          color: #E60076;
+          color: #2ECC71;
         }
 
         @media (min-width: 640px) {
@@ -469,7 +469,7 @@ export function ProductCard({
         .currency {
           font-size: 14px;
           font-weight: 700;
-          color: #E60076;
+          color: #2ECC71;
         }
 
         @media (min-width: 640px) {
@@ -482,7 +482,7 @@ export function ProductCard({
           font-size: 8px;
           font-weight: 700;
           color: white;
-          background: #E60076;
+          background: #2ECC71;
           padding: 2px 6px;
           border-radius: 4px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -520,7 +520,7 @@ export function ProductCard({
         .spinner-small {
           width: 16px;
           height: 16px;
-          border: 2px solid #E60076;
+          border: 2px solid #1A834B;
           border-top-color: transparent;
           border-radius: 50%;
           animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -557,7 +557,7 @@ export function ProductCard({
             {/* Loading Spinner */}
             {!imageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center z-10 bg-gray-100">
-                <div className="spinner w-8 h-8 border-4 border-[#E60076] border-t-transparent rounded-full"></div>
+                <div className="spinner w-8 h-8 border-4 border-[#1A834B] border-t-transparent rounded-full"></div>
               </div>
             )}
             

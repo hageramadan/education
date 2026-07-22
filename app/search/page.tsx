@@ -10,8 +10,15 @@ import Pagination from "@/components/products/Pagination";
 import toast from "react-hot-toast";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getHeaders } from "@/services/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // إضافة الـ Select components
 
-const API_URL = "https://beauty.admin.t-carts.com/api";
+const API_URL = "https://fakeha.admin.t-carts.com/api";
 
 //  تعريف واجهات
 interface VariantAttribute {
@@ -159,7 +166,7 @@ const transformProductForCard = (product: any): TransformedProduct => {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder-product.jpg";
     if (url.startsWith("/storage")) {
-      return `https://beauty.admin.t-carts.com${url}`;
+      return `https://fakeha.admin.t-carts.com${url}`;
     }
     return url;
   };
@@ -211,13 +218,21 @@ function SearchContent() {
   const [lastPage, setLastPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const [searchInput, setSearchInput] = useState(query);
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState("");
 
   const perPage = 10; //  10 منتجات في كل صفحة
 
   const hasLoadedRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const isSearchChangeRef = useRef(false);
+
+  // خيارات الترتيب باستخدام useTranslation
+  const sortOptions = [
+    { value: t('search.sortNewest'), label: t('search.sortNewest') },
+    { value: t('search.sortPopular'), label: t('search.sortPopular') },
+    { value: t('search.sortPriceAsc'), label: t('search.sortPriceAsc') },
+    { value: t('search.sortPriceDesc'), label: t('search.sortPriceDesc') },
+  ];
 
   const fetchSearchResults = useCallback(async () => {
     if (!query) {
@@ -355,8 +370,8 @@ function SearchContent() {
     }
   };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value);
+  const handleSortChange = (value: string | null) => {
+    setSortBy(value || "s");
   };
 
   const handlePageChange = (page: number) => {
@@ -397,15 +412,15 @@ function SearchContent() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder={t('search.placeholder')}
-              className="w-full px-6 py-3 ps-2 border border-gray-200 rounded-[8px] focus:outline-none  focus:ring-[#E60076] focus:border-transparent"
+              className="w-full px-6 py-3 ps-2 border border-gray-200 rounded-[8px] focus:outline-none focus:ring-[#1A834B] focus:border-transparent"
             />
             <button
               type="submit"
-              className={`absolute ${language === 'en' ? ' end-3' : ' end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#E60076] transition`}
+              className={`absolute ${language === 'en' ? ' end-3' : ' end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1A834B] transition`}
               disabled={isLoading}
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
               ) : (
                 <Search className="w-5 h-5" />
               )}
@@ -413,7 +428,7 @@ function SearchContent() {
           </form>
         </div>
 
-        {/* عدد النتائج وشريط الترتيب */}
+        {/* عدد النتائج وشريط الترتيب - باستخدام نفس UI بتاع CustomerReviews */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <p className="text-gray-600">
             {totalProducts > 0 ? (
@@ -422,24 +437,34 @@ function SearchContent() {
               !isLoading && t('search.noResults', { query })
             )}
           </p>
+          
+          {/* استخدام نفس Select component زي CustomerReviews */}
           {products.length > 0 && (
-            <select
-              value={sortBy}
-              onChange={handleSortChange}
-              className="px-4 py-2 border border-gray-200 rounded-[8px] focus:outline-none  focus:ring-[#E60076]"
-            >
-              <option value="newest">{t('search.sortNewest')}</option>
-              <option value="popular">{t('search.sortPopular')}</option>
-              <option value="price_asc">{t('search.sortPriceAsc')}</option>
-              <option value="price_desc">{t('search.sortPriceDesc')}</option>
-            </select>
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger className="h-12 bg-[#F0F0F0] rounded-full focus:ring-[#1A834B] focus:ring-offset-0 w-[180px]">
+                <SelectValue placeholder={t('search.sortBy')} />
+              </SelectTrigger>
+              <SelectContent className="bg-white rounded-[8px] shadow-lg border-gray-100">
+                {sortOptions.map((option) => (
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                    className="cursor-pointer hover:bg-blue-50 hover:text-[#1A834B] focus:bg-blue-50 focus:text-[#1A834B]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span>{option.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </div>
 
         {isLoading && products.length > 0 && (
           <div className="flex justify-center py-8">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
               <span className="text-gray-500">{t('search.loadingMore')}</span>
             </div>
           </div>
@@ -479,7 +504,7 @@ function SearchContent() {
               })}
             </div>
 
-            {/*  الباجينشن - يظهر فقط لو في اكتر من صفحة */}
+            {/* الباجينشن - يظهر فقط لو في اكتر من صفحة */}
             {lastPage > 1 && (
               <div className="mt-12">
                 <Pagination
@@ -506,7 +531,7 @@ function SearchContent() {
               </p>
               <button
                 onClick={() => router.push("/")}
-                className="inline-block bg-[#E60076] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
+                className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 {t('search.backToHome')}
               </button>

@@ -85,7 +85,7 @@ export default function LoginWithPhone() {
     // استخدام API حقيقي عبر الـ Context
     const result = await loginWithPhone(
       formData.phoneNumber,
-      // formData.password,
+      formData.password,
       formData.countryCode,
     );
 
@@ -146,12 +146,46 @@ export default function LoginWithPhone() {
                     <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
                   )}
                 </div>
-
+<div className="mb-6">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    كلمة المرور <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <FaLock className="absolute  start-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) => {
+                        setFormData({ ...formData, password: e.target.value });
+                        // clearFieldError("password");
+                      }}
+                      placeholder="•••••••• (6 أحرف على الأقل)"
+                      disabled={isLoading}
+                      className={`w-full px-4 text-sm  py-2  ps-10  pe-10 border rounded-[8px] focus:ring-2 focus:ring-black focus:border-black outline-none transition-colors ${
+                        errors.password ? "border-red-500" : "border-gray-300"
+                      } ${isLoading ? "opacity-50" : ""}`}
+                      dir="rtl"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                      className="absolute  end-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
                 {/* زر تسجيل الدخول */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#E60076] text-white rounded-[8px] hover:bg-[#f0278f] transition font-medium ${
+                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition font-medium ${
                     isLoading ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
@@ -172,7 +206,7 @@ export default function LoginWithPhone() {
                     <button
                       type="button"
                       onClick={() => router.push("/auth/register/phone")}
-                      className="text-[#E60076] font-medium hover:underline"
+                      className="text-[#1A834B] font-medium hover:underline"
                     >
                       إنشاء حساب جديد
                     </button>

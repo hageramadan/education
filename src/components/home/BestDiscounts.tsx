@@ -89,9 +89,9 @@
 //   const cleanImageUrl = (url: string) => {
 //     if (!url) return "/images/placeholder.jpg";
 //     if (url.startsWith("/storage")) {
-//       return `https://beauty.admin.t-carts.com${url}`;
+//       return `https://fakeha.admin.t-carts.com${url}`;
 //     }
-//     return `https://beauty.admin.t-carts.com${url}`;
+//     return `https://fakeha.admin.t-carts.com${url}`;
 //   };
 
 //   const mainImage =
@@ -263,7 +263,7 @@
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
 //                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
 //               </div>
              
 //             </div>
@@ -306,7 +306,7 @@
 //           </div>
 //           <Link
 //             href="/products"
-//             className="text-[#E60076] text-[14px] font-bold hover:underline transition-all duration-300"
+//             className="text-[#1A834B] text-[14px] font-bold hover:underline transition-all duration-300"
 //           >
 //             عرض المزيد
 //           </Link>
@@ -316,7 +316,7 @@
 //         {isLoadingMore && (
 //           <div className="flex justify-center py-4 mb-4">
 //             <div className="flex items-center gap-2">
-//               <div className="w-6 h-6 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+//               <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
 //               <span className="text-gray-500 text-sm">جاري تحميل المزيد...</span>
 //             </div>
 //           </div>
@@ -365,8 +365,8 @@
 //               className="px-6 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105"
 //               style={{
 //                 backgroundColor: "transparent",
-//                 color: "#E60076",
-//                 border: "2px solid #E60076",
+//                 color: "#1A834B",
+//                 border: "2px solid #1A834B",
 //                 borderRadius: "8px",
 //               }}
 //             >
@@ -527,9 +527,9 @@ const extractColorsFromVariants = (
 const cleanImageUrl = (url: string) => {
   if (!url) return "/images/placeholder.jpg";
   if (url.startsWith("/storage")) {
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   }
-  return `https://beauty.admin.t-carts.com${url}`;
+  return `https://fakeha.admin.t-carts.com${url}`;
 };
 
 //  تحويل البيانات من API إلى شكل المنتج المطلوب مع دعم الفاريانتات
@@ -716,7 +716,7 @@ export function BestDiscounts() {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
               </div>
             </div>
           </div>
@@ -733,7 +733,7 @@ export function BestDiscounts() {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
               </div>
               {/* <p className="text-gray-500 text-sm">{t.loading}</p> */}
             </div>
@@ -776,7 +776,7 @@ export function BestDiscounts() {
           </div>
           <Link
             href="/products"
-            className="text-[#E60076] text-[14px] font-bold hover:underline transition-all duration-300"
+            className="text-[#1A834B] text-[14px] font-bold hover:underline transition-all duration-300"
           >
             {t.viewMore}
           </Link>
@@ -786,7 +786,7 @@ export function BestDiscounts() {
         {isLoadingMore && (
           <div className="flex justify-center py-4 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
               <span className="text-gray-500 text-sm">{t.loadingMore}</span>
             </div>
           </div>
@@ -833,8 +833,8 @@ export function BestDiscounts() {
               className="px-6 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: "transparent",
-                color: "#E60076",
-                border: "2px solid #E60076",
+                color: "#1A834B",
+                border: "2px solid #1A834B",
                 borderRadius: "8px",
               }}
             >

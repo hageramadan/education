@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-[#E60076] text-white rounded-[8px] hover:bg-[#f0278f] transition disabled:opacity-50"
+              className="w-full py-3 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition disabled:opacity-50"
             >
               {isLoading ? t("auth.sending") : t("auth.next")}
             </button>
@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/auth/login")}
-                  className="text-[#E60076] font-medium hover:underline"
+                  className="text-[#1A834B] font-medium hover:underline"
                 >
                   {t("auth.login")}
                 </button>

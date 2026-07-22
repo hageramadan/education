@@ -76,7 +76,7 @@ export default function OrderSummary({
               <span>{t('checkout.discount')}</span>
               <span className="text-xs">(-{discountPercentage}%)</span>
             </span>
-            <span className="text-[#E60076]">-$ {discount.toFixed(2)}</span>
+            <span className="text-[#1A834B]">-$ {discount.toFixed(2)}</span>
           </div>
         )}
         
@@ -89,7 +89,7 @@ export default function OrderSummary({
                 {couponCode}
               </span>
             </span>
-            <span className="text-[#E60076]">-$ {couponDiscount.toFixed(2)}</span>
+            <span className="text-[#1A834B]">-$ {couponDiscount.toFixed(2)}</span>
           </div>
         )}
         

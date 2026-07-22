@@ -12,7 +12,7 @@ import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
 
 // ========== إعدادات API ==========
-const API_URL = 'https://beauty.admin.t-carts.com/api';
+const API_URL = 'https://fakeha.admin.t-carts.com/api';
 
 // ========== أنواع البيانات ==========
 interface OrderItem {
@@ -201,7 +201,7 @@ const submitReturnRequest = async (
 const cleanImageUrl = (url: string): string => {
   if (!url) return "/images/placeholder-product.png";
   if (url.startsWith("/storage")) {
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   }
   return url;
 };
@@ -307,7 +307,7 @@ export default function ReturnRequestPage() {
     return (
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] page-with-padding">
         <div className="container mx-auto px-4 py-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E60076] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A834B] mx-auto"></div>
           <p className="text-gray-500 mt-4">{t('returns.loadingOrder')}</p>
         </div>
       </div>
@@ -325,7 +325,7 @@ export default function ReturnRequestPage() {
           <p className="text-gray-500 mb-4">{t('orders.orderNotFoundDesc')}</p>
           <Link
             href="/account/orders"
-            className="inline-block bg-[#E60076] hover:bg-[#f0278f] text-white px-6 py-2 rounded-lg"
+            className="inline-block bg-[#1A834B] hover:bg-[#2ECC71] text-white px-6 py-2 rounded-lg"
           >
             {t('orders.backToOrders')}
           </Link>
@@ -339,11 +339,11 @@ export default function ReturnRequestPage() {
       <div className="container mx-auto mb-3 px-4 md:px-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-          <Link href="/account" className="hover:text-[#E60076] transition">{t('account.myAccount')}</Link>
+          <Link href="/account" className="hover:text-[#1A834B] transition">{t('account.myAccount')}</Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/account/orders" className="hover:text-[#E60076] transition">{t('orders.title')}</Link>
+          <Link href="/account/orders" className="hover:text-[#1A834B] transition">{t('orders.title')}</Link>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-[#E60076] font-medium">{t('returns.returnRequest')}</span>
+          <span className="text-[#1A834B] font-medium">{t('returns.returnRequest')}</span>
         </div>
 
         <div>
@@ -359,7 +359,7 @@ export default function ReturnRequestPage() {
                 <div className="flex items-center gap-1">
                   <p>{order.order_number}</p>
                   <IoCopyOutline 
-                    className="cursor-pointer hover:text-[#E60076] transition"
+                    className="cursor-pointer hover:text-[#1A834B] transition"
                     onClick={copyOrderNumber}
                   />
                 </div>
@@ -459,7 +459,7 @@ export default function ReturnRequestPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder={t('checkout.notesPlaceholder')}
-              className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#E60076] resize-none"
+              className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#1A834B] resize-none"
               rows={3}
             />
           </div>
@@ -475,7 +475,7 @@ export default function ReturnRequestPage() {
                   key={method.id}
                   className={`flex items-start gap-4 p-4 border-2 rounded-xl cursor-pointer transition ${
                     refundMethod === method.id
-                      ? "border-[#E60076] bg-red-50"
+                      ? "border-[#1A834B] bg-red-50"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -485,7 +485,7 @@ export default function ReturnRequestPage() {
                     value={method.id}
                     checked={refundMethod === method.id}
                     onChange={(e) => setRefundMethod(e.target.value)}
-                    className="mt-1 w-4 h-4 text-[#E60076] focus:ring-[#E60076]"
+                    className="mt-1 w-4 h-4 text-[#1A834B] focus:ring-[#1A834B]"
                   />
                   <div className="flex-1">
                     <p className="font-bold text-gray-800">{method.name}</p>
@@ -503,7 +503,7 @@ export default function ReturnRequestPage() {
             className={`w-full py-3 rounded-xl font-medium transition mt-4 ${
               isSubmitting || !refundMethod
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-[#E60076] text-white hover:bg-[#f0278f]"
+                : "bg-[#1A834B] text-white hover:bg-[#2ECC71]"
             }`}
           >
             {isSubmitting ? (
@@ -529,13 +529,13 @@ export default function ReturnRequestPage() {
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">{t('returns.returnSubmitted')}</h3>
             <p className="text-gray-500 mb-6">
-              {t('returns.orderNumberLabel')}: <span className="font-bold text-[#E60076]">{order.order_number}</span>
+              {t('returns.orderNumberLabel')}: <span className="font-bold text-[#1A834B]">{order.order_number}</span>
               <br />
               {t('returns.returnProcessing')}
             </p>
             <button
               onClick={handleCloseSuccess}
-              className="w-full bg-[#E60076] text-white py-3 rounded-xl font-medium hover:bg-[#f0278f] transition"
+              className="w-full bg-[#1A834B] text-white py-3 rounded-xl font-medium hover:bg-[#2ECC71] transition"
             >
               {t('orders.backToOrders')}
             </button>

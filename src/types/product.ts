@@ -96,9 +96,9 @@ export const extractColorsFromVariants = (
 export const cleanImageUrl = (url: string): string => {
   if (!url) return "/images/placeholder.jpg";
   if (url.startsWith("/storage")) {
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   }
-  return `https://beauty.admin.t-carts.com${url}`;
+  return `https://fakeha.admin.t-carts.com${url}`;
 };
 
 //  دالة تحويل البيانات من API

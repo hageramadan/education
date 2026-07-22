@@ -1,6 +1,8 @@
 // components/Pagination.tsx
 'use client';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/hooks/useTranslation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
@@ -11,6 +13,8 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, lastPage, onPageChange, total }: PaginationProps) {
+  const {language}= useTranslation();
+  const isEnglish = language === 'en';
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
@@ -87,11 +91,13 @@ export default function Pagination({ currentPage, lastPage, onPageChange, total 
           className={`w-10 h-10 rounded-full transition-all duration-200 flex items-center justify-center ${
             currentPage === 1
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-[#E60076]'
+              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-[#1A834B]'
           }`}
           aria-label="الصفحة السابقة"
         >
-          <ChevronRight size={18} />
+          <ChevronRight  className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${
+                    isEnglish ? 'rotate-180' : ''
+                  }`}  />
         </button>
         
         {/* أرقام الصفحات */}
@@ -106,8 +112,8 @@ export default function Pagination({ currentPage, lastPage, onPageChange, total 
               onClick={() => handlePageChange(page as number)}
               className={`w-12 h-12 rounded-full transition-all duration-200 font-medium ${
                 page === currentPage
-                  ? 'bg-[#E60076] text-white border-2 border-[#E60076]'
-                  : 'bg-white text-[#E60076] border-2 border-gray-300 hover:border-[#E60076] hover:bg-gray-50'
+                  ? 'bg-[#1A834B] text-white border-2 border-[#1A834B]'
+                  : 'bg-white text-[#1A834B] border-2 border-gray-300 hover:border-[#1A834B] hover:bg-gray-50'
               }`}
               aria-label={`الصفحة ${page}`}
               aria-current={page === currentPage ? 'page' : undefined}
@@ -124,11 +130,13 @@ export default function Pagination({ currentPage, lastPage, onPageChange, total 
           className={`w-10 h-10 rounded-full transition-all duration-200 flex items-center justify-center ${
             currentPage === lastPage
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-[#E60076]'
+              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-[#1A834B]'
           }`}
           aria-label="الصفحة التالية"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft  className={`w-5 h-5 text-gray-600 transition-transform duration-300 ${
+                    isEnglish ? 'rotate-180' : ''
+                  }`}  />
         </button>
       </div>
     </div>

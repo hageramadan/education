@@ -1,8 +1,8 @@
 import { Currency } from "@/types/product";
 
 // services/api.ts
-const API_URL = "https://beauty.admin.t-carts.com/api";
-const API_BASE_URL_Img="https://beauty.admin.t-carts.com";
+const API_URL = "https://fakeha.admin.t-carts.com/api";
+const API_BASE_URL_Img="https://fakeha.admin.t-carts.com";
 // ========== دوال مساعدة للمصادقة (يجب تعريفها أولاً) ==========
 export function getToken(): string | null {
   if (typeof window !== 'undefined') {
@@ -414,7 +414,7 @@ export interface AdData {
 
 export async function getAds(): Promise<AdData[]> {
   try {
-    const response = await fetch(`${API_URL}/ads`, {
+    const response = await fetch(`https://fakeha.admin.t-carts.com/api/ads`, {
       method: 'GET',
       headers: getHeaders(false),
       cache: getCacheStrategy(),
@@ -1033,7 +1033,7 @@ interface RegisterWithEmailRequest {
 interface RegisterWithPhoneRequest {
   name: string;
   phone: string;
-  // password: string;
+  password: string;
   country_code: string;
 }
 
@@ -1044,7 +1044,7 @@ interface LoginWithEmailRequest {
 
 interface LoginWithPhoneRequest {
   phone: string;
-  // password: string;
+  password: string;
   country_code: string;
 }
 
@@ -1211,7 +1211,7 @@ export async function logout(token?: string): Promise<LogoutResponse> {
     
     const response = await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
-       headers: getHeaders(false),
+       headers: headers,
     });
 
     if (!response.ok) {

@@ -93,9 +93,9 @@ const transformProduct = (product: ProductData): Product => {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("/storage")) {
-      return `https://beauty.admin.t-carts.com${url}`;
+      return `https://fakeha.admin.t-carts.com${url}`;
     }
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   };
 
   const mainImage =
@@ -297,7 +297,7 @@ export function YouMayAlsoLike() {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
               </div>
               <p className="text-gray-500 text-sm animate-pulse">
                 {t("products.loading")}
@@ -318,7 +318,7 @@ export function YouMayAlsoLike() {
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={() => fetchProducts(1, false)}
-              className="px-4 py-2 bg-[#E60076] text-white rounded-lg hover:bg-[#3bacee] transition"
+              className="px-4 py-2 bg-[#1A834B] text-white rounded-lg hover:bg-[#3bacee] transition"
             >
               {t("common.retry")}
             </button>
@@ -338,7 +338,7 @@ export function YouMayAlsoLike() {
           </h2>
           <Link
             href="/products"
-            className="text-[#E60076] text-[14px] font-bold hover:underline transition-all duration-300 flex items-center gap-1"
+            className="text-[#1A834B] text-[14px] font-bold hover:underline transition-all duration-300 flex items-center gap-1"
           >
             {t("youMayAlsoLike.viewMore")}
             {/* <ChevronLeft className="w-4 h-4" /> */}
@@ -351,7 +351,7 @@ export function YouMayAlsoLike() {
         {isLoadingMore && (
           <div className="flex justify-center py-4 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#E60076] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
               <span className="text-gray-500 text-sm">{t("products.loadingMore")}</span>
             </div>
           </div>
@@ -398,8 +398,8 @@ export function YouMayAlsoLike() {
               className="px-6 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105"
               style={{
                 backgroundColor: "transparent",
-                color: "#E60076",
-                border: "2px solid #E60076",
+                color: "#1A834B",
+                border: "2px solid #1A834B",
                 borderRadius: "8px",
               }}
             >

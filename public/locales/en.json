@@ -168,6 +168,7 @@
     "UAE": "UAE"
   },
    "search": {
+    "sortBy":"Sort by",
     "title": "Search Results",
     "placeholder": "Search for products...",
     "loading": "Searching...",
@@ -1110,6 +1111,20 @@
     "profileUpdateError": "Error updating profile",
     "profileUpdateSuccess": "Profile updated successfully ",
     "noChanges": "No changes to save"
+  },
+  "reviews": {
+    "productReviews": "Product Reviews",
+    "reviews": "reviews",
+    "addReview": "Add Review",
+    "noReviews": "No reviews for this product yet",
+    "beFirst": "Be the first to rate this product",
+    "loadingReviews": "Loading reviews...",
+    "sortBy": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "highest": "Highest Rated",
+    "lowest": "Lowest Rated",
+    "verified": "Verified"
   },
   "footer": {
     "categories": "Categories",

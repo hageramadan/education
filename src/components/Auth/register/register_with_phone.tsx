@@ -79,18 +79,18 @@ export default function RegisterWithPhone() {
     }
 
     // التحقق من كلمة المرور
-    // if (!formData.password) {
-    //   newErrors.password = "كلمة المرور مطلوبة";
-    // } else if (formData.password.length < 6) {
-    //   newErrors.password = "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
-    // }
+    if (!formData.password) {
+      newErrors.password = "كلمة المرور مطلوبة";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+    }
 
     // التحقق من تطابق كلمة المرور
-    // if (!formData.confirmPassword) {
-    //   newErrors.confirmPassword = "تأكيد كلمة المرور مطلوب";
-    // } else if (formData.password !== formData.confirmPassword) {
-    //   newErrors.confirmPassword = "كلمة المرور غير متطابقة";
-    // }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "تأكيد كلمة المرور مطلوب";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "كلمة المرور غير متطابقة";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -113,7 +113,7 @@ export default function RegisterWithPhone() {
   const result = await registerWithPhone(
     formData.name,
     formData.phoneNumber,
-    // formData.password,
+    formData.password,
     formData.countryCode
   );
 
@@ -148,17 +148,7 @@ export default function RegisterWithPhone() {
 
   return (
     <>
-      {/* <Toaster
-        position="top-center"
-        toastOptions={{
-          style: {
-            fontSize: "14px",
-            padding: "12px 16px",
-            borderRadius: "8px",
-            direction: "rtl",
-          },
-        }}
-      /> */}
+     
 
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] flex items-center justify-center ">
         <div className="container mx-auto px-4 py-6 md:py-12">
@@ -247,7 +237,7 @@ export default function RegisterWithPhone() {
                 </div>
 
                 {/* كلمة المرور */}
-                {/* <div className="mb-6">
+                <div className="mb-6">
                   <label className="block text-gray-700 font-medium mb-2">
                     كلمة المرور <span className="text-red-500">*</span>
                   </label>
@@ -281,10 +271,10 @@ export default function RegisterWithPhone() {
                       {errors.password}
                     </p>
                   )}
-                </div> */}
+                </div>
 
                 {/* تأكيد كلمة المرور */}
-                {/* <div className="mb-6">
+                <div className="mb-6">
                   <label className="block text-gray-700 font-medium mb-2">
                     تأكيد كلمة المرور <span className="text-red-500">*</span>
                   </label>
@@ -318,13 +308,13 @@ export default function RegisterWithPhone() {
                       {errors.confirmPassword}
                     </p>
                   )}
-                </div> */}
+                </div>
 
                 {/* زر إنشاء الحساب */}
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#E60076] text-white rounded-[8px] hover:bg-[#f0278f] transition font-medium ${
+                  className={`w-full flex justify-center items-center gap-2 px-4 py-3 bg-[#1A834B] text-white rounded-[8px] hover:bg-[#2ECC71] transition font-medium ${
                     isLoading ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
@@ -345,7 +335,7 @@ export default function RegisterWithPhone() {
                     <button
                       type="button"
                       onClick={() => router.push("/auth/login")}
-                      className="text-[#E60076] font-medium hover:underline"
+                      className="text-[#1A834B] font-medium hover:underline"
                     >
                       تسجيل الدخول
                     </button>

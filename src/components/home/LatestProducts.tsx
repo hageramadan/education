@@ -66,9 +66,9 @@ const transformProduct = (product: ProductData): Product => {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("/storage")) {
-      return `https://beauty.admin.t-carts.com${url}`;
+      return `https://fakeha.admin.t-carts.com${url}`;
     }
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   };
 
   const mainImage =
@@ -225,7 +225,7 @@ export function LatestProducts() {
             </h2> */}
           </div>
           <div className="flex flex-col justify-center items-center py-20 gap-4">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#E60076]"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1A834B]"></div>
             {/* <p className="text-gray-500 text-sm">Loading...</p> */}
           </div>
         </div>
@@ -247,7 +247,7 @@ export function LatestProducts() {
             </h2>
           </div>
           <div className="flex flex-col justify-center items-center py-20 gap-4">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#E60076]"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1A834B]"></div>
             {/* <p className="text-gray-500 text-sm">{t.loading}</p> */}
           </div>
         </div>
@@ -282,7 +282,7 @@ export function LatestProducts() {
           </h2>
           <Link
             href="/products"
-            className="text-[#E60076] text-sm font-semibold hover:underline"
+            className="text-[#2ECC71] text-sm font-semibold hover:underline"
           >
             {t.viewMore}
           </Link>
@@ -323,7 +323,7 @@ export function LatestProducts() {
         {/* Loading State for Load More -  استخدام الترجمة */}
         {isLoadingMore && (
           <div className="flex flex-col justify-center items-center py-8 gap-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E60076]"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A834B]"></div>
             <p className="text-gray-500 text-sm">{t.loading}</p>
           </div>
         )}
@@ -403,9 +403,9 @@ export function LatestProducts() {
 // const cleanImageUrl = (url: string) => {
 //   if (!url) return "/images/placeholder.jpg";
 //   if (url.startsWith("/storage")) {
-//     return `https://beauty.admin.t-carts.com${url}`;
+//     return `https://fakeha.admin.t-carts.com${url}`;
 //   }
-//   return `https://beauty.admin.t-carts.com${url}`;
+//   return `https://fakeha.admin.t-carts.com${url}`;
 // };
 
 // // تحويل البيانات من API إلى شكل المنتج المطلوب
@@ -814,7 +814,7 @@ export function LatestProducts() {
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
 //                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
 //               </div>
 //             </div>
 //           </div>
@@ -831,7 +831,7 @@ export function LatestProducts() {
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
 //                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#E60076] border-t-transparent rounded-full animate-spin"></div>
+//                 <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
 //               </div>
 
 //             </div>
@@ -862,7 +862,7 @@ export function LatestProducts() {
 //           </h2>
 //           <Link
 //             href="/products"
-//             className="text-[#E60076] text-sm font-semibold hover:underline"
+//             className="text-[#1A834B] text-sm font-semibold hover:underline"
 //           >
 //             {t.viewMore}
 //           </Link>
@@ -878,7 +878,7 @@ export function LatestProducts() {
 //                   language === "en"
 //                     ? "end-2 md:end-[-30px]"
 //                     : "end-2 md:end-[-30px]"
-//                 } absolute top-1/2 md:top-1/2 -translate-y-1/2 z-20 bg-[#E60076] hover:bg-[#E60076] shadow-sm hover:shadow-lg rounded-full p-2 transition-all duration-300 hover:scale-110 border border-gray-200`}
+//                 } absolute top-1/2 md:top-1/2 -translate-y-1/2 z-20 bg-[#1A834B] hover:bg-[#1A834B] shadow-sm hover:shadow-lg rounded-full p-2 transition-all duration-300 hover:scale-110 border border-gray-200`}
 //                 style={{ transform: "translate(-50%, -50%)" }}
 //                 aria-label="السابق"
 //               >
@@ -895,7 +895,7 @@ export function LatestProducts() {
 //                   language === "en"
 //                     ? "start-2 md:start-[-30px]"
 //                     : "start-2 md:start-[-30px]"
-//                 } absolute top-1/2 md:top-1/2 -translate-y-1/2 z-20 bg-[#E60076] hover:bg-[#E60076] shadow-sm hover:shadow-lg rounded-full p-2 transition-all duration-300 hover:scale-110 border border-gray-200`}
+//                 } absolute top-1/2 md:top-1/2 -translate-y-1/2 z-20 bg-[#1A834B] hover:bg-[#1A834B] shadow-sm hover:shadow-lg rounded-full p-2 transition-all duration-300 hover:scale-110 border border-gray-200`}
 //                 style={{ transform: "translate(50%, -50%)" }}
 //                 aria-label="التالي"
 //               >

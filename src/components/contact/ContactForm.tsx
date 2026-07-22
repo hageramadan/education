@@ -56,7 +56,7 @@ export default function ContactForm() {
         message: formData.message,
       };
 
-      const response = await fetch("https://beauty.admin.t-carts.com/api/contact-us", {
+      const response = await fetch("https://fakeha.admin.t-carts.com/api/contact-us", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

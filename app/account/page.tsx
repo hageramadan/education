@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getHeaders } from "@/services/api";
 
+
 export default function AccountPage() {
   const { t , language } = useTranslation();
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function AccountPage() {
     }
     
     // إذا كان مسارًا نسبيًا
-    return `https://beauty.admin.t-carts.com${imagePath}`;
+    return `https://fakeha.admin.t-carts.com${imagePath}`;
   };
 
   // دالة لجلب رصيد المحفظة من الـ API
@@ -57,7 +58,7 @@ export default function AccountPage() {
         return;
       }
 
-      const apiUrl = "https://beauty.admin.t-carts.com/api";
+      const apiUrl = "https://fakeha.admin.t-carts.com/api";
       const response = await fetch(`${apiUrl}/wallet`, {
         method: "GET",
         headers: getHeaders(),
@@ -93,12 +94,12 @@ export default function AccountPage() {
   // التحقق من حالة تسجيل الدخول
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      toast.error(t('account.pleaseLogin'), {
-        duration: 2000,
-        position: "top-center",
-      });
+      // toast.error(t('account.pleaseLogin'), {
+      //   duration: 2000,
+      //   position: "top-center",
+      // });
       setTimeout(() => {
-        router.push("/auth/login");
+        router.push("/");
       }, 1500);
     }
   }, [isAuthenticated, loading, router, t]);
@@ -158,7 +159,7 @@ export default function AccountPage() {
     return (
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-gray-300 border-t-[#E60076] rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-gray-300 border-t-[#1A834B] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">{t('account.loading')}</p>
         </div>
       </div>
@@ -219,7 +220,7 @@ export default function AccountPage() {
                     onError={() => {}}
                   />
                 ) : (
-                  <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#E60076] flex items-center justify-center shadow-lg">
+                  <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#1A834B] flex items-center justify-center shadow-lg">
                     <span className="text-white text-xl md:text-2xl font-bold">
                       {getUserInitial()}
                     </span>

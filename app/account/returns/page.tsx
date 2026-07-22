@@ -13,7 +13,7 @@ import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
 
 // ========== إعدادات API ==========
-const API_URL = 'https://beauty.admin.t-carts.com/api';
+const API_URL = 'https://fakeha.admin.t-carts.com/api';
 
 const getToken = (): string | null => {
   if (typeof window !== 'undefined') {
@@ -212,7 +212,7 @@ const fetchReturns = async (page: number = 1, perPage: number = 10): Promise<{ r
 const cleanImageUrl = (url: string): string => {
   if (!url) return "/images/placeholder-product.png";
   if (url.startsWith("/storage")) {
-    return `https://beauty.admin.t-carts.com${url}`;
+    return `https://fakeha.admin.t-carts.com${url}`;
   }
   return url;
 };
@@ -427,7 +427,7 @@ export default function ReturnsPage() {
         <div className="container mx-auto px-4 py-8 text-center">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E60076] mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1A834B] mx-auto"></div>
               
             </div>
           </div>
@@ -441,7 +441,7 @@ export default function ReturnsPage() {
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
         {/* العنوان */}
         <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-          <RefreshCw className="w-6 h-6 sm:w-7 sm:h-7 text-[#E60076]" />
+          <RefreshCw className="w-6 h-6 sm:w-7 sm:h-7 text-[#1A834B]" />
           <h1 className="text-xl sm:text-xl font-bold text-gray-800">{t('returns.title')}</h1>
         </div>
 
@@ -456,7 +456,7 @@ export default function ReturnsPage() {
               }}
               className={`whitespace-nowrap px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition ${
                 filterStatus === filter.value
-                  ? "bg-[#E60076] text-white"
+                  ? "bg-[#1A834B] text-white"
                   : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
               }`}
             >
@@ -509,7 +509,7 @@ export default function ReturnsPage() {
                                 #{String(returnItem.id).padStart(5, '0')}
                               </p>
                               <IoCopyOutline 
-                                className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer hover:text-[#E60076] transition"
+                                className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer hover:text-[#1A834B] transition"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   copyToClipboard(`#${String(returnItem.id).padStart(5, '0')}`, t('returns.returnNumber'));
@@ -522,13 +522,13 @@ export default function ReturnsPage() {
                             <h1 className="text-xs sm:text-sm">{t('returns.order')}</h1>
                             <div className="flex gap-1 sm:gap-2 items-center">
                               <p 
-                                className="text-gray-600 text-xs sm:text-sm cursor-pointer hover:text-[#E60076] hover:underline transition"
+                                className="text-gray-600 text-xs sm:text-sm cursor-pointer hover:text-[#1A834B] hover:underline transition"
                                 onClick={(e) => handleOrderClick(returnItem.order?.id, e)}
                               >
                                 {returnItem.order?.order_number || "-"}
                               </p>
                               <IoCopyOutline 
-                                className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer hover:text-[#E60076] transition"
+                                className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer hover:text-[#1A834B] transition"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   copyToClipboard(returnItem.order?.order_number || "", t('returns.orderNumber'));
@@ -670,7 +670,7 @@ export default function ReturnsPage() {
                           <div className="flex justify-between items-center flex-wrap gap-2">
                             <div className="text-right">
                               <p className="text-xs sm:text-sm text-gray-500">{t('returns.totalRefund')}</p>
-                              <p className="text-base sm:text-xl font-bold text-[#E60076]">$ {totalRefund.toFixed(2)}</p>
+                              <p className="text-base sm:text-xl font-bold text-[#1A834B]">$ {totalRefund.toFixed(2)}</p>
                             </div>
                           </div>
                           
@@ -694,7 +694,7 @@ export default function ReturnsPage() {
                           <div className="mt-4 flex justify-end">
                             <button
                               onClick={() => goToReturnDetails(returnItem.id)}
-                              className="px-4 py-2 bg-[#E60076] text-white rounded-[8px] text-sm font-medium hover:bg-[#f0278f] transition"
+                              className="px-4 py-2 bg-[#1A834B] text-white rounded-[8px] text-sm font-medium hover:bg-[#2ECC71] transition"
                             >
                               {t('returns.viewDetails')}
                             </button>

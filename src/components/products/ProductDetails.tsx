@@ -533,7 +533,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("/storage")) {
-      return `https://beauty.admin.t-carts.com${url}`;
+      return `https://fakeha.admin.t-carts.com${url}`;
     }
     return url;
   };
@@ -621,7 +621,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 />
 
                 {discountPercentage > 0 && (
-                  <span className="absolute top-2 right-2 bg-[#E60076] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
+                  <span className="absolute top-2 right-2 bg-[#1A834B] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
                     {discountPercentage}% {t("product.discount")}
                   </span>
                 )}
@@ -651,7 +651,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   className={`
                     relative aspect-[4/3] max-h-[80px] bg-gray-100 rounded-[8px] overflow-hidden
                     border-2 transition-all duration-200
-                    ${selectedImage === index ? "border-[#E60076]" : "border-transparent hover:border-gray-300"}
+                    ${selectedImage === index ? "border-[#1A834B]" : "border-transparent hover:border-gray-300"}
                   `}
                 >
                   <Image
@@ -672,7 +672,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             <div className="text-center text-sm text-gray-500 py-2">
               <button
                 onClick={hideVideoPlayer}
-                className="text-[#E60076] hover:underline font-medium"
+                className="text-[#1A834B] hover:underline font-medium"
               >
                 {t("product.backToImages")}
               </button>
@@ -694,7 +694,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             </div>
 
             <div className="flex flex-col items-end">
-              <span className="text-lg lg:text-xl font-bold text-[#E60076] flex items-center gap-0.5">
+              <span className="text-lg lg:text-xl font-bold text-[#1A834B] flex items-center gap-0.5">
                 {currentPrice.toLocaleString()}
                 <span className="text-sm">{getCurrencySymbol()}</span>
               </span>
@@ -858,7 +858,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 cartLoading ||
                 (product.has_variants && !selectedVariant)
               }
-              className="flex-1 bg-[#E60076] text-sm text-white px-4 py-2 rounded-[8px] font-bold hover:bg-[#E60076] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#1A834B] text-sm text-white px-4 py-2 rounded-[8px] font-bold hover:bg-[#1A834B] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isAddingToCart ? (
                 <>
@@ -875,17 +875,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 onClick={handleToggleFavorite}
                 disabled={isMutating}
                 className={`
-                  flex-1 py-2 rounded-[8px] text-[#E60076] font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs
+                  flex-1 py-2 rounded-[8px] text-[#1A834B] font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs
                   ${
                     isProductFavorite
                       ? "bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
-                      : "border border-[#E60076] hover:bg-[#ff89e13f]"
+                      : "border border-[#1A834B] hover:bg-[#ff89e13f]"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
                 <Heart
-                  className={`h-3.5 w-3.5 ${isProductFavorite?'text-[#ef4444]':'text-[#E60076]'}`}
+                  className={`h-3.5 w-3.5 ${isProductFavorite?'text-[#ef4444]':'text-[#1A834B]'}`}
                   fill={isProductFavorite ? "#ef4444" : "none"}
                 />
                 {isProductFavorite ? t("product.inFavorites") : t("product.addToFavorites")}
@@ -903,7 +903,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 className="flex justify-between items-center w-full py-1.5 text-right"
               >
                 <span className="font-semibold text-gray-800 flex items-center gap-1.5 text-sm">
-                  <Info className="w-3.5 h-3.5 text-[#E60076]" />
+                  <Info className="w-3.5 h-3.5 text-[#1A834B]" />
                   {t("product.productInfo")}
                 </span>
                 <span className="text-lg">

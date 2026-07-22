@@ -85,7 +85,7 @@ export function CategoriesSection() {
   const getFullImageUrl = (imagePath: string) => {
     if (!imagePath) return '/images/placeholder.jpg';
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://beauty.admin.t-carts.com${imagePath}`;
+    return `http://fakeha.admin.t-carts.com${imagePath}`;
   };
 
   if (loading) {
@@ -109,10 +109,10 @@ export function CategoriesSection() {
       <div className="container-custom px-4 sm:px-6 relative ">
         
         {/* زر السهم الأيمن */}
-        {categories.length > 4 && (
+        {categories.length > 6 && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#E60076] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#f0278f] transition-all duration-300 hidden xl:block"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#2ECC71] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#1A834B]  transition-all duration-300 hidden xl:block"
             style={{ 
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               transform: 'translateX(50%) translateY(-50%)'
@@ -124,10 +124,10 @@ export function CategoriesSection() {
         )}
 
         {/* زر السهم الأيسر */}
-        {categories.length > 4 && (
+        {categories.length > 6 && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#E60076] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#f0278f] transition-all duration-300 hidden xl:block"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#2ECC71] rounded-full shadow-lg p-2 md:p-3 hover:bg-[#1A834B] transition-all duration-300 hidden xl:block"
             style={{ 
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               transform: 'translateX(-50%) translateY(-50%)'
@@ -163,13 +163,13 @@ export function CategoriesSection() {
                 className="flex-shrink-0 flex items-stretch transition-all duration-300 hover:-translate-y-2" 
               >
                 <Link  href={`/products?categories=[${category.id}]`} className="block w-full">
-                  <div className="relative w-[85px] md:w-[220px] h-[100px] md:h-[236px] rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="relative w-[75px] md:w-[200px] h-[80px] md:h-[200px] overflow-hidden bg-[#F8F8F8] border-2 border-[#E4E7E9] hover:shadow-xl transition-all duration-300">
                     <Image
                       src={getFullImageUrl(category.image)}
                       alt={category.name}
                       fill
-                      className="object-cover transition-transform duration-500" 
-                      sizes="(max-width: 768px) 85px, 220px"
+                      className="object-contain p-2 transition-transform duration-500" 
+                      sizes="(max-width: 768px) 75px, 200px"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/images/placeholder.jpg';
@@ -177,14 +177,15 @@ export function CategoriesSection() {
                     />
                     
                     {/* اسم الفئة في الأسفل */}
-                    <div className="absolute bottom-0 left-0 right-0 ">
+                   
+                  </div>
+                   <div >
                       <h3 
-                        className="text-white text-[16px] font-bold bg-[#E6007699] py-1 md:py-2 w-full md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
+                        className=" text-[16px] font-bold  py-1 md:py-2  md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
                       >
                         {category.name}
                       </h3>
                     </div>
-                  </div>
                 </Link>
               </div>
             ))}

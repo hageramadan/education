@@ -25,7 +25,7 @@ export function CartEmpty() {
         </p>
         <Link
           href="/products"
-          className="inline-block bg-[#E60076] text-white px-8 py-3 rounded-[8px] font-semibold hover:bg-[#f0278f] transition-all duration-300 shadow-md hover:shadow-lg"
+          className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-[8px] font-semibold hover:bg-[#2ECC71] transition-all duration-300 shadow-md hover:shadow-lg"
         >
           {t('cartEmpty.shopNow')}
         </Link>
@@ -38,9 +38,9 @@ const PageHeader = ({ title, t }: { title: string; t: any }) => (
   <div className="page-with-padding">
     <h1 className="text-xl font-bold text-gray-800">{title}</h1>
     <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-      <Link href="/" className="hover:text-[#E60076]">{t('cartEmpty.home')}</Link>
+      <Link href="/" className="hover:text-[#1A834B]">{t('cartEmpty.home')}</Link>
       <ChevronRight className="w-4 h-4" />
-      <span className="text-[#E60076]">{title}</span>
+      <span className="text-[#1A834B]">{title}</span>
     </div>
   </div>
 );
