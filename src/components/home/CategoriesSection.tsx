@@ -181,7 +181,7 @@ export function CategoriesSection() {
                   </div>
                    <div >
                       <h3 
-                        className=" text-[16px] font-bold  py-1 md:py-2  md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
+                        className=" text-[14px] lg:font-semibold  py-1 md:py-2  md:text-base lg:text-lg text-center line-clamp-2 whitespace-normal"
                       >
                         {category.name}
                       </h3>

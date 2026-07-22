@@ -241,7 +241,7 @@ export function ProductCard({
         .product-card {
           width: 100%;
           max-width: 172px;
-          height: 278px;
+          height: 200px;
           border-radius: 16px;
           border: 1px solid #E4E7E9;
           overflow: hidden;
@@ -255,7 +255,7 @@ export function ProductCard({
         }
         
         .product-image {
-          height: 172px;
+          height: 152px;
           width: 100%;
           border-radius: 16px 16px 0 0;
           position: relative;

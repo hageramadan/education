@@ -176,13 +176,13 @@ export function AdsHome() {
 
   return (
     <section className="bg-[#EAFAF1] container rounded-[8px]">
-      <div className="flex flex-col lg:flex-row items-end justify-end lg:items-stretch lg:justify-between gap-3 sm:gap-6 md:gap-10">
+      <div className="flex flex-col lg:flex-row items-end justify-end lg:items-stretch lg:justify-between gap-1 sm:gap-3 md:gap-10">
         
         {/* Left Content - نفس التصميم الأصلي */}
-        <div className="flex items-center lg:items-start justify-center lg:justify-normal px-3 sm:px-4 py-4 sm:py-5 md:py-6 sm:ps-[2%] md:ps-[4%] lg:ps-[10%] xl:ps-[13%] flex-col gap-1 sm:gap-2  w-full lg:w-1/2">
+        <div className="flex items-center lg:items-start justify-center lg:justify-normal px-3 sm:px-4 pt-4 sm:pt-5 md:py-6  flex-col gap-1 sm:gap-2  w-full lg:w-1/2">
           
           {/* Limited offer badge - من API */}
-          <p className="text-[20px] md:text-[24px]  py-0.5 sm:py-1 px-2 sm:px-3 text-[#006D37]">
+          <p className="text-[20px] md:text-[24px]  py-0.5 sm:py-1 px-2 sm:px-3 text-[#006D37] text-center lg:text-start">
             {activeAd.name}
           </p>
           
@@ -246,7 +246,7 @@ export function AdsHome() {
         </div>
         
         {/* Right Image - نفس التصميم الأصلي */}
-        <div className="w-full  lg:w-1/2 flex items-center justify-center gap-2 flex-wrap lg:flex-nowrap p-2">
+        <div className="w-full  lg:w-1/2 flex items-center justify-center  gap-2 lg:gap-5 flex-wrap lg:flex-nowrap p-2">
           {/* <Image 
             src={adImageUrl}
             alt={activeAd.name}
@@ -297,7 +297,7 @@ export function AdsHome() {
           <Button
             asChild
             aria-label='buy now'
-            className="flex w-full sm:w-[150px] md:w-[180px] md:h-[60px] animate-in text-[11px] sm:text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-2 sm:mt-4"
+            className="flex w-full sm:w-[150px] md:w-[180px] md:h-[60px]  animate-in text-[11px] sm:text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-2 sm:mt-6"
             style={{ backgroundColor: '#F79201' }}
           >
             <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white">
