@@ -1,4 +1,5 @@
 // components/CategoriesDragDrop.tsx
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { getCategories } from "@/services/api";
+
 export interface Category {
   id: number;
   name: string;
@@ -14,13 +16,26 @@ export interface Category {
   subcategories: any[];
 }
 
-export function CategoriesSection() {
+interface CategoriesSectionProps {
+  onLoad?: () => void;
+}
+
+export function CategoriesSection({ onLoad }: CategoriesSectionProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollStart, setScrollStart] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  // ✅ استدعاء onLoad بعد تحميل البيانات
+  useEffect(() => {
+    if (!loading && !isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
+  }, [loading, isDataLoaded, onLoad]);
 
   // جلب البيانات من API
   useEffect(() => {
@@ -93,7 +108,6 @@ export function CategoriesSection() {
       <section className="py-2 md:py-5">
         <div className="container px-4 sm:px-6">
           <div className="flex justify-center items-center h-[140px] md:h-[300px]">
-          
           </div>
         </div>
       </section>
@@ -101,6 +115,10 @@ export function CategoriesSection() {
   }
 
   if (categories.length === 0) {
+    if (!isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
     return null;
   }
 
@@ -175,9 +193,6 @@ export function CategoriesSection() {
                         target.src = '/images/placeholder.jpg';
                       }}
                     />
-                    
-                    {/* اسم الفئة في الأسفل */}
-                   
                   </div>
                    <div >
                       <h3 

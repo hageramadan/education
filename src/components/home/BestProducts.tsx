@@ -1,3 +1,5 @@
+// components/BestProducts.tsx
+
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -56,6 +58,10 @@ interface Product {
     name: string;
     rate: number;
   };
+}
+
+interface BestProductsProps {
+  onLoad?: () => void;
 }
 
 //  دالة للحصول على الترجمات حسب اللغة
@@ -179,7 +185,7 @@ const transformProduct = (product: ProductData): Product => {
   };
 };
 
-export function BestProducts() {
+export function BestProducts({ onLoad }: BestProductsProps) {
   const { language } = useLanguage();
   const t = getTranslations(language);
   
@@ -193,9 +199,18 @@ export function BestProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   
   const isMounted = useRef(true);
   const fetchingRef = useRef(false);
+
+  // ✅ استدعاء onLoad بعد تحميل البيانات
+  useEffect(() => {
+    if (!isInitialLoading && !isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
+  }, [isInitialLoading, isDataLoaded, onLoad]);
 
   //  تعيين isClient بعد تحميل العميل
   useEffect(() => {
@@ -312,6 +327,10 @@ export function BestProducts() {
 
   // عرض رسالة خطأ -  استخدام الترجمة
   if (error && products.length === 0) {
+    if (!isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
     return (
       <section className="py-6 md:py-12 bg-white">
         <div className="container-custom">
@@ -331,9 +350,11 @@ export function BestProducts() {
 
   //  عرض رسالة عدم وجود منتجات
   if (products.length === 0 && !isInitialLoading) {
-    return (
-     null
-    );
+    if (!isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
+    return null;
   }
 
   return (
@@ -389,7 +410,6 @@ export function BestProducts() {
                 hasVariants={product.hasVariants || false}
                 variants={product.variants || []}
                 variantId={product.variantId || null}
-                // currency={product.currency}
               />
             </div>
           ))}

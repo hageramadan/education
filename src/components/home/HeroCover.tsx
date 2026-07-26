@@ -1,4 +1,5 @@
 // components/Hero.tsx
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -17,6 +18,10 @@ interface Slide {
   description: string;
   buttonText: string;
   buttonLink: string;
+}
+
+interface HeroProps {
+  onLoad?: () => void;
 }
 
 //  دالة للحصول على الترجمات حسب اللغة
@@ -394,17 +399,26 @@ function IndividualSlider({
   );
 }
 
-export function Hero() {
+export function Hero({ onLoad }: HeroProps) {
   const { language } = useLanguage();
   const t = getTranslations(language);
   
   const [leftSlides, setLeftSlides] = useState<Slide[]>([]);
   const [rightSlides, setRightSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [centerText, setCenterText] = useState({
     title: t.defaultTitle,
     description: t.defaultDescription
   });
+
+  // ✅ استدعاء onLoad بعد تحميل البيانات
+  useEffect(() => {
+    if (!loading && !isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
+  }, [loading, isDataLoaded, onLoad]);
 
   // جلب السلايدرات من API
   useEffect(() => {
@@ -470,6 +484,10 @@ export function Hero() {
 
   // إذا لم توجد سلايدرات
   if (leftSlides.length === 0 && rightSlides.length === 0) {
+    if (!isDataLoaded && onLoad) {
+      setIsDataLoaded(true);
+      onLoad();
+    }
     return <></>;
   }
 
