@@ -215,7 +215,7 @@ export function LatestProducts() {
   if (!isClient) {
     return (
       <section className="py-2 md:py-12 bg-white">
-        <div className="container-custom">
+        <div className="container">
           <div className="mb-5 md:mb-10 flex justify-between">
             {/* <h2
               className="text-2xl md:text-3xl font-bold mb-3"
@@ -237,7 +237,7 @@ export function LatestProducts() {
   if (isInitialLoading) {
     return (
       <section className="py-2 md:py-12 bg-white">
-        <div className="container-custom">
+        <div className="container">
           <div className="mb-5 md:mb-10 flex justify-between">
             <h2
               className="text-2xl md:text-3xl font-bold mb-3"
@@ -271,7 +271,7 @@ export function LatestProducts() {
 
   return (
     <section className="py-2 md:py-12 bg-white">
-      <div className="container-custom">
+      <div className="container">
         {/* Header -  استخدام الترجمة */}
         <div className="mb-2 md:mb-5 flex justify-between items-center">
           <h2
@@ -809,7 +809,7 @@ export function LatestProducts() {
 //   if (!isClient) {
 //     return (
 //       <section className="py-6 md:py-12 bg-white">
-//         <div className="container-custom">
+//         <div className="container">
 //           <div className="flex justify-center items-center min-h-[400px]">
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
@@ -826,7 +826,7 @@ export function LatestProducts() {
 //   if (isInitialLoading) {
 //     return (
 //       <section className="py-6 md:py-12 bg-white">
-//         <div className="container-custom">
+//         <div className="container">
 //           <div className="flex justify-center items-center min-h-[400px]">
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
@@ -851,7 +851,7 @@ export function LatestProducts() {
 
 //   return (
 //     <section className="py-6 md:py-12 bg-white overflow-hidden" id="new">
-//       <div className="container-custom">
+//       <div className="container">
 //         {/* Header -  استخدام الترجمة */}
 //         <div className="mb-2 md:mb-5 flex justify-between items-center px-1 relative">
 //           <h2

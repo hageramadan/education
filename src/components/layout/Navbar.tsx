@@ -369,7 +369,7 @@ export function Navbar() {
   if (loading) {
     return (
       <header className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white">
-        <div className="container-custom">
+        <div className="container">
           <div className="flex h-20 items-center justify-between">
             <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
           </div>
@@ -385,7 +385,7 @@ export function Navbar() {
         className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white"
         style={{ backgroundColor: styles.backgroundColor }}
       >
-        <div className="container-custom">
+        <div className="container">
           <div className="flex h-16 items-center justify-between gap-4">
             {/* Logo */}
             <Link
@@ -740,7 +740,7 @@ export function Navbar() {
 
       {/* الشريط العلوي للموبايل */}
       <div className="md:hidden sticky top-0 z-30 w-full bg-white shadow-md">
-        <div className="px-2 py-3 flex items-center justify-between">
+        <div className="px-4 py-3 flex items-center justify-between">
           <Link href="/" className="shrink-0 text-[#1A834B] font-semibold text-lg">
             {/* <Image
               src="/images/logo.png"

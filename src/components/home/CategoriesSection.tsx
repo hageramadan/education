@@ -91,7 +91,7 @@ export function CategoriesSection() {
   if (loading) {
     return (
       <section className="py-2 md:py-5">
-        <div className="container-custom px-4 sm:px-6">
+        <div className="container px-4 sm:px-6">
           <div className="flex justify-center items-center h-[140px] md:h-[300px]">
           
           </div>
@@ -106,7 +106,7 @@ export function CategoriesSection() {
 
   return (
     <section className="py-2 md:py-5 ">
-      <div className="container-custom px-4 sm:px-6 relative ">
+      <div className="container px-4 sm:px-6 relative ">
         
         {/* زر السهم الأيمن */}
         {categories.length > 6 && (
