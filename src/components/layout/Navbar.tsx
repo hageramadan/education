@@ -368,7 +368,7 @@ export function Navbar() {
   // عرض شاشة تحميل مؤقتة
   if (loading) {
     return (
-      <header className="hidden md:block sticky top-0 z-50 w-full shadow-md bg-white">
+      <header className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white">
         <div className="container-custom">
           <div className="flex h-20 items-center justify-between">
             <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
@@ -382,7 +382,7 @@ export function Navbar() {
     <>
       {/* Desktop Navigation */}
       <header
-        className="hidden md:block sticky top-0 z-50 w-full shadow-md bg-white"
+        className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white"
         style={{ backgroundColor: styles.backgroundColor }}
       >
         <div className="container-custom">
@@ -441,7 +441,7 @@ export function Navbar() {
                 {/* Categories Dropdown - Desktop */}
                 {showCategoriesDropdown && (
                   <div
-                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg border shadow-xl z-50 animate-in fade-in zoom-in-95 duration-200"
+                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg border shadow-xl z-30 animate-in fade-in zoom-in-95 duration-200"
                     style={{ borderColor: "#e2e8f0" }}
                     onMouseLeave={() => setShowCategoriesDropdown(false)}
                   >
@@ -605,7 +605,7 @@ export function Navbar() {
                 </Button>
 
                 {showLanguageDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-lg border shadow-xl z-50">
+                  <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-lg border shadow-xl z-30">
                     <div className="py-2">
                       <button
                         onClick={() => handleLanguageChange("ar")}
@@ -658,7 +658,7 @@ export function Navbar() {
                   </button>
 
                   {showUserDropdown && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg border shadow-xl z-50">
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg border shadow-xl z-30">
                       <div className="py-2">
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-[#1A834B]">
@@ -739,7 +739,7 @@ export function Navbar() {
       {/* ========== MOBILE VIEW ========== */}
 
       {/* الشريط العلوي للموبايل */}
-      <div className="md:hidden sticky top-0 z-50 w-full bg-white shadow-md">
+      <div className="md:hidden sticky top-0 z-30 w-full bg-white shadow-md">
         <div className="px-2 py-3 flex items-center justify-between">
           <Link href="/" className="shrink-0 text-[#1A834B] font-semibold text-lg">
             {/* <Image
@@ -783,7 +783,7 @@ export function Navbar() {
 
                 {showMobileLanguageDropdown && (
                   <div
-                    className={`absolute top-full mt-2 w-40 bg-white rounded-lg border shadow-xl z-50 ${
+                    className={`absolute top-full mt-2 w-40 bg-white rounded-lg border shadow-xl z-30 ${
                       language === "en" ? "right-0" : "left-0"
                     }`}
                   >
@@ -1069,7 +1069,7 @@ export function Navbar() {
 
       {/* القائمة السفلية للموبايل (Bottom Navigation Bar) -  استخدام الترجمات */}
       <div
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg"
         style={{ borderColor: "#e2e8f0" }}
       >
         <div className="flex items-center justify-around py-2">
@@ -1222,10 +1222,10 @@ export function Navbar() {
       {showMobileCategoriesSheet && (
         <>
           <div
-            className="md:hidden fixed inset-0 bg-black/50 z-50 transition-opacity"
+            className="md:hidden fixed inset-0 bg-black/50 z-30 transition-opacity"
             onClick={() => setShowMobileCategoriesSheet(false)}
           />
-          <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-xl animate-in slide-in-from-bottom duration-300 max-h-[70vh] overflow-y-auto">
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white rounded-t-2xl shadow-xl animate-in slide-in-from-bottom duration-300 max-h-[70vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b px-4 py-3 flex items-center justify-between">
               <h3 className="text-lg font-bold" style={{ color: "#112B40" }}>
                 {t.allCategories}

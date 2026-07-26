@@ -490,10 +490,10 @@ export function Hero() {
       </div>
 
       {/* Overlay gradient - فقط للديكور */}
-      <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-black/40 via-black/10 to-black/40" />
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/40 via-black/10 to-black/40" />
 
       {/* Fixed Center Text */}
-      <div className="absolute inset-0 z-30 flex items-center lg:items-center justify-center lg:justify-normal px-4 sm:px-6 pointer-events-none">
+      <div className="absolute inset-0 z-20 flex items-center lg:items-center justify-center lg:justify-normal px-4 sm:px-6 pointer-events-none">
         <div className="max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%] pointer-events-none">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[58px] font-bold mb-2 sm:mb-3 md:mb-4 text-white drop-shadow-lg">
             {centerText.title}
