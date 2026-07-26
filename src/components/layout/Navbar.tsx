@@ -369,7 +369,7 @@ export function Navbar() {
   if (loading) {
     return (
       <header className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white">
-        <div className="container">
+        <div className="container-custom">
           <div className="flex h-20 items-center justify-between">
             <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
           </div>
@@ -385,7 +385,7 @@ export function Navbar() {
         className="hidden md:block sticky top-0 z-30 w-full shadow-md bg-white"
         style={{ backgroundColor: styles.backgroundColor }}
       >
-        <div className="container">
+        <div className="container-custom">
           <div className="flex h-16 items-center justify-between gap-4">
             {/* Logo */}
             <Link

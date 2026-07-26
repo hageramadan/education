@@ -215,7 +215,7 @@ export function LatestProducts() {
   if (!isClient) {
     return (
       <section className="py-2 md:py-12 bg-white">
-        <div className="container">
+        <div className="container-custom">
           <div className="mb-5 md:mb-10 flex justify-between">
             {/* <h2
               className="text-2xl md:text-3xl font-bold mb-3"
@@ -237,7 +237,7 @@ export function LatestProducts() {
   if (isInitialLoading) {
     return (
       <section className="py-2 md:py-12 bg-white">
-        <div className="container">
+        <div className="container-custom">
           <div className="mb-5 md:mb-10 flex justify-between">
             <h2
               className="text-2xl md:text-3xl font-bold mb-3"
@@ -271,7 +271,7 @@ export function LatestProducts() {
 
   return (
     <section className="py-2 md:py-12 bg-white">
-      <div className="container">
+      <div className="container-custom">
         {/* Header -  استخدام الترجمة */}
         <div className="mb-2 md:mb-5 flex justify-between items-center">
           <h2
@@ -490,7 +490,7 @@ export function LatestProducts() {
 //   const isMountedRef = useRef(true);
 //   const fetchingRef = useRef(false);
 //   const sliderRef = useRef<HTMLDivElement>(null);
-//   const containerRef = useRef<HTMLDivElement>(null);
+//   const container-customRef = useRef<HTMLDivElement>(null);
 //   const animationRef = useRef<number>(0);
 //   const velocityRef = useRef(0);
 //   const lastMoveXRef = useRef(0);
@@ -588,10 +588,10 @@ export function LatestProducts() {
 
 //   // حساب عرض الكارت الواحد مع المسافات
 //   const getCardWidthWithGap = useCallback(() => {
-//     if (!containerRef.current) return 0;
-//     const containerWidth = containerRef.current.offsetWidth;
+//     if (!container-customRef.current) return 0;
+//     const container-customWidth = container-customRef.current.offsetWidth;
 //     const gap = window.innerWidth < 640 ? 8 : 16;
-//     return (containerWidth - (itemsPerView - 1) * gap) / itemsPerView + gap;
+//     return (container-customWidth - (itemsPerView - 1) * gap) / itemsPerView + gap;
 //   }, [itemsPerView]);
 
 //   // الانتقال لشريحة محددة
@@ -809,7 +809,7 @@ export function LatestProducts() {
 //   if (!isClient) {
 //     return (
 //       <section className="py-6 md:py-12 bg-white">
-//         <div className="container">
+//         <div className="container-custom">
 //           <div className="flex justify-center items-center min-h-[400px]">
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
@@ -826,7 +826,7 @@ export function LatestProducts() {
 //   if (isInitialLoading) {
 //     return (
 //       <section className="py-6 md:py-12 bg-white">
-//         <div className="container">
+//         <div className="container-custom">
 //           <div className="flex justify-center items-center min-h-[400px]">
 //             <div className="flex flex-col items-center gap-4">
 //               <div className="relative">
@@ -851,7 +851,7 @@ export function LatestProducts() {
 
 //   return (
 //     <section className="py-6 md:py-12 bg-white overflow-hidden" id="new">
-//       <div className="container">
+//       <div className="container-custom">
 //         {/* Header -  استخدام الترجمة */}
 //         <div className="mb-2 md:mb-5 flex justify-between items-center px-1 relative">
 //           <h2
@@ -868,7 +868,7 @@ export function LatestProducts() {
 //           </Link>
 //         </div>
 
-//         {/* Slider Container */}
+//         {/* Slider container-custom */}
 //         <div className="relative">
 //            {currentIndex >= 0 && (
 //               <button
@@ -904,7 +904,7 @@ export function LatestProducts() {
 //             )}
 
 //           {/* Slider Track */}
-//           <div ref={containerRef} className="overflow-hidden">
+//           <div ref={container-customRef} className="overflow-hidden">
 //             <div
 //               ref={sliderRef}
 //               className="flex gap-3 md:gap-5 cursor-grab active:cursor-grabbing select-none"

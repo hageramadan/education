@@ -457,7 +457,7 @@ export function Hero() {
   // عرض شاشة تحميل
   if (loading) {
     return (
-      <section className="container my-4 rounded-[8px] relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
+      <section className="container-custom my-4 rounded-[8px] relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
         <div className="flex items-center justify-center h-full min-h-[50vh]">
           <div className="relative">
             <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
@@ -474,7 +474,7 @@ export function Hero() {
   }
 
   return (
-    <section className="container p-0 lg:rounded-[8px] lg:my-4 relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
+    <section className="container-custom p-0 lg:rounded-[8px] lg:my-4 relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
       
       {/* Slider */}
       <div className="w-full h-full">
