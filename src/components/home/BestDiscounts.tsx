@@ -37,7 +37,7 @@ interface ProductVariant {
   attributes: VariantAttribute[];
 }
 
-//  تحديث واجهة Product لإضافة خصائص الفاريانتات
+//  تحديث واجهة Product لإضافة خصائص الفاريانتات والكمية
 interface Product {
   id: string;
   name: string;
@@ -60,6 +60,7 @@ interface Product {
     name: string;
     rate: number;
   };
+  quantity?: number | null; // ✅ إضافة الكمية
 }
 
 interface BestDiscountsProps {
@@ -132,7 +133,7 @@ const cleanImageUrl = (url: string) => {
   return `https://fakeha.admin.t-carts.com${url}`;
 };
 
-//  تحويل البيانات من API إلى شكل المنتج المطلوب مع دعم الفاريانتات
+//  تحويل البيانات من API إلى شكل المنتج المطلوب مع دعم الفاريانتات والكمية
 const transformProduct = (product: ProductData): Product => {
   const mainImage =
     product.images && product.images.length > 0
@@ -168,6 +169,16 @@ const transformProduct = (product: ProductData): Product => {
     colors = extractColorsFromVariants(product.variants as ProductVariant[]);
   }
 
+  // ✅ استخراج الكمية من المنتج
+  let quantity: number | null = null;
+  if (product.has_variants && product.variants && product.variants.length > 0) {
+    // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
+    quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
+  } else {
+    // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
+    quantity = product.quantity ?? null;
+  }
+
   return {
     id: product.id.toString(),
     name: product.name,
@@ -190,6 +201,7 @@ const transformProduct = (product: ProductData): Product => {
       name: "Egyptian Pound",
       rate: 1,
     },
+    quantity: quantity, // ✅ إضافة الكمية
   };
 };
 
@@ -213,7 +225,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
   const isMounted = useRef(true);
   const fetchingRef = useRef(false);
 
-  // ✅ استدعاء onLoad بعد تحميل البيانات
+  // ✅ استدعاء onLoad في useEffect وليس في render
   useEffect(() => {
     if (!isInitialLoading && !isDataLoaded && onLoad) {
       setIsDataLoaded(true);
@@ -351,19 +363,13 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
     );
   }
 
+  // ✅ من غير استدعاء onLoad هنا
   if (error && products.length === 0) {
-    if (!isDataLoaded && onLoad) {
-      setIsDataLoaded(true);
-      onLoad();
-    }
     return <></>;
   }
 
+  // ✅ من غير استدعاء onLoad هنا
   if (products.length === 0 && !isInitialLoading) {
-    if (!isDataLoaded && onLoad) {
-      setIsDataLoaded(true);
-      onLoad();
-    }
     return (
       <section className="py-6 md:py-12 bg-white">
         <div className="container-custom">
@@ -434,6 +440,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
                 variants={product.variants || []}
                 variantId={product.variantId || null}
                 currency={product.currency}
+                quantity={product.quantity} // ✅ تمرير الكمية إلى ProductCard
               />
             </div>
           ))}

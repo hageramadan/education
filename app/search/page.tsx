@@ -16,9 +16,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // إضافة الـ Select components
+} from "@/components/ui/select";
 
-const API_URL = "https://fakeha.admin.t-carts.com/api";
+const API_URL = "https://education.admin.t-carts.com/api";
 
 //  تعريف واجهات
 interface VariantAttribute {
@@ -63,6 +63,7 @@ interface TransformedProduct {
   hasVariants?: boolean;
   variants?: ProductVariant[];
   variantId?: number | null;
+  quantity?: number | null; // ✅ إضافة الكمية
 }
 
 // دالة جلب التوكن
@@ -166,7 +167,7 @@ const transformProductForCard = (product: any): TransformedProduct => {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder-product.jpg";
     if (url.startsWith("/storage")) {
-      return `https://fakeha.admin.t-carts.com${url}`;
+      return `https://education.admin.t-carts.com${url}`;
     }
     return url;
   };
@@ -180,6 +181,16 @@ const transformProductForCard = (product: any): TransformedProduct => {
   let discount = undefined;
   if (hasDiscount && originalPrice && originalPrice > finalPrice) {
     discount = Math.round(((originalPrice - finalPrice) / originalPrice) * 100);
+  }
+
+  // ✅ استخراج الكمية من المنتج
+  let quantity: number | null = null;
+  if (product.has_variants && product.variants && product.variants.length > 0) {
+    // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
+    quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
+  } else {
+    // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
+    quantity = product.quantity ?? null;
   }
 
   return {
@@ -200,6 +211,7 @@ const transformProductForCard = (product: any): TransformedProduct => {
     hasVariants: hasVariants,
     variants: variants,
     variantId: variantId,
+    quantity: quantity, // ✅ إضافة الكمية
   };
 };
 
@@ -220,7 +232,7 @@ function SearchContent() {
   const [searchInput, setSearchInput] = useState(query);
   const [sortBy, setSortBy] = useState("");
 
-  const perPage = 10; //  10 منتجات في كل صفحة
+  const perPage = 10;
 
   const hasLoadedRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -412,15 +424,15 @@ function SearchContent() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder={t('search.placeholder')}
-              className="w-full px-6 py-3 ps-2 border border-gray-200 rounded-[8px] focus:outline-none focus:ring-[#1A834B] focus:border-transparent"
+              className="w-full px-6 py-3 ps-2 border border-gray-200 rounded-[8px] focus:outline-none focus:ring-[#C092BD] focus:border-transparent"
             />
             <button
               type="submit"
-              className={`absolute ${language === 'en' ? ' end-3' : ' end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1A834B] transition`}
+              className={`absolute ${language === 'en' ? ' end-3' : ' end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C092BD] transition`}
               disabled={isLoading}
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-[#C092BD] rounded-full animate-spin"></div>
               ) : (
                 <Search className="w-5 h-5" />
               )}
@@ -428,7 +440,7 @@ function SearchContent() {
           </form>
         </div>
 
-        {/* عدد النتائج وشريط الترتيب - باستخدام نفس UI بتاع CustomerReviews */}
+        {/* عدد النتائج وشريط الترتيب */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <p className="text-gray-600">
             {totalProducts > 0 ? (
@@ -438,10 +450,9 @@ function SearchContent() {
             )}
           </p>
           
-          {/* استخدام نفس Select component زي CustomerReviews */}
           {products.length > 0 && (
             <Select value={sortBy} onValueChange={handleSortChange}>
-              <SelectTrigger className="h-12 bg-[#F0F0F0] rounded-full focus:ring-[#1A834B] focus:ring-offset-0 w-[180px]">
+              <SelectTrigger className="h-12 bg-[#F0F0F0] rounded-full focus:ring-[#C092BD] focus:ring-offset-0 w-[180px]">
                 <SelectValue placeholder={t('search.sortBy')} />
               </SelectTrigger>
               <SelectContent className="bg-white rounded-[8px] shadow-lg border-gray-100">
@@ -449,7 +460,7 @@ function SearchContent() {
                   <SelectItem
                     key={option.value}
                     value={option.value}
-                    className="cursor-pointer hover:bg-blue-50 hover:text-[#1A834B] focus:bg-blue-50 focus:text-[#1A834B]"
+                    className="cursor-pointer hover:bg-blue-50 hover:text-[#C092BD] focus:bg-blue-50 focus:text-[#C092BD]"
                   >
                     <div className="flex items-center gap-2">
                       <span>{option.label}</span>
@@ -464,7 +475,7 @@ function SearchContent() {
         {isLoading && products.length > 0 && (
           <div className="flex justify-center py-8">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#C092BD] rounded-full animate-spin"></div>
               <span className="text-gray-500">{t('search.loadingMore')}</span>
             </div>
           </div>
@@ -498,6 +509,7 @@ function SearchContent() {
                       hasVariants={cardData.hasVariants || false}
                       variants={cardData.variants || []}
                       variantId={cardData.variantId || null}
+                      quantity={cardData.quantity} // ✅ تمرير الكمية إلى ProductCard
                     />
                   </div>
                 );
@@ -531,7 +543,7 @@ function SearchContent() {
               </p>
               <button
                 onClick={() => router.push("/")}
-                className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
+                className="inline-block bg-[#C092BD] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 {t('search.backToHome')}
               </button>

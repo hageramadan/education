@@ -170,7 +170,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
   // عرض نسخة ثابتة أثناء Hydration
   if (!isClient) {
     return (
-      <section className="bg-[#EAFAF1]">
+      <section className="bg-[#C092BD]">
         <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-6 md:gap-10 min-h-[200px]">
           <div className="flex items-center justify-center w-full">
           </div>
@@ -193,7 +193,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
   const hasTimer = timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0;
 
   return (
-    <section className="bg-[#EAFAF1] container rounded-[8px]">
+    <section className="bg-[#C092BD] container rounded-[8px]">
       <div className="flex flex-col lg:flex-row items-end justify-end lg:items-stretch lg:justify-between gap-1 sm:gap-3 md:gap-10">
         
         {/* Left Content */}

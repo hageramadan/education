@@ -1,10 +1,11 @@
 // src/components/products/ProductCard.tsx
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -19,7 +20,6 @@ interface ColorOption {
   name: string;
 }
 
-//  إضافة واجهة العملة
 interface Currency {
   code: string;
   symbol: string;
@@ -44,6 +44,7 @@ interface ProductCardProps {
   hasVariants?: boolean;
   variants?: Array<{ id: number }>;
   currency?: Currency;
+  quantity?: number | null;
 }
 
 //  دالة للحصول على الترجمات حسب اللغة
@@ -59,6 +60,8 @@ const getTranslations = (lang: string) => {
       addedToCart: "Product added to cart successfully",
       errorAddingToCart: "Error adding product to cart",
       reviews: "reviews",
+      outOfStock: "Out of Stock",
+      productUnavailable: "Product is not available",
     };
   }
   // Arabic (default)
@@ -66,12 +69,14 @@ const getTranslations = (lang: string) => {
     loginRequired: "يرجى تسجيل الدخول أولاً لإضافة المنتجات إلى المفضلة",
     errorAdding: "حدث خطأ أثناء إضافة المنتج إلى المفضلة",
     bestSeller: "الاكثر طلبا",
-    addToCart: "اضف الي السلة",
+    addToCart: "إضافة إلى السلة",
     removeFromFavorites: "إزالة من المفضلة",
     addToFavorites: "إضافة إلى المفضلة",
     addedToCart: "تم إضافة المنتج إلى السلة",
     errorAddingToCart: "حدث خطأ أثناء إضافة المنتج إلى السلة",
     reviews: "تقييمات",
+    outOfStock: " نفذ من المخزون",
+    productUnavailable: "المنتج  نفذ من المخزون",
   };
 };
 
@@ -92,6 +97,7 @@ export function ProductCard({
   hasVariants = false,
   variants = [],
   currency,
+  quantity,
 }: ProductCardProps) {
   const { language } = useLanguage();
   const t = getTranslations(language);
@@ -109,6 +115,9 @@ export function ProductCard({
   
   const isProductFavorite = isFavorite(id);
   const [localFavorite, setLocalFavorite] = useState(isProductFavorite);
+  
+  // التحقق من التوفر - الكمية null أو undefined أو 0 أو أقل
+  const isOutOfStock = quantity === null || quantity === undefined || quantity <= 0;
 
   // دالة لتوليد نجوم التقييم
   const renderStars = (rating: number) => {
@@ -171,27 +180,36 @@ export function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     
+    // ✅ التحقق من الكمية قبل الإضافة
+    if (isOutOfStock) {
+      toast.error(t.productUnavailable, {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+    
     if (isAddingToCart || cartLoading) return;
     
     const productId = parseInt(id);
-    const quantity = 1;
+    const quantityToAdd = 1; // يمكن تعديلها حسب الحاجة
     
     if (hasVariants && variants.length > 0) {
       const firstVariantId = variants[0].id;
       
       setIsAddingToCart(true);
       try {
-        await addItem(productId, quantity, firstVariantId);
+        await addItem(productId, quantityToAdd, firstVariantId);
         // toast.success(t.addedToCart, {
-        //   duration: 2000,
-        //   position: "bottom-right",
+        //   duration: 3000,
+        //   position: "top-center",
         // });
       } catch (error) {
         console.error("❌ Error adding to cart:", error);
-        // toast.error(t.errorAddingToCart, {
-        //   duration: 2000,
-        //   position: "bottom-right",
-        // });
+        toast.error(t.errorAddingToCart, {
+          duration: 3000,
+          position: "top-center",
+        });
       } finally {
         setIsAddingToCart(false);
       }
@@ -201,21 +219,21 @@ export function ProductCard({
     setIsAddingToCart(true);
     try {
       const finalVariantId = variantId || null;
-      await addItem(productId, quantity, finalVariantId);
+      await addItem(productId, quantityToAdd, finalVariantId);
       // toast.success(t.addedToCart, {
-      //   duration: 2000,
-      //   position: "bottom-right",
+      //   duration: 3000,
+      //   position: "top-center",
       // });
     } catch (error) {
       console.error("❌ Error adding to cart:", error);
-      // toast.error(t.errorAddingToCart, {
-      //   duration: 2000,
-      //   position: "bottom-right",
-      // });
+      toast.error(t.errorAddingToCart, {
+        duration: 3000,
+        position: "top-center",
+      });
     } finally {
       setIsAddingToCart(false);
     }
-  }, [id, variantId, hasVariants, variants, isAddingToCart, cartLoading, addItem, t]);
+  }, [id, variantId, hasVariants, variants, isAddingToCart, cartLoading, addItem, isOutOfStock, t]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -233,423 +251,160 @@ export function ProductCard({
     <div
       role="article"
       aria-labelledby={`product-name-${id}`}
-      className="group relative w-full mx-auto"
+      className="group w-full max-w-[340px] sm:max-w-[350px] md:max-w-[308px] lg:max-w-[308px] mx-auto h-auto relative bg-white transition-all duration-500 ease-out hover:shadow-2xl"
+      style={{
+        borderRadius: '16px',
+        border: '1px solid #E4E7E9',
+        padding: '0 0px 16px 0',
+        overflow: 'hidden',
+        transform: isHovered ? 'translateY(-12px)' : 'translateY(0px)',
+        transition: 'transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s ease',
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <style jsx>{`
-        .product-card {
-          width: 100%;
-          height: 200px;
-          border-radius: 16px;
-          border: 1px solid #E4E7E9;
-          overflow: hidden;
-          background: white;
-          position: relative;
-          isolation: isolate;
-        }
-        
-        .product-card:hover {
-          box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .product-image {
-          height: 152px;
-          width: 100%;
-          border-radius: 16px 16px 0 0;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        @media (min-width: 640px) {
-          .product-card {
-            max-width: 308px;
-            height: 432px;
-          }
-          .product-image {
-            height: 308px;
-          }
-        }
-
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .spinner {
-          animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        .favorite-button {
-          position: absolute;
-          top: 8px;
-          left: 8px;
-          z-index: 30;
-          border-radius: 9999px;
-          padding: 6px;
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(4px);
-          transition: all 0.2s ease;
-          border: none;
-          cursor: pointer;
-        }
-
-        .favorite-button:hover {
-          transform: scale(1.1);
-        }
-
-        .favorite-button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        @media (min-width: 640px) {
-          .favorite-button {
-            top: 12px;
-            left: 12px;
-            padding: 8px;
-          }
-        }
-
-        .add-to-cart-overlay {
-          position: absolute;
-          inset: 0;
-          z-index: 20;
-          display: flex;
-          align-items: flex-end;
-          justify-content: center;
-          padding-bottom: 16px;
-          background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-          opacity: 0;
-          visibility: hidden;
-          transition: all 0.3s ease;
-        }
-
-        .group:hover .add-to-cart-overlay {
-          opacity: 1;
-          visibility: visible;
-        }
-
-        .add-to-cart-button {
-          font-size: 11px;
-          font-weight: 600;
-          border-radius: 8px;
-          background: #2ECC71;
-          color: white;
-          padding: 6px 12px;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 4px;
-          border: none;
-          cursor: pointer;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-          transform: scale(0.9);
-        }
-
-        .group:hover .add-to-cart-button {
-          transform: scale(1);
-        }
-
-        .add-to-cart-button:hover {
-          background: #1A834B;
-          transform: scale(1.05);
-        }
-
-        .add-to-cart-button:active {
-          transform: scale(0.95);
-        }
-
-        .add-to-cart-button:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        @media (min-width: 640px) {
-          .add-to-cart-button {
-            font-size: 13px;
-            padding: 8px 16px;
-            gap: 8px;
-          }
-        }
-
-        .product-info {
-          padding: 8px 12px 12px 12px;
-          display: flex;
-          flex-direction: column;
-          background: white;
-          flex: 1;
-        }
-
-        @media (min-width: 640px) {
-          .product-info {
-            padding: 12px 16px 16px 16px;
-          }
-        }
-
-        .product-name {
-          font-size: 11px;
-          font-weight: 500;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          margin-bottom: 4px;
-          color: #112B40;
-        }
-
-        @media (min-width: 640px) {
-          .product-name {
-            font-size: 13px;
-            margin-bottom: 8px;
-          }
-        }
-
-        .rating-container {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          margin-bottom: 4px;
-          flex-wrap: wrap;
-        }
-
-        @media (min-width: 640px) {
-          .rating-container {
-            gap: 8px;
-            margin-bottom: 8px;
-          }
-        }
-
-        .price-container {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          margin-top: 4px;
-        }
-
-        @media (min-width: 640px) {
-          .price-container {
-            gap: 8px;
-            margin-top: 8px;
-          }
-        }
-
-        .current-price {
-          font-size: 14px;
-          font-weight: 700;
-          color: #2ECC71;
-        }
-
-        @media (min-width: 640px) {
-          .current-price {
-            font-size: 16px;
-          }
-        }
-
-        .original-price-text {
-          font-size: 12px;
-          text-decoration: line-through;
-          color: #9CA3AF;
-        }
-
-        @media (min-width: 640px) {
-          .original-price-text {
-            font-size: 14px;
-          }
-        }
-
-        .currency {
-          font-size: 14px;
-          font-weight: 700;
-          color: #2ECC71;
-        }
-
-        @media (min-width: 640px) {
-          .currency {
-            font-size: 16px;
-          }
-        }
-
-        .badge {
-          font-size: 8px;
-          font-weight: 700;
-          color: white;
-          background: #2ECC71;
-          padding: 2px 6px;
-          border-radius: 4px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (min-width: 640px) {
-          .badge {
-            font-size: 10px;
-            padding: 4px 8px;
-          }
-        }
-
-        .discount-badge {
-          position: absolute;
-          top: 40px;
-          right: 8px;
-          z-index: 20;
-          font-size: 8px;
-          font-weight: 700;
-          color: #195073;
-          background: #FFDB00;
-          padding: 2px 6px;
-          border-radius: 4px;
-        }
-
-        @media (min-width: 640px) {
-          .discount-badge {
-            top: 48px;
-            right: 12px;
-            font-size: 10px;
-            padding: 4px 8px;
-          }
-        }
-
-        .spinner-small {
-          width: 16px;
-          height: 16px;
-          border: 2px solid #1A834B;
-          border-top-color: transparent;
-          border-radius: 50%;
-          animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        @media (min-width: 640px) {
-          .spinner-small {
-            width: 20px;
-            height: 20px;
-          }
-        }
-      `}</style>
-
-      <div className="product-card">
-        {/* Favorite Button */}
-        <button
-          onClick={handleFavoriteClick}
-          disabled={isLocalMutating || isLoading}
-          className="favorite-button"
-          style={{ color: localFavorite ? '#ef4444' : '#112B40' }}
-          aria-label={localFavorite ? t.removeFromFavorites : t.addToFavorites}
-          aria-pressed={localFavorite}
+      <Link href={href} className="block h-full" aria-label={`عرض تفاصيل ${name}`}>
+        {/* Image Container */}
+        <div 
+          className="relative mx-auto transition-all duration-500 w-full"
+          style={{
+            borderRadius: '5px',
+          }}
         >
-          {isLocalMutating ? (
-            <div className="spinner-small" />
-          ) : (
-            <Heart className="h-4 w-4 sm:h-5 sm:w-5" fill={localFavorite ? '#ef4444' : 'none'} />
-          )}
-        </button>
-
-        <Link href={href} className="h-full flex flex-col" aria-label={`عرض تفاصيل ${name}`}>
-          {/* Image Container */}
-          <div className="product-image bg-gray-100">
-            {/* Loading Spinner */}
-            {!imageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center z-10 bg-gray-100">
-                <div className="spinner w-8 h-8 border-4 border-[#1A834B] border-t-transparent rounded-full"></div>
-              </div>
+          {/* Heart Icon - Top Left Corner */}
+          <button
+            onClick={handleFavoriteClick}
+            disabled={isLocalMutating || isLoading}
+            className="absolute top-1 left-2 z-10 rounded-full p-1.5 bg-white shadow hover:bg-red-50 transition-all duration-200 hover:scale-110"
+            style={{ color: localFavorite ? '#ef4444' : '#112B40' }}
+            aria-label={localFavorite ? t.removeFromFavorites : t.addToFavorites}
+            aria-pressed={localFavorite}
+          >
+            {isLocalMutating ? (
+              <div className="w-4 h-4 border-2 border-[#C092BD] border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Heart className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" fill={localFavorite ? '#ef4444' : 'none'} />
             )}
-            
-            {/* Best Seller Badge -  استخدام الترجمة */}
-            {isBestSeller && (
-              <div className="absolute top-2 right-2 z-20">
-                <p className="badge">{t.bestSeller}</p>
-              </div>
-            )}
-
-            {/* Discount Badge */}
-            {discount && discount > 0 && (
-              <div className="discount-badge">
-                {discount}% OFF
-              </div>
-            )}
-
-            {/* Add to Cart Button - Overlay on Image -  استخدام الترجمة */}
-            <div className="add-to-cart-overlay">
-              <button
-                onClick={handleAddToCart}
-                disabled={isAddingToCart || cartLoading}
-                className="add-to-cart-button"
-              >
-                {isAddingToCart || cartLoading ? (
-                  <div className="spinner-small border-white" />
-                ) : (
-                  <>
-                    <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>{t.addToCart}</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Image */}
-            <div className="relative w-full h-full">
-              <Image
-                src={currentImage}
-                alt={name}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 308px"
-                className="object-cover transition-all duration-700 ease-out"
-                style={{
-                  transform: isHovered ? 'scale(1.08)' : 'scale(1)',
-                }}
-                onLoad={() => setImageLoaded(true)}
-              />
-            </div>
-          </div>
-
-          {/* Product Info */}
-          <div className="product-info">
-            {/* Rating -  استخدام الترجمة */}
-            <div className="rating-container">
-              <div className="flex gap-0.5">
-                {renderStars(rating)}
-              </div>
-              <p className="text-[#77878F] text-[10px] sm:text-xs">
-                ({reviewsCount > 0 ? reviewsCount : 0} {t.reviews})
+          </button>
+          
+          {/* Best Seller Badge */}
+          {isBestSeller && (
+            <div className="absolute top-2 right-2 z-10">
+              <p className="text-[9px] sm:text-xs font-bold text-white bg-[#08B2A7] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded">
+                {t.bestSeller}
               </p>
             </div>
-            
-            {/* Product Name */}
-            <h3 
-              id={`product-name-${id}`}
-              className="product-name"
-            >
-              {name}
-            </h3>
+          )}
 
-            {/* Price -  استخدام العملة */}
-            <div className="price-container">
-              {originalPrice && originalPrice > price ? (
-                <>
-                  <span className="original-price-text">
-                    {originalPrice.toLocaleString()}
-                  </span>
-                  <span className="current-price">
-                    {price.toLocaleString()}
-                  </span>
-                  <span className="currency">{currency?.symbol || '$'}</span>
-                </>
-              ) : (
-                <>
-                  <span className="current-price">
-                    {price.toLocaleString()}
-                  </span>
-                  <span className="currency">{currency?.symbol || '$'}</span>
-                </>
-              )}
+          {/* Discount Badge */}
+          {discount && discount > 0 && (
+            <div className="absolute top-10 right-2 z-10">
+              <p className="text-[9px] sm:text-xs font-bold text-white bg-red-500 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded">
+                {discount}% OFF
+              </p>
+            </div>
+          )}
+
+          {/* Out of Stock Badge */}
+          {/* {isOutOfStock && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 rounded-t-lg">
+              <p className="text-white text-sm sm:text-base font-bold bg-red-600 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg">
+                {t.outOfStock}
+              </p>
+            </div>
+          )} */}
+
+          {/* Image with scale effect on hover */}
+          <div className="overflow-hidden rounded-t-lg">
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-t-lg">
+                <div className="w-8 h-8 border-4 border-[#C092BD] border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+            <Image
+              src={currentImage}
+              alt={name}
+              width={340}
+              height={340}
+              className="object-cover w-full h-auto aspect-square transition-transform duration-500 ease-out group-hover:scale-105"
+              style={{
+                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+              }}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </div>
+        </div>
+
+        {/* Product Info with slide up effect */}
+        <div 
+          className="px-2 sm:px-3 flex flex-col gap-1 sm:gap-2 mt-2 transition-all duration-500 ease-out"
+          style={{
+            transform: isHovered ? 'translateY(-4px)' : 'translateY(0px)',
+          }}
+        >
+          {/* Rating Section */}
+          <div className="flex gap-1 items-center mb-1 flex-wrap">
+            <p className="text-[#77878F] text-[10px] sm:text-xs md:text-sm">({reviewsCount || 0})</p>
+            <div className="flex gap-0.5">
+              {renderStars(rating)}
             </div>
           </div>
-        </Link>
-      </div>
+          
+          {/* Product Name */}
+          <h3 
+            id={`product-name-${id}`}
+            className="text-[11px] sm:text-[13px] md:text-[14px] font-medium line-clamp-2 mb-1" 
+            style={{ color: '#112B40' }}
+          >
+            {name}
+          </h3>
+
+          {/* Price */}
+          <div className="flex items-center gap-2 mb-2">
+            {originalPrice && originalPrice > price ? (
+              <>
+                <span className="text-sm sm:text-base md:text-[17px] font-semibold" style={{ color: '#08B2A7' }}>
+                  {price.toLocaleString()} <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">{currency?.symbol || 'EGP'}</span>
+                </span>
+                <span className="text-[10px] sm:text-xs md:text-[12px] text-gray-400 line-through">
+                  {originalPrice.toLocaleString()}
+                </span>
+              </>
+            ) : (
+              <span className="text-sm sm:text-base md:text-[17px] font-semibold" style={{ color: '#08B2A7' }}>
+                {price.toLocaleString()} <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">{currency?.symbol || 'EGP'}</span>
+              </span>
+            )}
+          </div>
+          
+          {/* Add to cart button */}
+          <div
+            style={{
+              opacity: isHovered ? 1 : 0.9,
+              transition: 'opacity 0.3s ease 0.1s',
+            }}
+          >
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock || isAddingToCart || cartLoading}
+              className={`w-full text-[11px] sm:text-[14px] md:text-[16px] font-semibold rounded-[24px] transition-all duration-300 text-white py-1.5 sm:py-2 md:py-2.5 px-4 border-2 flex items-center justify-center gap-2 hover:scale-[1.02] h-auto ${
+                isOutOfStock 
+                  ? 'bg-gray-400 border-gray-400 cursor-not-allowed' 
+                  : 'bg-[#C092BD] hover:bg-[#8C6D8A] border-[#C092BD] hover:border-[#8C6D8A]'
+              }`}
+            >
+              {isAddingToCart || cartLoading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                  <span>{isOutOfStock ? t.outOfStock : t.addToCart}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }

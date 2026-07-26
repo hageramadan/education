@@ -309,6 +309,8 @@
   },
   
   "product": {
+    "outOfStock":"out of stock",
+    "availableQuantity":"available Quantity",
     "noBrand": "No Brand",
     "review": "Review",
     "color": "Color",

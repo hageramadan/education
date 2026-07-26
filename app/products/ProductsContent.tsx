@@ -49,6 +49,26 @@ interface FiltersState {
   maxPrice?: number;
 }
 
+// تعريف نوع المنتج المحول للبطاقة
+interface TransformedProductCard {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  hoverImage: string;
+  href: string;
+  originalPrice?: number;
+  discount?: number;
+  colors?: Array<{ color: string; name: string }>;
+  rating?: number;
+  reviewsCount?: number;
+  isBestSeller?: boolean;
+  hasVariants?: boolean;
+  variants?: ProductVariant[];
+  variantId?: number | null;
+  quantity?: number | null; // ✅ إضافة الكمية
+}
+
 const extractColorsFromVariants = (
   variants: ProductVariant[],
 ): Array<{ color: string; name: string }> => {
@@ -80,7 +100,7 @@ const extractColorsFromVariants = (
 
 export default function ProductsContent() {
   const searchParams = useSearchParams();
-  const { t } = useTranslation(); //  استخدام hook الترجمة
+  const { t } = useTranslation();
 
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,8 +174,6 @@ export default function ProductsContent() {
         ];
       }
 
-      
-      
       const { products: productsData, pagination } =
         await getAllProducts(filterParams);
       
@@ -194,8 +212,6 @@ export default function ProductsContent() {
   }, [loadProducts]);
 
   const handleFilterChange = (newFilters: any) => {
-   
-    
     const updatedFilters: FiltersState = {};
     
     if (newFilters.categoryIds) {
@@ -217,8 +233,6 @@ export default function ProductsContent() {
       updatedFilters.maxPrice = newFilters.maxPrice;
     }
     
-   
-    
     isFilterChangeRef.current = true;
     setFilters(updatedFilters);
     setCurrentPage(1);
@@ -226,7 +240,6 @@ export default function ProductsContent() {
   };
 
   const handlePageChange = (page: number) => {
-   
     if (page >= 1 && page <= lastPage) {
       setCurrentPage(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -244,7 +257,8 @@ export default function ProductsContent() {
     };
   }, [isMobileFilterOpen]);
 
-  const transformProductForCard = (product: ProductData) => {
+  // ✅ تحويل المنتج إلى بيانات البطاقة مع الكمية
+  const transformProductForCard = (product: ProductData): TransformedProductCard => {
     let colors: Array<{ color: string; name: string }> = [];
 
     if (
@@ -258,10 +272,20 @@ export default function ProductsContent() {
     const cleanImageUrl = (url: string) => {
       if (!url) return "/placeholder-image.jpg";
       if (url.startsWith("/storage")) {
-        return `https://fakeha.admin.t-carts.com${url}`;
+        return `https://education.admin.t-carts.com${url}`;
       }
-      return `https://fakeha.admin.t-carts.com/storage${url}`;
+      return `https://education.admin.t-carts.com/storage${url}`;
     };
+
+    // ✅ استخراج الكمية من المنتج
+    // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
+    let quantity: number | null = null;
+    if (product.has_variants && product.variants && product.variants.length > 0) {
+      quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
+    } else {
+      // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
+      quantity = product.quantity ?? null;
+    }
 
     return {
       id: product.id.toString(),
@@ -289,6 +313,8 @@ export default function ProductsContent() {
       isBestSeller: product.is_active,
       hasVariants: product.has_variants || false,
       variants: product.variants || [],
+      // ✅ إضافة الكمية للمنتج المحول
+      quantity: quantity,
     };
   };
 
@@ -329,7 +355,7 @@ export default function ProductsContent() {
                   onClick={() => {
                     setIsMobileFilterOpen(true);
                   }}
-                  className="md:hidden flex items-center gap-2 px-4 py-2 bg-[#1A834B] rounded-[8px] hover:bg-gray-200 transition-colors"
+                  className="md:hidden flex items-center gap-2 px-4 py-2 bg-[#C092BD] rounded-[8px] hover:bg-gray-200 transition-colors"
                 >
                   <VscSettings className="w-6 h-6 text-white" />
                 </button>
@@ -362,12 +388,9 @@ export default function ProductsContent() {
                           reviewsCount={cardData.reviewsCount}
                           isBestSeller={cardData.isBestSeller}
                           hasVariants={cardData.hasVariants}
-                          variants={cardData.variants}
-                          variantId={
-                            cardData.hasVariants && cardData.variants.length > 0
-                              ? cardData.variants[0].id
-                              : null
-                          }
+                           variants={cardData.variants || []}
+                           variantId={cardData.variantId || null}
+                          quantity={cardData.quantity} // ✅ تمرير الكمية إلى ProductCard
                         />
                       </div>
                     );

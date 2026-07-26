@@ -42,7 +42,7 @@ export const LoadingScreen = () => {
             className="object-contain"
             priority
           /> */}
-          <h1 className="text-[32px] lg:text-[64px] text-center font-bold transition-colors  text-[#2ECC71]">logo</h1>
+          <h1 className="text-[32px] lg:text-[64px] text-center font-bold transition-colors  text-[#C092BD]">logo</h1>
         </div>
 
         {/* مؤشر التحميل */}
@@ -55,7 +55,7 @@ export const LoadingScreen = () => {
           {/* شريط التقدم */}
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#2ECC71] rounded-full transition-all duration-300"
+              className="h-full bg-[#C092BD] rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>

@@ -20,7 +20,7 @@ export default function FormInput({
   required = false,
   rows = 3,
 }: FormInputProps) {
-  const baseClassName = "w-full px-4 py-3 border border-gray-200  rounded-[8px]  focus:border-[#1A834B] focus:outline-none focus:ring-1 focus:ring-[#1A834B] transition bg-white";
+  const baseClassName = "w-full px-4 py-3 border border-gray-200  rounded-[8px]  focus:border-[#C092BD] focus:outline-none focus:ring-1 focus:ring-[#C092BD] transition bg-white";
   
   return (
     <div>

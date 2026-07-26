@@ -423,6 +423,8 @@
   },
 
   "product": {
+    "outOfStock":"نفذ المخزون",
+    "availableQuantity":"الكميه المتاحة",
     "noBrand": "بدون ماركة",
     "review": "تقييم",
     "color": "اللون",
@@ -730,7 +732,7 @@
     "cancelOrder": "إلغاء الطلب",
     "cancelling": "جاري الإلغاء...",
 
-    "unavailable": "غير متوفر",
+    "unavailable": " نفذ من المخزون",
 
     "orderNotFound": "الطلب غير موجود",
     "orderNotFoundMessage": "عذراً، لا يمكننا العثور على هذا الطلب",
@@ -901,7 +903,7 @@
     "paymentMethod": "طريقة الدفع",
     "returnNotes": "ملاحظات المرتجع",
     "noNotes": "لا توجد ملاحظات",
-    "unavailable": "غير متوفر",
+    "unavailable": " نفذ من المخزون",
     "loading": "جاري تحميل تفاصيل المرتجع...",
     "notFound": "المرتجع غير موجود",
     "notFoundMessage": "عذراً، لا يمكننا العثور على هذا المرتجع",

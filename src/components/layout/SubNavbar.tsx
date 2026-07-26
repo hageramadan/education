@@ -169,32 +169,32 @@ export function SubNavbar() {
   //  إذا كان في السيرفر أو لم يتم التحميل بعد، عرض محتوى ثابت
   if (!isClient) {
     return (
-      <div className="w-full bg-[#EAFAF1] border-b border-[#E4E7E9] py-2 md:py-3">
+      <div className="w-full bg-[#C092BD] border-b border-[#E4E7E9] py-2 md:py-3">
         <div className="container mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
             <div className="flex gap-5 items-center">
               <div className="hidden md:flex items-center gap-1">
-                <LiaPhoneSolid className="text-[#1A834B]" />
-                <span className="text-[#1A834B] text-sm md:text-sm font-bold">
+                <LiaPhoneSolid className="text-white" />
+                <span className="text-white text-sm md:text-sm font-bold">
                   ---
                 </span>
               </div>
               <div className="hidden md:flex items-center gap-2">
-                <TfiEmail className="text-[#1A834B]" />
-                <span className="text-[#1A834B] text-sm md:text-sm font-bold">
+                <TfiEmail className="text-white" />
+                <span className="text-white text-sm md:text-sm font-bold">
                   ---
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-0 md:gap-3">
-              {/* <PiGiftBold className="text-[#1A834B] w-4 h-4 md:w-5 md:h-5" /> */}
-              <p className="text-[#1A834B] text-xs md:text-sm font-semibold text-center">
+              {/* <PiGiftBold className="text-white w-4 h-4 md:w-5 md:h-5" /> */}
+              <p className="text-white text-xs md:text-sm font-semibold text-center">
                 ---
               </p>
             </div>
             <div className="hidden md:flex items-center gap-0 md:gap-6">
               <div className="flex items-center gap-3 md:gap-4">
-                <span className="text-[#1A834B] text-xs md:text-sm font-medium">
+                <span className="text-white text-xs md:text-sm font-medium">
                   ---
                 </span>
               </div>
@@ -206,18 +206,18 @@ export function SubNavbar() {
   }
 
   return (
-    <div className="w-full bg-[#EAFAF1] border-b border-[#E4E7E9] py-2 md:py-3">
+    <div className="w-full bg-[#C092BD] border-b border-[#E4E7E9] py-2 md:py-3">
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between ">
           {/* Right Section - Email & Phone */}
           <div className="hidden lg:flex gap-5 items-center ">
             {/* Phone */}
             <div className="hidden md:flex items-center gap-1">
-              <LiaPhoneSolid className="text-[#1A834B]" />
+              <LiaPhoneSolid className="text-white" />
               <Link
                 dir="ltr"
                 href={settings?.whatsapp ? `tel:${settings.whatsapp.replace(/[^0-9]/g, '')}` : "#"}
-                className="text-[#1A834B] text-sm md:text-sm font-bold hover:opacity-80 transition-opacity"
+                className="text-white text-sm md:text-sm font-bold hover:opacity-80 transition-opacity"
               >
                 {settingsLoading ? t.loading : settings?.phone || "(000) 000-999"}
               </Link>
@@ -225,10 +225,10 @@ export function SubNavbar() {
             
             {/* Email */}
             <div className="hidden md:flex items-center gap-2">
-              <TfiEmail className="text-[#1A834B]" />
+              <TfiEmail className="text-white" />
               <Link
                 href={settings?.email ? `mailto:${settings.email}` : "#"}
-                className="text-[#1A834B] text-sm md:text-sm font-bold hover:opacity-80 transition-opacity"
+                className="text-white text-sm md:text-sm font-bold hover:opacity-80 transition-opacity"
               >
                 {settingsLoading ? t.loading : settings?.email || "lorum@lorum.com"}
               </Link>
@@ -237,8 +237,8 @@ export function SubNavbar() {
 
           {/* Center Section - Free Shipping Message */}
           <div className="flex items-start md:items-center gap-1 md:gap-3">
-            {/* <PiGiftBold className="text-[#1A834B] w-4 h-4 md:w-5 md:h-5" /> */}
-            <p className="text-[#1A834B] text-xs md:text-sm font-semibold ">
+            {/* <PiGiftBold className="text-white w-4 h-4 md:w-5 md:h-5" /> */}
+            <p className="text-white text-xs md:text-sm font-semibold ">
               {t.freeShipping}
             </p>
           </div>
@@ -247,7 +247,7 @@ export function SubNavbar() {
           <div className="flex items-center gap-4 md:gap-6">
             {/* Social Media Links */}
             <div className="hidden md:flex items-center gap-3 md:gap-4">
-              <span className="text-[#1A834B] text-xs md:text-sm font-medium">
+              <span className="text-white text-xs md:text-sm font-medium">
                 {t.followUs}
               </span>
               {socialLinks.map((social, index) => {
@@ -258,7 +258,7 @@ export function SubNavbar() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#1A834B] duration-300 hover:scale-110 transform hover:opacity-80"
+                    className="text-white duration-300 hover:scale-110 transform hover:opacity-80"
                     aria-label={social.label}
                   >
                     <Icon className="text-sm md:text-base" />
@@ -278,11 +278,11 @@ export function SubNavbar() {
                 className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
               >
-                <span className="text-[#1A834B] text-xs md:text-sm font-medium">
+                <span className="text-white text-xs md:text-sm font-medium">
                   {language === "ar" ? "عربي" : "Eng"}
                 </span>
                 <MdKeyboardArrowDown 
-                  className={`text-[#1A834B] transition-transform duration-200 ${showLanguageDropdown ? "rotate-180" : ""}`} 
+                  className={`text-white transition-transform duration-200 ${showLanguageDropdown ? "rotate-180" : ""}`} 
                 />
               </div>
 
@@ -293,25 +293,25 @@ export function SubNavbar() {
                     <button
                       onClick={() => handleLanguageChange("ar")}
                       className={`w-full text-right px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
-                        language === "ar" ? "text-[#1A834B] font-bold" : ""
+                        language === "ar" ? "text-[#C092BD] font-bold" : ""
                       }`}
                     >
                       <span className="text-lg">🇸🇦</span>
                       العربية
                       {language === "ar" && (
-                        <span className="mr-auto text-[#1A834B]">✓</span>
+                        <span className="mr-auto text-[#C092BD]">✓</span>
                       )}
                     </button>
                     <button
                       onClick={() => handleLanguageChange("en")}
                       className={`w-full text-right px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
-                        language === "en" ? "text-[#1A834B] font-bold" : ""
+                        language === "en" ? "text-[#C092BD] font-bold" : ""
                       }`}
                     >
                       <span className="text-lg">🇬🇧</span>
                       English
                       {language === "en" && (
-                        <span className="mr-auto text-[#1A834B]">✓</span>
+                        <span className="mr-auto text-[#C092BD]">✓</span>
                       )}
                     </button>
                   </div>

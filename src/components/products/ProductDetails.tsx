@@ -83,12 +83,13 @@ interface ProductDetailsProps {
     variants?: ProductVariant[];
     has_variants?: boolean;
     video?: string;
-    currency?: Currency; //  إضافة العملة
+    currency?: Currency;
+    quantity?: number | null; // ✅ إضافة الكمية الرئيسية للمنتج
   };
 }
 
 export function ProductDetails({ product }: ProductDetailsProps) {
-  const { t } = useTranslation(); //  استخدام hook الترجمة
+  const { t } = useTranslation();
   const { language } = useLanguage();
   const isRTL = language === 'ar';
 
@@ -114,6 +115,30 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const { toggleFavorite, isFavorite, isMutating } = useFavorites();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
+
+  // ✅ دالة للتحقق من توفر المنتج
+  const getAvailableQuantity = (): number => {
+    if (selectedVariant) {
+      // إذا كان هناك متغير محدد، نأخذ الكمية من المتغير
+      return selectedVariant.quantity ?? 0;
+    }
+    // إذا لم يكن هناك متغيرات، نأخذ الكمية من المنتج نفسه
+    return product.quantity ?? 0;
+  };
+
+  // ✅ التحقق من أن المنتج متوفر
+  const isProductAvailable = (): boolean => {
+    const availableQty = getAvailableQuantity();
+    return availableQty > 0;
+  };
+
+  // ✅ الحصول على الحد الأقصى للكمية
+  const getMaxQuantity = (): number => {
+    const availableQty = getAvailableQuantity();
+    // إذا كانت الكمية غير محدودة (null) أو أكبر من 99، نحدها بـ 99
+    if (availableQty === 0) return 0;
+    return Math.min(availableQty, 99);
+  };
 
   //  استخراج معرف الفيديو من رابط يوتيوب
   const getYouTubeVideoId = (url: string): string | null => {
@@ -459,6 +484,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       );
       setSelectedVariant(variant);
       setSelectedImage(0);
+      
+      // ✅ إعادة تعيين الكمية إلى 1 عند تغيير المتغير
+      setQuantity(1);
     } else {
       setSelectedVariant(null);
     }
@@ -476,17 +504,43 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const isProductFavorite = isFavorite(product.id.toString());
   const itemInCartQuantity = getItemQuantity(product.id);
 
+  // ✅ التحقق من توفر المنتج
+  const availableQty = getAvailableQuantity();
+  const maxQty = getMaxQuantity();
+  const isAvailable = isProductAvailable();
+
   //  الحصول على رمز العملة
   const getCurrencySymbol = (): string => {
     return product.currency?.symbol || "$";
   };
 
-  //  Add to cart
+  //  Add to cart - معدلة مع التحقق من الكمية
   const handleAddToCart = async () => {
     if (isAddingToCart) return;
 
+    // ✅ التحقق من توفر المنتج
+    if (!isAvailable) {
+      toast.error(t("product.outOfStock"), {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+
     if (product.has_variants && !selectedVariant) {
-      toast.error(t("product.pleaseSelect"));
+      toast.error(t("product.pleaseSelect"), {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+
+    // ✅ التحقق من أن الكمية المطلوبة لا تتجاوز المتاحة
+    if (quantity > maxQty) {
+      toast.error(t("product.notEnoughStock").replace('{max}', maxQty.toString()), {
+        duration: 3000,
+        position: "top-center",
+      });
       return;
     }
 
@@ -498,10 +552,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
       if (success) {
         setQuantity(1);
+        toast.success(t("product.addedToCart"), {
+          duration: 3000,
+          position: "top-center",
+        });
       }
     } catch (error) {
       console.error("❌ Error adding to cart:", error);
-      toast.error(t("product.errorAdding"));
+      toast.error(t("product.errorAdding"), {
+        duration: 3000,
+        position: "top-center",
+      });
     } finally {
       setIsAddingToCart(false);
     }
@@ -519,12 +580,16 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     await toggleFavorite(product.id.toString(), isProductFavorite);
   };
 
+  // ✅ تحديث دالة زيادة الكمية
   const increaseQuantity = () => {
-    const maxQty =
-      selectedVariant?.quantity && selectedVariant.quantity > 0
-        ? selectedVariant.quantity
-        : 99;
-    setQuantity((prev) => Math.min(prev + 1, maxQty));
+    if (quantity < maxQty) {
+      setQuantity((prev) => prev + 1);
+    } else {
+      toast.error(t("product.maxQuantity").replace('{max}', maxQty.toString()), {
+        duration: 2000,
+        position: "top-center",
+      });
+    }
   };
 
   const decreaseQuantity = () =>
@@ -533,7 +598,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const cleanImageUrl = (url: string) => {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("/storage")) {
-      return `https://fakeha.admin.t-carts.com${url}`;
+      return `https://education.admin.t-carts.com${url}`;
     }
     return url;
   };
@@ -621,12 +686,21 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 />
 
                 {discountPercentage > 0 && (
-                  <span className="absolute top-2 right-2 bg-[#1A834B] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
+                  <span className="absolute top-2 right-2 bg-[#C092BD] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full z-10">
                     {discountPercentage}% {t("product.discount")}
                   </span>
                 )}
 
-                {product.video && embedVideoUrl && (
+                {/* ✅ عرض علامة " نفذ من المخزون" إذا كانت الكمية صفر */}
+                {/* {!isAvailable && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 rounded-t-lg">
+                    <p className="text-white text-lg font-bold bg-red-600 px-4 py-2 rounded-lg">
+                      {t("product.outOfStock")}
+                    </p>
+                  </div>
+                )} */}
+
+                {product.video && embedVideoUrl && isAvailable && (
                   <button
                     onClick={showVideoPlayer}
                     className="absolute inset-0 z-10 flex items-center justify-center group"
@@ -651,7 +725,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   className={`
                     relative aspect-[4/3] max-h-[80px] bg-gray-100 rounded-[8px] overflow-hidden
                     border-2 transition-all duration-200
-                    ${selectedImage === index ? "border-[#1A834B]" : "border-transparent hover:border-gray-300"}
+                    ${selectedImage === index ? "border-[#C092BD]" : "border-transparent hover:border-gray-300"}
                   `}
                 >
                   <Image
@@ -672,7 +746,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             <div className="text-center text-sm text-gray-500 py-2">
               <button
                 onClick={hideVideoPlayer}
-                className="text-[#1A834B] hover:underline font-medium"
+                className="text-[#C092BD] hover:underline font-medium"
               >
                 {t("product.backToImages")}
               </button>
@@ -694,7 +768,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             </div>
 
             <div className="flex flex-col items-end">
-              <span className="text-lg lg:text-xl font-bold text-[#1A834B] flex items-center gap-0.5">
+              <span className="text-lg lg:text-xl font-bold text-[#C092BD] flex items-center gap-0.5">
                 {currentPrice.toLocaleString()}
                 <span className="text-sm">{getCurrencySymbol()}</span>
               </span>
@@ -819,13 +893,12 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           {/* ===== Quantity ===== */}
           <div>
             <div className="flex items-center gap-2 lg:mt-4">
-              <div className="flex items-center rounded-full bg-[#F3F3F3] h-9 w-[110px] justify-center">
+              <div className={`flex items-center rounded-full bg-[#F3F3F3] h-9 w-[110px] justify-center ${!isAvailable ? 'opacity-50' : ''}`}>
                 <button
                   onClick={decreaseQuantity}
-                  disabled={quantity <= 1}
+                  disabled={quantity <= 1 || !isAvailable}
                   className="w-6 h-6 flex items-center justify-center text-[#A3A3A3] transition disabled:cursor-not-allowed"
-
->
+                >
                   <FaMinus className="w-2.5 h-2.5" />
                 </button>
                 <span className="w-10 text-center text-base font-bold text-[#222222]">
@@ -833,19 +906,26 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 </span>
                 <button
                   onClick={increaseQuantity}
-                  className="w-6 h-6 flex items-center justify-center text-[#3A4980] font-bold transition"
+                  disabled={quantity >= maxQty || !isAvailable}
+                  className="w-6 h-6 flex items-center justify-center text-[#3A4980] font-bold transition disabled:cursor-not-allowed"
                 >
                   <FaPlus className="w-2.5 h-2.5 font-bold" />
                 </button>
               </div>
-              {selectedVariant &&
-                selectedVariant.quantity !== null &&
-                selectedVariant.quantity < 5 &&
-                selectedVariant.quantity > 0 && (
-                  <span className="text-[10px] text-orange-600">
-                    {t("product.onlyLeft").replace('{count}', selectedVariant.quantity.toString())}
-                  </span>
-                )}
+              
+              {/* ✅ عرض الكمية المتبقية */}
+              {isAvailable && maxQty > 0 && maxQty < 10 && (
+                <span className="text-xs text-orange-600">
+                  {t("product.onlyLeft").replace('{count}', maxQty.toString())}
+                </span>
+              )}
+              
+              {/* ✅ عرض " نفذ من المخزون" */}
+              {!isAvailable && (
+                <span className="text-sm text-red-600 font-bold">
+                  {t("product.outOfStock")}
+                </span>
+              )}
             </div>
           </div>
 
@@ -856,9 +936,12 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               disabled={
                 isAddingToCart ||
                 cartLoading ||
+                !isAvailable ||
                 (product.has_variants && !selectedVariant)
               }
-              className="flex-1 bg-[#1A834B] text-sm text-white px-4 py-2 rounded-[8px] font-bold hover:bg-[#1A834B] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`flex-1 text-sm text-white px-4 py-2 rounded-[8px] font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
+                ${isAvailable ? 'bg-[#C092BD] hover:bg-[#C092BD]' : 'bg-gray-400 cursor-not-allowed'}
+              `}
             >
               {isAddingToCart ? (
                 <>
@@ -866,7 +949,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   {t("product.adding")}
                 </>
               ) : (
-                t("product.addToCart")
+                  isAvailable ?t("product.addToCart"):t("product.outOfStock")
               )}
             </button>
 
@@ -875,17 +958,17 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 onClick={handleToggleFavorite}
                 disabled={isMutating}
                 className={`
-                  flex-1 py-2 rounded-[8px] text-[#1A834B] font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs
+                  flex-1 py-2 rounded-[8px] text-[#C092BD] font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs
                   ${
                     isProductFavorite
                       ? "bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
-                      : "border border-[#1A834B] hover:bg-[#ff89e13f]"
+                      : "border border-[#C092BD] hover:bg-[#ff89e13f]"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
                 <Heart
-                  className={`h-3.5 w-3.5 ${isProductFavorite?'text-[#ef4444]':'text-[#1A834B]'}`}
+                  className={`h-3.5 w-3.5 ${isProductFavorite?'text-[#ef4444]':'text-[#C092BD]'}`}
                   fill={isProductFavorite ? "#ef4444" : "none"}
                 />
                 {isProductFavorite ? t("product.inFavorites") : t("product.addToFavorites")}
@@ -903,7 +986,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 className="flex justify-between items-center w-full py-1.5 text-right"
               >
                 <span className="font-semibold text-gray-800 flex items-center gap-1.5 text-sm">
-                  <Info className="w-3.5 h-3.5 text-[#1A834B]" />
+                  <Info className="w-3.5 h-3.5 text-[#C092BD]" />
                   {t("product.productInfo")}
                 </span>
                 <span className="text-lg">
@@ -932,6 +1015,10 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                       </p>
                     </>
                   )}
+                  {/* ✅ عرض الكمية المتاحة */}
+                  <p>
+                    <strong>{t("product.availableQuantity")}:</strong> {isAvailable ? maxQty : 0}
+                  </p>
                 </div>
               )}
             </div>

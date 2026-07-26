@@ -288,7 +288,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string; token?: string }> => {
       try {
         const response = await fetch(
-          "https://fakeha.admin.t-carts.com/api/auth/verify-otp",
+          "https://education.admin.t-carts.com/api/auth/verify-otp",
           {
             method: "POST",
             headers: getHeaders(false),
@@ -341,7 +341,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string; token?: string }> => {
       try {
         const response = await fetch(
-          "https://fakeha.admin.t-carts.com/api/auth/verify-otp",
+          "https://education.admin.t-carts.com/api/auth/verify-otp",
           {
             method: "POST",
             headers: getHeaders(false),
@@ -420,7 +420,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     ): Promise<{ success: boolean; message: string }> => {
       try {
         const response = await fetch(
-          "https://fakeha.admin.t-carts.com/api/auth/resend-otp",
+          "https://education.admin.t-carts.com/api/auth/resend-otp",
           {
             method: "POST",
             headers: getHeaders(),

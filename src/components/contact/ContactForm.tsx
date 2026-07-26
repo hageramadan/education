@@ -56,7 +56,7 @@ export default function ContactForm() {
         message: formData.message,
       };
 
-      const response = await fetch("https://fakeha.admin.t-carts.com/api/contact-us", {
+      const response = await fetch("https://education.admin.t-carts.com/api/contact-us", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export default function ContactForm() {
       </h2>
 
       {isSubmitted && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-[8px] text-green-700 text-sm">
+        <div className="mb-6 p-4 bg-pink-50 border border-green-200 rounded-[8px] text-green-700 text-sm">
           {t('contact.success')}
         </div>
       )}

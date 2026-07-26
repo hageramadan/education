@@ -475,7 +475,7 @@ export function Hero({ onLoad }: HeroProps) {
         <div className="flex items-center justify-center h-full min-h-[50vh]">
           <div className="relative">
             <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#C092BD] border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </section>
@@ -492,7 +492,7 @@ export function Hero({ onLoad }: HeroProps) {
   }
 
   return (
-    <section className="container-custom p-0 lg:rounded-[8px] lg:my-4 relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
+    <section className=" relative w-full min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden">
       
       {/* Slider */}
       <div className="w-full h-full">
@@ -508,15 +508,15 @@ export function Hero({ onLoad }: HeroProps) {
       </div>
 
       {/* Overlay gradient - فقط للديكور */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/40 via-black/10 to-black/40" />
+      {/* <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/40 via-black/10 to-black/40" /> */}
 
       {/* Fixed Center Text */}
-      <div className="absolute inset-0 z-20 flex items-center lg:items-center justify-center lg:justify-normal px-4 sm:px-6 pointer-events-none">
+      <div className="container absolute inset-0 z-20 flex items-center lg:items-center justify-center lg:justify-normal px-4 sm:px-6 pointer-events-none">
         <div className="max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%] pointer-events-none">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[58px] font-bold mb-2 sm:mb-3 md:mb-4 text-white drop-shadow-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[58px] font-bold mb-2 sm:mb-3 md:mb-4  drop-shadow-lg">
             {centerText.title}
           </h1>
-          <p className="text-white/95 w-full sm:w-[85%] md:w-[80%] text-sm sm:text-base md:text-lg lg:text-[20px] mb-4 sm:mb-6 md:mb-8 leading-relaxed drop-shadow-md line-clamp-3">
+          <p className=" w-full sm:w-[85%] md:w-[80%] text-sm sm:text-base md:text-lg lg:text-[20px] mb-4 sm:mb-6 md:mb-8 leading-relaxed drop-shadow-md line-clamp-3">
             {centerText.description}
           </p>
     
@@ -526,7 +526,7 @@ export function Hero({ onLoad }: HeroProps) {
               asChild
               className="text-white text-[14px] sm:text-[16px] font-bold rounded-xl hover:scale-105 transition-transform duration-300"
               style={{
-                backgroundColor: "#1A834B",
+                backgroundColor: "#08b2a7",
                 width: "150px",
                 height: "45px",
               }}
@@ -539,21 +539,7 @@ export function Hero({ onLoad }: HeroProps) {
               </Link>
             </Button>
 
-            <Button
-              asChild
-              className="text-white cursor-pointer border-0 backdrop-blur-md bg-white/30 text-[14px] sm:text-[16px] font-bold rounded-xl hover:scale-105 transition-transform duration-300"
-              style={{
-                width: "150px",
-                height: "45px",
-              }}
-            >
-              <Link
-                href="/products"
-                className="flex items-center justify-center gap-2"
-              >
-                {t.showMore}
-              </Link>
-            </Button>
+        
           </div>
         </div>
       </div>

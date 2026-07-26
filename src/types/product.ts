@@ -60,6 +60,7 @@ export interface Product {
   variants?: ProductVariant[];
   variantId?: number | null;
   currency?: Currency;
+  quantity?:number | null;
 }
 
 //  دالة استخراج الألوان من جميع الـ variants
@@ -96,9 +97,9 @@ export const extractColorsFromVariants = (
 export const cleanImageUrl = (url: string): string => {
   if (!url) return "/images/placeholder.jpg";
   if (url.startsWith("/storage")) {
-    return `https://fakeha.admin.t-carts.com${url}`;
+    return `https://education.admin.t-carts.com${url}`;
   }
-  return `https://fakeha.admin.t-carts.com${url}`;
+  return `https://education.admin.t-carts.com${url}`;
 };
 
 //  دالة تحويل البيانات من API

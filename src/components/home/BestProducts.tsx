@@ -58,6 +58,7 @@ interface Product {
     name: string;
     rate: number;
   };
+    quantity?: number | null;
 }
 
 interface BestProductsProps {
@@ -125,9 +126,9 @@ const extractColorsFromVariants = (
 const cleanImageUrl = (url: string) => {
   if (!url) return "/images/placeholder.jpg";
   if (url.startsWith('/storage')) {
-    return `https://fakeha.admin.t-carts.com${url}`;
+    return `https://education.admin.t-carts.com${url}`;
   }
-  return `https://fakeha.admin.t-carts.com${url}`;
+  return `https://education.admin.t-carts.com${url}`;
 };
 
 // تحويل البيانات من API إلى شكل المنتج المطلوب - ديناميكي بالكامل
@@ -159,6 +160,14 @@ const transformProduct = (product: ProductData): Product => {
     variantId = product.variants[0].id;
     colors = extractColorsFromVariants(product.variants as ProductVariant[]);
   }
+  let quantity: number | null = null;
+if (product.has_variants && product.variants && product.variants.length > 0) {
+  // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
+  quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
+} else {
+  // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
+  quantity = product.quantity ?? null;
+}
 
   return {
     id: product.id.toString(),
@@ -182,6 +191,7 @@ const transformProduct = (product: ProductData): Product => {
       name: "Egyptian Pound",
       rate: 1,
     },
+     quantity: quantity,
   };
 };
 
@@ -295,7 +305,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#C092BD] border-t-transparent rounded-full animate-spin"></div>
               </div>
             </div>
           </div>
@@ -313,7 +323,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative">
                 <div className="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#1A834B] border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#C092BD] border-t-transparent rounded-full animate-spin"></div>
               </div>
               <p className="text-gray-500 text-sm animate-pulse">
                 {t.loading}
@@ -338,7 +348,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
             <p className="text-red-500 text-center">{t.error}</p>
             <button 
               onClick={() => fetchProducts(1, false)}
-              className="px-6 py-2 bg-[#1A834B] text-white rounded-lg hover:bg-[#c70063] transition-colors"
+              className="px-6 py-2 bg-[#C092BD] text-white rounded-lg hover:bg-[#c70063] transition-colors"
             >
               {t.retry}
             </button>
@@ -367,7 +377,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
           </h2>
           <Link 
             href="/products" 
-            className="text-[#1A834B] text-xs lg:text-sm font-bold hover:underline transition-all duration-300"
+            className="text-[#C092BD] text-xs lg:text-sm font-bold hover:underline transition-all duration-300"
           >
             {t.viewMore}
           </Link>
@@ -377,7 +387,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
         {isLoadingMore && (
           <div className="flex justify-center py-4 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-[#C092BD] rounded-full animate-spin"></div>
               <span className="text-gray-500 text-sm">{t.loadingMore}</span>
             </div>
           </div>
@@ -410,6 +420,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
                 hasVariants={product.hasVariants || false}
                 variants={product.variants || []}
                 variantId={product.variantId || null}
+                  quantity={product.quantity} 
               />
             </div>
           ))}
@@ -421,7 +432,7 @@ export function BestProducts({ onLoad }: BestProductsProps) {
             <Button
               onClick={handleLoadMore}
               disabled={isLoadingMore}
-              className="px-8 py-3 bg-[#1A834B] text-white rounded-lg hover:bg-[#2ECC71] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 py-3 bg-[#C092BD] text-white rounded-lg hover:bg-[#C092BD] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isLoadingMore ? (
                 <>

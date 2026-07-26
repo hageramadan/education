@@ -21,15 +21,15 @@ const PageHeader = ({ title }: { title: string }) => {
     <div className="page-with-padding">
       <h1 className="text-xl font-bold text-gray-800">{title}</h1>
       <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-        <Link href="/" className="hover:text-[#1A834B] transition">
+        <Link href="/" className="hover:text-[#C092BD] transition">
           {t("common.home")}
         </Link>
         <ChevronRight className="w-4 h-4" />
-        <Link href="/account" className="hover:text-[#1A834B] transition">
+        <Link href="/account" className="hover:text-[#C092BD] transition">
           {t("common.myAccount")}
         </Link>
         <ChevronRight className="w-4 h-4" />
-        <span className="text-[#1A834B]">{title}</span>
+        <span className="text-[#C092BD]">{title}</span>
       </div>
     </div>
   );
@@ -53,7 +53,7 @@ const WishlistEmpty = () => {
         <p className="text-gray-500 mb-6">{t("wishlist.emptyMessage")}</p>
         <Link
           href="/products"
-          className="inline-block bg-[#1A834B] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
+          className="inline-block bg-[#C092BD] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
         >
           {t("wishlist.exploreProducts")}
         </Link>
@@ -80,12 +80,12 @@ interface TransformedProduct {
   variants?: Array<{ id: number }>;
   variantId?: number | null;
   currency?: {
-    //  إضافة العملة
     code: string;
     symbol: string;
     name: string;
     rate: number;
   };
+  quantity?: number | null; // ✅ إضافة الكمية
 }
 
 //  إضافة واجهة Pagination
@@ -152,12 +152,13 @@ export default function WishlistPage() {
                 ? product.variants[0].id
                 : null,
             currency: product.currency || {
-              //  إضافة العملة
               code: "EGP",
               symbol: "$",
               name: "Egyptian Pound",
               rate: 1,
             },
+            // ✅ إضافة الكمية من بيانات المنتج
+            quantity: product.quantity ?? null,
           });
         }
       } catch (error) {
@@ -239,7 +240,7 @@ export default function WishlistPage() {
     if (!url) return "/images/placeholder.jpg";
     if (url.startsWith("http")) return url;
     if (url.startsWith("/storage")) {
-      return `https://fakeha.admin.t-carts.com${url}`;
+      return `https://education.admin.t-carts.com${url}`;
     }
     return url;
   }, []);
@@ -254,7 +255,7 @@ export default function WishlistPage() {
         <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 ">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-2 border-gray-300 border-t-[#1A834B] rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-2 border-gray-300 border-t-[#C092BD] rounded-full animate-spin"></div>
             </div>
           </div>
         </div>
@@ -319,7 +320,8 @@ export default function WishlistPage() {
                 hasVariants={item.hasVariants || false}
                 variants={item.variants || []}
                 variantId={item.variantId || null}
-                currency={item.currency} //  تمرير العملة
+                currency={item.currency}
+                quantity={item.quantity} // ✅ تمرير الكمية إلى ProductCard
               />
             </div>
           ))}

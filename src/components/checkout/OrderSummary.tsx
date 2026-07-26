@@ -67,7 +67,7 @@ export default function OrderSummary({
       <div className="space-y-3 pt-3 border-t border-gray-100">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">{t('checkout.subtotal')}</span>
-          <span className="text-gray-800">$ {subtotal?.toFixed(2) || "0.00"}</span>
+          <span className="text-gray-800">EGP {subtotal?.toFixed(2) || "0.00"}</span>
         </div>
         
         {discount > 0 && (
@@ -76,7 +76,7 @@ export default function OrderSummary({
               <span>{t('checkout.discount')}</span>
               <span className="text-xs">(-{discountPercentage}%)</span>
             </span>
-            <span className="text-[#1A834B]">-$ {discount.toFixed(2)}</span>
+            <span className="text-[#C092BD]">-$ {discount.toFixed(2)}</span>
           </div>
         )}
         
@@ -85,11 +85,11 @@ export default function OrderSummary({
           <div className="flex justify-between text-sm text-gray-600">
             <span className="flex items-center gap-1">
               <span>{t('checkout.couponDiscount')}</span>
-              <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+              <span className="text-xs text-green-600 bg-pink-50 px-2 py-0.5 rounded-full">
                 {couponCode}
               </span>
             </span>
-            <span className="text-[#1A834B]">-$ {couponDiscount.toFixed(2)}</span>
+            <span className="text-[#C092BD]">-$ {couponDiscount.toFixed(2)}</span>
           </div>
         )}
         
