@@ -275,25 +275,25 @@ export function LatestProducts() {
         {/* Header -  استخدام الترجمة */}
         <div className="mb-2 md:mb-5 flex justify-between items-center">
           <h2
-            className="text-xl md:text-2xl font-bold"
+            className="text-base md:text-2xl font-bold"
             style={{ color: "#112B40" }}
           >
             {t.latestProducts}
           </h2>
           <Link
             href="/products"
-            className="text-[#2ECC71] text-sm font-semibold hover:underline"
+            className="text-[#2ECC71] text-xs lg:text-sm font-semibold hover:underline"
           >
             {t.viewMore}
           </Link>
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-6 justify-items-center mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center mb-10">
           {visibleProducts.map((product, index) => (
             <div
               key={product.id}
-              className="animate-in fade-in zoom-in duration-500"
+              className="animate-in fade-in zoom-in duration-500 flex justify-center w-full"
               style={{
                 animationFillMode: "both",
                 animationDelay: `${index * 100}ms`,
@@ -855,7 +855,7 @@ export function LatestProducts() {
 //         {/* Header -  استخدام الترجمة */}
 //         <div className="mb-2 md:mb-5 flex justify-between items-center px-1 relative">
 //           <h2
-//             className="text-lg md:text-xl font-bold"
+//             className="text-base md:text-xl font-bold"
 //             style={{ color: "#112B40" }}
 //           >
 //             {t.latestProducts}

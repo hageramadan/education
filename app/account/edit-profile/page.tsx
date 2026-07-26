@@ -423,7 +423,7 @@ export default function EditProfilePage() {
                     isEnglish ? 'rotate-180' : ''
                   }`}  />
             </button>
-            <h1 className="text-lg md:text-xl font-bold text-[#180100]">{t('account.editProfile')}</h1>
+            <h1 className="text-base md:text-xl font-bold text-[#180100]">{t('account.editProfile')}</h1>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -445,7 +445,7 @@ export default function EditProfilePage() {
                     />
                   ) : (
                     <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#1A834B] flex items-center justify-center shadow-lg">
-                      <span className="text-white text-xl md:text-2xl font-bold">
+                      <span className="text-white text-base md:text-2xl font-bold">
                         {getUserInitial()}
                       </span>
                     </div>

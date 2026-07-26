@@ -231,7 +231,7 @@ export function Footer() {
           {/* اللوجو */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <h1 className="text-[#FFFFFF] text-xl md:text-2xl font-bold">
+              <h1 className="text-[#FFFFFF] text-base md:text-2xl font-bold">
                 {settingsLoading ? t.loading : settings?.name || "LoGo"}
               </h1>
               <PiLineVerticalThin className="w-6 h-8 text-[#E8ECEF]" />

@@ -233,14 +233,13 @@ export function ProductCard({
     <div
       role="article"
       aria-labelledby={`product-name-${id}`}
-      className="group relative mx-auto"
+      className="group relative w-full mx-auto"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <style jsx>{`
         .product-card {
           width: 100%;
-          max-width: 172px;
           height: 200px;
           border-radius: 16px;
           border: 1px solid #E4E7E9;
@@ -265,7 +264,6 @@ export function ProductCard({
         @media (min-width: 640px) {
           .product-card {
             max-width: 308px;
-            width: 308px;
             height: 432px;
           }
           .product-image {
@@ -301,7 +299,6 @@ export function ProductCard({
         }
 
         .favorite-button:hover {
-          // background: rgba(239, 68, 68, 0.1);
           transform: scale(1.1);
         }
 
@@ -341,7 +338,7 @@ export function ProductCard({
           font-size: 11px;
           font-weight: 600;
           border-radius: 8px;
-          background:#2ECC71 ;
+          background: #2ECC71;
           color: white;
           padding: 6px 12px;
           transition: all 0.3s ease;

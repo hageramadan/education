@@ -341,12 +341,12 @@ export function BestProducts() {
       <div className="container-custom">
         {/* Header -  استخدام الترجمة */}
         <div className="mb-2 md:mb-5 flex justify-between items-center">
-          <h2 className="text-lg md:text-xl font-bold" style={{ color: '#112B40' }}>
+          <h2 className="text-base md:text-xl font-bold" style={{ color: '#112B40' }}>
             {t.bestSelling}
           </h2>
           <Link 
             href="/products" 
-            className="text-[#1A834B] text-[14px] font-bold hover:underline transition-all duration-300"
+            className="text-[#1A834B] text-xs lg:text-sm font-bold hover:underline transition-all duration-300"
           >
             {t.viewMore}
           </Link>
@@ -363,7 +363,7 @@ export function BestProducts() {
         )}
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-6 mb-2 md:mb-5">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-6 mb-2 md:mb-5">
           {visibleProducts.map((product, index) => (
             <div
               key={product.id}

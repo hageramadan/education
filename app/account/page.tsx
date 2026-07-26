@@ -221,7 +221,7 @@ export default function AccountPage() {
                   />
                 ) : (
                   <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#1A834B] flex items-center justify-center shadow-lg">
-                    <span className="text-white text-xl md:text-2xl font-bold">
+                    <span className="text-white text-base md:text-2xl font-bold">
                       {getUserInitial()}
                     </span>
                   </div>
