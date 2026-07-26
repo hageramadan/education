@@ -79,7 +79,7 @@ export default function RootLayout({
           
             <FavoritesProvider>
             <SubNavbar/>
-              <Navbar />
+              {/* <Navbar /> */}
               <main>{children}</main>
               <Toaster
                 position="top-center" // مكان ظهور الإشعار
