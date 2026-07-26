@@ -238,14 +238,7 @@ export function LatestProducts() {
     return (
       <section className="py-2 md:py-12 bg-white">
         <div className="container-custom">
-          <div className="mb-5 md:mb-10 flex justify-between">
-            <h2
-              className="text-2xl md:text-3xl font-bold mb-3"
-              style={{ color: "#112B40" }}
-            >
-              {t.latestProducts}
-            </h2>
-          </div>
+          
           <div className="flex flex-col justify-center items-center py-20 gap-4">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1A834B]"></div>
             {/* <p className="text-gray-500 text-sm">{t.loading}</p> */}
