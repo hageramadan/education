@@ -50,7 +50,7 @@ export default function AccountPage() {
     setLoadingWallet(true);
     
     try {
-      const token = localStorage.getItem("auth_token");
+      const token = localStorage.getItem("auth_token6");
 
       if (!token) {
         console.warn("لم يتم العثور على توكن المصادقة");

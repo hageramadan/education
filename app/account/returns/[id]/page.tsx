@@ -111,7 +111,7 @@ const API_URL = 'https://education.admin.t-carts.com/api';
 
 const getToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('auth_token6');
   }
   return null;
 };
@@ -142,7 +142,7 @@ const fetchReturnDetails = async (returnId: string, locale: string = "ar-EG"): P
     
     if (response.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_token6');
         localStorage.removeItem('user_data');
       }
       throw new Error('UNAUTHORIZED');

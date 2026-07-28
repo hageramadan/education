@@ -100,7 +100,7 @@ const API_URL = 'https://education.admin.t-carts.com/api';
 
 const getToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('auth_token6');
   }
   return null;
 };

@@ -48,6 +48,16 @@ const transformProductData = (apiProduct: ProductData, t: any) => {
   // إذا لم يكن هناك مقاسات، أضف مقاسات افتراضية
   const finalSizes = sizes.length > 0 ? sizes : ["S", "M", "L", "XL"];
   
+  // ✅ تحسين التحقق من التوفر
+  let isAvailable = apiProduct.is_active;
+  if (apiProduct.has_variants && apiProduct.variants) {
+    // إذا كان هناك متغيرات، نتحقق من وجود أي متغير متاح
+    isAvailable = isAvailable && apiProduct.variants.some(v => (v.quantity ?? 0) > 0);
+  } else {
+    // إذا لم يكن هناك متغيرات، نتحقق من الكمية الرئيسية
+    isAvailable = isAvailable && (apiProduct.quantity ?? 0) > 0;
+  }
+  
   return {
     id: apiProduct.id,
     name: apiProduct.name,
@@ -63,11 +73,11 @@ const transformProductData = (apiProduct: ProductData, t: any) => {
     rating: apiProduct.avg_rating || 4.5,
     reviewsCount: apiProduct.total_reviews || 0,
     sku: `SKU-${apiProduct.id}`,
-    availability: apiProduct.is_active && (apiProduct.quantity > 0 || apiProduct.has_variants),
-    //  إضافة variants و has_variants (الأهم)
+    availability: isAvailable, // ✅ استخدام التحسين الجديد
     variants: apiProduct.variants || [],
     has_variants: apiProduct.has_variants || false,
     video: apiProduct.video || null,
+    quantity: apiProduct.quantity || 0, // ✅ إضافة الكمية الرئيسية
   };
 };
 

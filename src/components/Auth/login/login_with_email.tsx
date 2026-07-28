@@ -44,7 +44,7 @@ export default function LoginWithEmail() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
-      toast.error(Object.values(errors)[0]);
+      // toast.error(Object.values(errors)[0]);
       return;
     }
 

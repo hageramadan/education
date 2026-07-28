@@ -137,7 +137,7 @@ export default function AddAddress({
     const fetchGovernorates = async () => {
       setIsLoadingGovernorates(true);
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("auth_token6");
 
         const response = await fetch(`${API_URL}/governates`, {
           headers: getHeaders(),
@@ -179,7 +179,7 @@ export default function AddAddress({
 
       setIsLoadingCities(true);
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("auth_token6");
 
         const response = await fetch(`${API_URL}/governates/${formData.governorateId}/cities`, {
           headers: getHeaders(),
@@ -413,7 +413,7 @@ export default function AddAddress({
         type: formData.addressType,
       };
 
-      const token = localStorage.getItem("auth_token");
+      const token = localStorage.getItem("auth_token6");
 
       let url = `${API_URL}/addresses`;
       let method = "POST";

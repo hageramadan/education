@@ -23,7 +23,7 @@ export default function AddressPage() {
   const fetchAddresses = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       
       const response = await fetch(`${API_URL}/addresses`, {
         headers: getHeaders(),
@@ -67,7 +67,7 @@ export default function AddressPage() {
 
   const handleDeleteAddress = async (id: number) => {
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       
       const response = await fetch(`${API_URL}/addresses/${id}/delete`, {
         method: 'DELETE',

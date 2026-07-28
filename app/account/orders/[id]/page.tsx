@@ -116,7 +116,7 @@ const API_URL = 'https://education.admin.t-carts.com/api';
 
 const getToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('auth_token6');
   }
   return null;
 };
@@ -134,7 +134,7 @@ const fetchOrderDetails = async (orderId: string, locale: string = "ar-EG"): Pro
     
     if (response.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_token6');
         localStorage.removeItem('user_data');
       }
       throw new Error('UNAUTHORIZED');
@@ -179,7 +179,7 @@ const cancelOrder = async (orderId: number): Promise<boolean> => {
     
     if (response.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_token6');
         localStorage.removeItem('user_data');
       }
       toast.error("جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
@@ -557,7 +557,7 @@ export default function OrderDetailsPage() {
 
       // التحقق من صلاحية التوكن
       if (response.status === 401) {
-        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_token6");
         localStorage.removeItem("user_data");
         toast.error(t('orders.invalidSession') || "جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
           duration: 3000,

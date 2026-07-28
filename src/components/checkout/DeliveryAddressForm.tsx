@@ -115,7 +115,7 @@ export default function DeliveryAddressForm({
     
     setIsLoadingAddresses(true);
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       //  إذا لم يوجد توكن، لا تجلب
       if (!token) {
        
@@ -155,7 +155,7 @@ export default function DeliveryAddressForm({
     
     setIsLoadingGovernorates(true);
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       const response = await fetch(`${API_URL}/governates`, {
         headers: getHeaders(),
       });
@@ -190,7 +190,7 @@ export default function DeliveryAddressForm({
 
     setIsLoadingCities(true);
     try {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       const response = await fetch(`${API_URL}/governates/${governorateId}/cities`, {
         headers: getHeaders()
       });
@@ -307,7 +307,7 @@ export default function DeliveryAddressForm({
         onCitySelected(cityId);
       }
       
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('auth_token6');
       const addressToSave = {
         city_id: cityId,
         street: getFieldValue(addressData.street),

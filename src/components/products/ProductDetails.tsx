@@ -117,28 +117,48 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const router = useRouter();
 
   // ✅ دالة للتحقق من توفر المنتج
-  const getAvailableQuantity = (): number => {
+  // ✅ دالة للتحقق من توفر المنتج
+const getAvailableQuantity = (): number => {
+  // إذا كان المنتج يحتوي على متغيرات
+  if (product.has_variants && product.variants && product.variants.length > 0) {
+    // إذا كان هناك متغير محدد، نأخذ الكمية من المتغير
     if (selectedVariant) {
-      // إذا كان هناك متغير محدد، نأخذ الكمية من المتغير
       return selectedVariant.quantity ?? 0;
     }
-    // إذا لم يكن هناك متغيرات، نأخذ الكمية من المنتج نفسه
-    return product.quantity ?? 0;
-  };
+    // إذا لم يتم اختيار متغير بعد، نبحث عن أول متغير متاح
+    const availableVariant = product.variants.find(v => (v.quantity ?? 0) > 0);
+    return availableVariant ? (availableVariant.quantity ?? 0) : 0;
+  }
+  
+  // إذا لم يكن هناك متغيرات، نأخذ الكمية من المنتج نفسه
+  return product.quantity ?? 0;
+};
 
   // ✅ التحقق من أن المنتج متوفر
-  const isProductAvailable = (): boolean => {
-    const availableQty = getAvailableQuantity();
-    return availableQty > 0;
-  };
+ // ✅ التحقق من أن المنتج متوفر
+const isProductAvailable = (): boolean => {
+  // إذا كان المنتج يحتوي على متغيرات
+  if (product.has_variants && product.variants && product.variants.length > 0) {
+    // إذا كان هناك متغير محدد، نتحقق من كميته
+    if (selectedVariant) {
+      return (selectedVariant.quantity ?? 0) > 0;
+    }
+    // إذا لم يتم اختيار متغير، نتحقق من وجود أي متغير متاح
+    return product.variants.some(v => (v.quantity ?? 0) > 0);
+  }
+  
+  // إذا لم يكن هناك متغيرات، نتحقق من الكمية الرئيسية
+  return (product.quantity ?? 0) > 0;
+};
 
   // ✅ الحصول على الحد الأقصى للكمية
-  const getMaxQuantity = (): number => {
-    const availableQty = getAvailableQuantity();
-    // إذا كانت الكمية غير محدودة (null) أو أكبر من 99، نحدها بـ 99
-    if (availableQty === 0) return 0;
-    return Math.min(availableQty, 99);
-  };
+  // ✅ الحصول على الحد الأقصى للكمية
+const getMaxQuantity = (): number => {
+  const availableQty = getAvailableQuantity();
+  // إذا كانت الكمية غير محدودة (null) أو أكبر من 99، نحدها بـ 99
+  if (availableQty === 0) return 0;
+  return Math.min(availableQty, 99);
+};
 
   //  استخراج معرف الفيديو من رابط يوتيوب
   const getYouTubeVideoId = (url: string): string | null => {
