@@ -52,6 +52,7 @@ const transformProductData = (apiProduct: ProductData, t: any) => {
   let isAvailable = apiProduct.is_active;
   if (apiProduct.has_variants && apiProduct.variants) {
     // إذا كان هناك متغيرات، نتحقق من وجود أي متغير متاح
+     // @ts-ignore
     isAvailable = isAvailable && apiProduct.variants.some(v => (v.quantity ?? 0) > 0);
   } else {
     // إذا لم يكن هناك متغيرات، نتحقق من الكمية الرئيسية
