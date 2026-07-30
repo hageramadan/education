@@ -513,7 +513,8 @@
     "free": "--",
     "total": "الإجمالي",
     "currency": "",
-    "checkout": "إكمال الطلب"
+    "checkout": "إكمال الطلب",
+    "processing":"جاري المعالجه"
   },
   "orderTracker": {
     "ordered": "تم الطلب",
@@ -537,7 +538,6 @@
   "checkout": {
     "contactInfo": "معلومات الاتصال",
     "fullName": "الاسم الكامل",
-
     "fullNameMinLength": "الاسم الكامل يجب أن يكون على الأقل 3 أحرف",
     "fullNameMaxLength": "الاسم الكامل طويل جداً",
     "fullNamePlaceholder": "أدخل اسمك الكامل",
@@ -561,11 +561,9 @@
     "building": "مبنى",
     "selectGovernorate": "اختر المحافظة",
     "selectCity": "اختر المدينة",
-
     "noCities": "لا توجد مدن متاحة",
     "saveAddress": "حفظ العنوان",
     "saving": "جاري الحفظ...",
-
     "cityUpdated": "تم اختيار المدينة",
     "deliveryFeeUpdated": "تم تحديث رسوم التوصيل تلقائياً",
     "saveAddressError": "حدث خطأ في حفظ العنوان",
@@ -607,9 +605,7 @@
     "cart": "سلة التسوق",
     "emptyCart": "سلة التسوق فارغة",
     "shopNow": "تسوق الآن",
-
     "thankYouMessage": "شكراً لتسوقك معنا، طلبك قيد التحضير الآن.",
-
     "addressSaved": "تم حفظ العنوان بنجاح",
     "fullNameRequired": "الرجاء إدخال الاسم الكامل",
     "addressRequired": "الرجاء إدخال بيانات العنوان بالكامل",
@@ -626,7 +622,6 @@
     "phoneLengthError": "رقم الهاتف في {country} يجب أن يكون {length} أرقام (الطول الحالي: {current})",
     "phoneStartsWithError": "رقم الهاتف في {country} يجب أن يبدأ بـ ({prefixes})",
     "phoneInvalidForCountry": "رقم الهاتف غير صحيح لدولة {country}",
-
     "nameRequired": "الاسم مطلوب",
     "nameMinLength": "الاسم يجب أن يكون 3 أحرف على الأقل",
     "correctAccountErrors": "يرجى تصحيح الأخطاء في بيانات الحساب",
@@ -648,29 +643,97 @@
     "fraudSuspected": "تم رفض العملية للاشتباه في احتيال",
     "authenticationFailed": "فشل التحقق من الهوية",
     "paymentError": "حدثت مشكلة أثناء معالجة الدفع. يرجى المحاولة مرة أخرى أو استخدام طريقة دفع أخرى.",
-
     "redirecting": "جاري تحويلك إلى صفحة الطلب...",
     "redirectingToPayment": "جاري التوجيه إلى بوابة الدفع",
     "redirectingToPaymentDesc": "سيتم توجيهك إلى بوابة الدفع الإلكتروني لإتمام عملية الدفع",
     "redirectingAuto": "سيتم توجيهك تلقائياً خلال لحظات...",
-
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "passwordRequired": "كلمة المرور مطلوبة",
     "passwordMinLength": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
     "passwordConfirmationRequired": "تأكيد كلمة المرور مطلوب",
     "passwordMismatch": "كلمات المرور غير متطابقة",
-
     "cancel": "إلغاء",
-
     "accountCreationDescription": "سيتم إنشاء حساب باستخدام بياناتك (البريد الإلكتروني، رقم الهاتف، الاسم)",
-
     "paymentMethodTitle": "طريقة الدفع",
     "cashOnDeliveryTitle": "الدفع عند الاستلام",
     "walletTitle": "محفظة",
     "walletUnavailableTitle": "غير متاحة حالياً - سوف تتوفر قريباً",
-    "card":"بطاقة ائتمان"
-  },
+    "card": "بطاقة ائتمان",
+    
+    "failed": {
+      "paymentDeclined": "تم رفض عملية الدفع",
+      "paymentFailed": "فشلت عملية الدفع",
+      "titleCancelled": "تم إلغاء الدفع",
+      "titleFailed": "فشلت عملية الدفع",
+      "orderNumber": "رقم الطلب",
+      "suggestionsTitle": "حلول مقترحة",
+      "retryButton": "محاولة الدفع مرة أخرى",
+      "viewOrdersButton": "عرض طلباتي",
+      "homeButton": "العودة إلى الرئيسية",
+      "errors": {
+        "paymentDeclined": "تم رفض الدفع من قبل البنك أو جهة الإصدار",
+        "insufficientFunds": "الرصيد غير كافٍ لإتمام العملية",
+        "cardExpired": "البطاقة منتهية الصلاحية",
+        "invalidCard": "بيانات البطاقة غير صحيحة",
+        "technicalError": "حدث خطأ تقني أثناء معالجة الدفع",
+        "timeout": "انتهت مهلة الدفع، يرجى المحاولة مرة أخرى",
+        "cancelledByUser": "تم إلغاء الدفع من قبلك",
+        "fraudSuspected": "تم رفض العملية للاشتباه في احتيال",
+        "authenticationFailed": "فشل التحقق من الهوية",
+        "default": "حدثت مشكلة أثناء معالجة الدفع. يرجى المحاولة مرة أخرى أو استخدام طريقة دفع أخرى."
+      },
+      "suggestions": {
+        "paymentDeclined": [
+          "تأكد من صحة بيانات البطاقة",
+          "جرب استخدام بطاقة أخرى",
+          "تواصل مع البنك للتأكد من تفعيل الدفع الإلكتروني"
+        ],
+        "insufficientFunds": [
+          "تأكد من وجود رصيد كافٍ في الحساب",
+          "جرب استخدام بطاقة أخرى",
+          "تواصل مع البنك لمعرفة الحدود اليومية"
+        ],
+        "cardExpired": [
+          "استخدم بطاقة أخرى غير منتهية الصلاحية",
+          "تواصل مع البنك لتجديد البطاقة"
+        ],
+        "invalidCard": [
+          "تأكد من إدخال رقم البطاقة وتاريخ الانتهاء ورمز CVV بشكل صحيح",
+          "جرب استخدام بطاقة أخرى"
+        ],
+        "timeout": [
+          "حاول مرة أخرى مع التأكد من استقرار الاتصال بالإنترنت",
+          "تأكد من إتمام عملية الدفع خلال الوقت المحدد"
+        ],
+        "cancelledByUser": [
+          "يمكنك المحاولة مرة أخرى في أي وقت",
+          "تأكد من رغبتك في إتمام الشراء قبل البدء"
+        ],
+        "default": [
+          "حاول مرة أخرى باستخدام طريقة دفع مختلفة",
+          "تأكد من صحة بيانات الدفع",
+          "تواصل مع خدمة العملاء للمساعدة"
+        ]
+      }
+    },
+    "success": {
+      "paymentSuccess": "🎉 تم الدفع بنجاح!",
+      "redirectingToOrders": "🎉 تم الدفع بنجاح! جاري التوجيه إلى طلباتك",
+      "confirmingPayment": "جاري تأكيد الدفع...",
+      "pleaseWait": "يرجى الانتظار لحظة",
+      "orderNumber": "رقم الطلب",
+      "paymentSuccessTitle": "✅ تم الدفع بنجاح!",
+      "redirectingToOrderDetails": "جاري تحويلك إلى صفحة تفاصيل الطلب...",
+      "redirectingToOrdersList": "سيتم توجيهك إلى قائمة طلباتك",
+      "viewOrdersButton": "عرض طلباتي",
+      "errors": {
+        "orderNumberMissing": "رقم الطلب غير موجود",
+        "processingError": "حدث خطأ في معالجة الدفع",
+        "orderNotFound": "تم الدفع ولكن لم نتمكن من العثور على الطلب"
+      }
+    }
+},
   "orders": {
     "paymentStatus": "حالة الدفع",
     "retryPayment": "محاولة الدفع مجدداً",
@@ -761,7 +824,7 @@
     "prices": "الاسعار",
     "maxPrice": "الحد الأقصى",
     "minPrice": "الحد الأدنى",
-    "currency": "$",
+    "currency": "",
     "categories": "الفئات",
     "subcategories": "الفئات الفرعية",
     "colors": "الألوان",
@@ -1057,7 +1120,7 @@
     "updateSuccess": "تم تحديث العنوان بنجاح",
     "saveError": "حدث خطأ في حفظ العنوان",
     "deliveryFee": "رسوم التوصيل",
-    "currency": "$",
+    "currency": "",
 
     "fetchGovernoratesError": "فشل في تحميل المحافظات",
     "fetchCitiesError": "فشل في تحميل المدن",

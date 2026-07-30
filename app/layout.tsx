@@ -10,6 +10,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { SubNavbar } from "@/components/layout/SubNavbar";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { getSettings } from "@/services/settingsApi";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 const almarai = Almarai({
   subsets: ["arabic"],
@@ -74,6 +75,7 @@ export default function RootLayout({
     <html>
       <body className={almarai.className}>
         <LanguageProvider>
+          <CurrencyProvider>
  <CartProvider>
         <AuthProvider>
           
@@ -90,6 +92,8 @@ export default function RootLayout({
          
         </AuthProvider>
          </CartProvider>
+          </CurrencyProvider>
+
         </LanguageProvider>
        
       </body>

@@ -195,7 +195,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const response = await updateCartItemQuantity(cartItemId, quantity);
       
       if (response.result === true && response.data) {
-        toast.success(t('cart.updateSuccess'));
+        // toast.success(t('cart.updateSuccess'));
         await fetchCartData(false);
         return true;
       } else {

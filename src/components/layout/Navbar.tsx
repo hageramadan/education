@@ -518,7 +518,7 @@ export function Navbar() {
                           ref={searchInputRef}
                           type="search"
                           placeholder={t.search}
-                          className="w-64 h-10 ps-9 pe-9 border border-gray-300 rounded-full bg-white focus:ring-2 focus:ring-[#C092BD] focus:border-transparent"
+                          className="w-64 h-10 ps-9 pe-9 border border-gray-300 rounded-full bg-white focus:ring-2 focus:ring-[#C092BD] focus:border-[#C092BD]"
                           style={{ color: "#195073" }}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}

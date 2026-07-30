@@ -39,7 +39,7 @@ export default function WalletPage() {
         const balanceString = data.data.balance;
         const [currencyPart, balancePart] = balanceString.split(" ");
         
-        setCurrency(currencyPart || "$");
+        setCurrency(currencyPart || "Egp");
         setBalance(parseFloat(balancePart) || 0);
       } else {
         throw new Error(data.message || t('account.fetchBalanceError'));

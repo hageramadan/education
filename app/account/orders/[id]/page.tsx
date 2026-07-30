@@ -22,7 +22,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
-
+import { useCurrency } from "@/hooks/useCurrency";
 // ========== تعريف الأنواع ==========
 interface OrderItem {
   id: number;
@@ -112,11 +112,11 @@ interface OrderDetails {
 }
 
 // ========== إعدادات API ==========
-const API_URL = 'https://education.admin.t-carts.com/api';
+const API_URL = "https://education.admin.t-carts.com/api";
 
 const getToken = (): string | null => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token6');
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("auth_token6");
   }
   return null;
 };
@@ -125,41 +125,44 @@ const getToken = (): string | null => {
 const PLACEHOLDER_IMAGE = "/images/placeholder-product.png";
 
 // ========== دالة جلب تفاصيل الطلب ==========
-const fetchOrderDetails = async (orderId: string, locale: string = "ar-EG"): Promise<OrderDetails | null> => {
+const fetchOrderDetails = async (
+  orderId: string,
+  locale: string = "ar-EG",
+): Promise<OrderDetails | null> => {
   try {
     const response = await fetch(`${API_URL}/orders/${orderId}`, {
-      method: 'GET',
+      method: "GET",
       headers: getHeaders(),
     });
-    
+
     if (response.status === 401) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token6');
-        localStorage.removeItem('user_data');
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_token6");
+        localStorage.removeItem("user_data");
       }
-      throw new Error('UNAUTHORIZED');
+      throw new Error("UNAUTHORIZED");
     }
-    
+
     const data = await response.json();
-    
+
     if (data.result === true || data.data || data.data.order) {
       return transformOrderDetails(data.data.order, locale);
     }
     return null;
   } catch (error) {
     console.error("❌ Error fetching order details:", error);
-    
-    if (error instanceof Error && error.message === 'UNAUTHORIZED') {
+
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
       toast.error("جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
         duration: 3000,
         position: "top-center",
       });
-      if (typeof window !== 'undefined') {
-        window.location.href = '/auth/login';
+      if (typeof window !== "undefined") {
+        window.location.href = "/auth/login";
       }
       return null;
     }
-    
+
     toast.error("حدث خطأ في جلب تفاصيل الطلب");
     return null;
   }
@@ -169,31 +172,31 @@ const fetchOrderDetails = async (orderId: string, locale: string = "ar-EG"): Pro
 const cancelOrder = async (orderId: number): Promise<boolean> => {
   try {
     const response = await fetch(`${API_URL}/orders/update/${orderId}`, {
-      method: 'POST',
+      method: "POST",
       headers: getHeaders(),
       body: JSON.stringify({
-        _method: 'put',
-        status: 'cancelled'
+        _method: "put",
+        status: "cancelled",
       }),
     });
-    
+
     if (response.status === 401) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token6');
-        localStorage.removeItem('user_data');
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_token6");
+        localStorage.removeItem("user_data");
       }
       toast.error("جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
         duration: 3000,
         position: "top-center",
       });
       setTimeout(() => {
-        window.location.href = '/auth/login';
+        window.location.href = "/auth/login";
       }, 1500);
       return false;
     }
-    
+
     const data = await response.json();
-    
+
     if (data.result === true && data.errNum === 200) {
       toast.success("تم إلغاء الطلب بنجاح", {
         duration: 4000,
@@ -221,13 +224,13 @@ const cancelOrder = async (orderId: number): Promise<boolean> => {
 // ========== تحويل حالة الطلب ==========
 const mapStatusToEnglish = (statusLabel: string): OrderStatus => {
   const statusMap: Record<string, OrderStatus> = {
-    "ordered": "ordered",
-    "processing": "processing",
-    "ready_for_receive": "ready_for_receive",
-    "delivering": "delivering",
-    "delivered": "delivered",
-    "not_delivered": "not_delivered",
-    "cancelled": "cancelled",
+    ordered: "ordered",
+    processing: "processing",
+    ready_for_receive: "ready_for_receive",
+    delivering: "delivering",
+    delivered: "delivered",
+    not_delivered: "not_delivered",
+    cancelled: "cancelled",
   };
   return statusMap[statusLabel] || "ordered";
 };
@@ -235,12 +238,12 @@ const mapStatusToEnglish = (statusLabel: string): OrderStatus => {
 // ========== تحويل طريقة الدفع ==========
 const mapPaymentMethod = (method: string): string => {
   const methodMap: Record<string, string> = {
-    "كاش": "الدفع عند الاستلام",
-    "أونلاين": "أونلاين",
-    "card": "بطاقة ائتمان",
-    "بطاقة": "بطاقة ائتمان",
-    "mada": "مدى",
-    "wallet": "محفظة",
+    كاش: "الدفع عند الاستلام",
+    أونلاين: "أونلاين",
+    card: "بطاقة ائتمان",
+    بطاقة: "بطاقة ائتمان",
+    mada: "مدى",
+    wallet: "محفظة",
   };
   return methodMap[method] || method;
 };
@@ -248,8 +251,8 @@ const mapPaymentMethod = (method: string): string => {
 // ========== تحويل طريقة التوصيل ==========
 const mapDeliveryMethod = (method: string): "pickup" | "delivery" => {
   const methodMap: Record<string, "pickup" | "delivery"> = {
-    "توصيل": "delivery",
-    "استلام": "pickup",
+    توصيل: "delivery",
+    استلام: "pickup",
     "استلام من الفرع": "pickup",
   };
   return methodMap[method] || "pickup";
@@ -260,8 +263,8 @@ const formatDate = (dateString: string): string => {
   try {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   } catch {
     return dateString;
@@ -285,7 +288,7 @@ const getUserName = (order: any): string => {
   if (order.additional_data?.name) {
     return order.additional_data.name;
   }
-  return " نفذ من المخزون";
+  return "";
 };
 
 // ========== دوال استخراج الخصائص ==========
@@ -294,7 +297,7 @@ const getUserName = (order: any): string => {
 const getMemory = (item: OrderItem): string | null => {
   if (!item.variant?.attributes) return null;
   const memoryAttr = item.variant.attributes.find(
-    (attr) => attr.attribute_type.name === "الذاكرة"
+    (attr) => attr.attribute_type.name === "الذاكرة",
   );
   return memoryAttr?.value || null;
 };
@@ -303,19 +306,21 @@ const getMemory = (item: OrderItem): string | null => {
 const getStorage = (item: OrderItem): string | null => {
   if (!item.variant?.attributes) return null;
   const storageAttr = item.variant.attributes.find(
-    (attr) => attr.attribute_type.name === "هارد ديسك"
+    (attr) => attr.attribute_type.name === "هارد ديسك",
   );
   return storageAttr?.value || null;
 };
 
 // جلب اللون
-const getColor = (item: OrderItem): { name: string; hex: string | null } | null => {
+const getColor = (
+  item: OrderItem,
+): { name: string; hex: string | null } | null => {
   if (!item.variant?.attributes) return null;
   const colorAttr = item.variant.attributes.find(
-    (attr) => attr.attribute_type.name === "لون"
+    (attr) => attr.attribute_type.name === "لون",
   );
   if (!colorAttr) return null;
-  
+
   return {
     name: colorAttr.value,
     hex: colorAttr.meta?.color || null,
@@ -323,9 +328,12 @@ const getColor = (item: OrderItem): { name: string; hex: string | null } | null 
 };
 
 // ========== تحويل بيانات الطلب ==========
-const transformOrderDetails = (apiOrder: any, locale: string = "ar-EG"): OrderDetails => {
+const transformOrderDetails = (
+  apiOrder: any,
+  locale: string = "ar-EG",
+): OrderDetails => {
   const englishStatus = mapStatusToEnglish(apiOrder.status_label);
-  
+
   return {
     id: apiOrder.id,
     orderNumber: apiOrder.order_number || `#${apiOrder.id}`,
@@ -353,13 +361,41 @@ const transformOrderDetails = (apiOrder: any, locale: string = "ar-EG"): OrderDe
 
 // ========== حالة الطلب مع التنسيق ==========
 const getStatusConfig = (t: any) => ({
-  ordered: { label: t('orders.statusOrdered'), color: "status-pending", icon: Clock },
-  processing: { label: t('orders.statusProcessing'), color: "status-processing", icon: Package },
-  ready_for_receive: { label: t('orders.statusReady'), color: "status-ready", icon: PackageCheck },
-  delivering: { label: t('orders.statusDelivering'), color: "status-delivering", icon: Truck },
-  delivered: { label: t('orders.statusDelivered'), color: "status-delivered", icon: CheckCircle },
-  not_delivered: { label: t('orders.statusNotDelivered'), color: "status-cancelled", icon: XCircle },
-  cancelled: { label: t('orders.statusCancelled'), color: "status-cancelled", icon: XCircle },
+  ordered: {
+    label: t("orders.statusOrdered"),
+    color: "status-pending",
+    icon: Clock,
+  },
+  processing: {
+    label: t("orders.statusProcessing"),
+    color: "status-processing",
+    icon: Package,
+  },
+  ready_for_receive: {
+    label: t("orders.statusReady"),
+    color: "status-ready",
+    icon: PackageCheck,
+  },
+  delivering: {
+    label: t("orders.statusDelivering"),
+    color: "status-delivering",
+    icon: Truck,
+  },
+  delivered: {
+    label: t("orders.statusDelivered"),
+    color: "status-delivered",
+    icon: CheckCircle,
+  },
+  not_delivered: {
+    label: t("orders.statusNotDelivered"),
+    color: "status-cancelled",
+    icon: XCircle,
+  },
+  cancelled: {
+    label: t("orders.statusCancelled"),
+    color: "status-cancelled",
+    icon: XCircle,
+  },
 });
 
 // ✅ دالة مساعدة للتحقق من حالة الدفع (تدعم العربية والإنجليزية)
@@ -374,20 +410,27 @@ const isPaymentPending = (paymentStatus: string): boolean => {
 };
 
 const isPaymentUnpaid = (paymentStatus: string): boolean => {
-  const unpaidStatuses = ["غير مدفوع", "Unpaid", "unpaid", "UNPAID", "Not Paid", "not paid"];
+  const unpaidStatuses = [
+    "غير مدفوع",
+    "Unpaid",
+    "unpaid",
+    "UNPAID",
+    "Not Paid",
+    "not paid",
+  ];
   return unpaidStatuses.includes(paymentStatus);
 };
 
 // ✅ دالة للحصول على نص الحالة المترجم
 const getPaymentStatusLabel = (paymentStatus: string, t: any): string => {
   if (isPaymentPaid(paymentStatus)) {
-    return t('orders.paymentPaid') || "مدفوع";
+    return t("orders.paymentPaid") || "مدفوع";
   }
   if (isPaymentPending(paymentStatus)) {
-    return t('orders.paymentPending') || "قيد الانتظار";
+    return t("orders.paymentPending") || "قيد الانتظار";
   }
   if (isPaymentUnpaid(paymentStatus)) {
-    return t('orders.paymentUnpaid') || "غير مدفوع";
+    return t("orders.paymentUnpaid") || "غير مدفوع";
   }
   // إذا كانت القيمة غير معروفة، نرجعها كما هي
   return paymentStatus;
@@ -436,25 +479,32 @@ const getPaymentStatusBgColor = (paymentStatus: string): string => {
 };
 
 // ✅ دالة للتحقق مما إذا كان يجب إظهار زر إعادة الدفع
-const shouldShowRetryButton = (paymentStatus: string, paymentMethod: string): boolean => {
+const shouldShowRetryButton = (
+  paymentStatus: string,
+  paymentMethod: string,
+): boolean => {
   const isUnpaid = isPaymentUnpaid(paymentStatus);
-  const isCardPayment = paymentMethod === "بطاقة ائتمان" || paymentMethod === "card" || paymentMethod === "Card";
+  const isCardPayment =
+    paymentMethod === "بطاقة ائتمان" ||
+    paymentMethod === "card" ||
+    paymentMethod === "Card";
   return isUnpaid && isCardPayment;
 };
 
 export default function OrderDetailsPage() {
   const { t } = useTranslation();
+   const { currency, isLoading: currencyLoading } = useCurrency();
   const params = useParams();
   const router = useRouter();
   const orderId = params.id as string;
-  
+
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [orderNotes, setOrderNotes] = useState("");
   const [copied, setCopied] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [isRetryingPayment, setIsRetryingPayment] = useState(false);
-  
+  const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   // State for Cancel Modal
   const [showCancelModal, setShowCancelModal] = useState(false);
 
@@ -464,17 +514,17 @@ export default function OrderDetailsPage() {
   useEffect(() => {
     const token = getToken();
     if (!token) {
-      toast.error(t('orders.pleaseLogin'), {
+      toast.error(t("orders.pleaseLogin"), {
         duration: 3000,
         position: "top-center",
       });
-      router.push('/auth/login');
+      router.push("/auth/login");
       return;
     }
-    
+
     const loadOrderDetails = async () => {
       setLoading(true);
-      const locale = t('locale') || 'ar-EG';
+      const locale = t("locale") || "ar-EG";
       const data = await fetchOrderDetails(orderId, locale);
       setOrder(data);
       if (data?.notes) {
@@ -482,7 +532,7 @@ export default function OrderDetailsPage() {
       }
       setLoading(false);
     };
-    
+
     if (orderId) {
       loadOrderDetails();
     }
@@ -492,7 +542,7 @@ export default function OrderDetailsPage() {
     if (order) {
       navigator.clipboard.writeText(order.orderNumber);
       setCopied(true);
-      toast.success(t('orders.copySuccess'), {
+      toast.success(t("orders.copySuccess"), {
         duration: 2000,
         position: "top-center",
       });
@@ -516,38 +566,41 @@ export default function OrderDetailsPage() {
   // دالة تأكيد إلغاء الطلب
   const confirmCancelOrder = async () => {
     if (!order) return;
-    
+
     setIsCancelling(true);
     closeCancelModal();
-    
+
     const success = await cancelOrder(order.id);
-    
+
     if (success) {
       setOrder({
         ...order,
         status: "cancelled",
-        status_label: t('orders.statusCancelled')
+        status_label: t("orders.statusCancelled"),
       });
-      
+
       setTimeout(() => {
         router.push("/account/orders");
       }, 2000);
     }
-    
+
     setIsCancelling(false);
   };
 
   // ✅ دالة إعادة محاولة الدفع - باستخدام الـ endpoint الجديد /repay
   const handleRetryPayment = async () => {
     if (!order) return;
-    
+
     try {
       setIsRetryingPayment(true);
-      
+
       // إظهار رسالة تحميل
-      const toastId = toast.loading(t('orders.preparingPayment') || "جاري تجهيز بوابة الدفع...", {
-        position: "top-center",
-      });
+      const toastId = toast.loading(
+        t("orders.preparingPayment") || "جاري تجهيز بوابة الدفع...",
+        {
+          position: "top-center",
+        },
+      );
 
       // ✅ استخدام الـ endpoint الجديد: /repay
       const response = await fetch(`${API_URL}/orders/${orderId}/repay`, {
@@ -559,10 +612,14 @@ export default function OrderDetailsPage() {
       if (response.status === 401) {
         localStorage.removeItem("auth_token6");
         localStorage.removeItem("user_data");
-        toast.error(t('orders.invalidSession') || "جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
-          duration: 3000,
-          position: "top-center",
-        });
+        toast.error(
+          t("orders.invalidSession") ||
+            "جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى",
+          {
+            duration: 3000,
+            position: "top-center",
+          },
+        );
         router.push("/auth/login");
         return;
       }
@@ -576,18 +633,25 @@ export default function OrderDetailsPage() {
       if (data.data?.redirect_url) {
         // ✅ توجيه المستخدم إلى بوابة الدفع
         window.location.href = data.data.redirect_url;
-        
+
         // ✅ يمكن تسجيل وقت إنشاء رابط الدفع للتحليل
-        console.log("✅ Payment URL created at:", data.data.payment_url_created_at);
+        console.log(
+          "✅ Payment URL created at:",
+          data.data.payment_url_created_at,
+        );
       } else {
-        toast.error(t('orders.paymentLinkError') || "تعذر الحصول على رابط الدفع، يرجى المحاولة مرة أخرى", {
-          duration: 4000,
-          position: "top-center",
-        });
+        toast.error(
+          t("orders.paymentLinkError") ||
+            "تعذر الحصول على رابط الدفع، يرجى المحاولة مرة أخرى",
+          {
+            duration: 4000,
+            position: "top-center",
+          },
+        );
       }
     } catch (error) {
       console.error("❌ Error retrying payment:", error);
-      toast.error(t('orders.serverError') || "حدث خطأ في الاتصال بالخادم", {
+      toast.error(t("orders.serverError") || "حدث خطأ في الاتصال بالخادم", {
         duration: 4000,
         position: "top-center",
       });
@@ -611,10 +675,15 @@ export default function OrderDetailsPage() {
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] page-with-padding">
         <div className="container mx-auto px-4 py-8 text-center">
           <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 mb-2">{t('orders.orderNotFound')}</h2>
-          <p className="text-gray-500 mb-4">{t('orders.orderNotFoundDesc')}</p>
-          <Link href="/account/orders" className="inline-block bg-[#C092BD] text-white px-6 py-2 rounded-[8px] hover:bg-[#C092BD] transition">
-            {t('orders.backToOrders')}
+          <h2 className="text-xl font-bold text-gray-800 mb-2">
+            {t("orders.orderNotFound")}
+          </h2>
+          <p className="text-gray-500 mb-4">{t("orders.orderNotFoundDesc")}</p>
+          <Link
+            href="/account/orders"
+            className="inline-block bg-[#C092BD] text-white px-6 py-2 rounded-[8px] hover:bg-[#C092BD] transition"
+          >
+            {t("orders.backToOrders")}
           </Link>
         </div>
       </div>
@@ -629,11 +698,23 @@ export default function OrderDetailsPage() {
   // تحديد الحالة المعروضة
   let displayStatus;
   if (isRefunded) {
-    displayStatus = { label: t('orders.statusRefunded'), color: "status-refunded", icon: GrMoney };
+    displayStatus = {
+      label: t("orders.statusRefunded"),
+      color: "status-refunded",
+      icon: GrMoney,
+    };
   } else if (isReturnPending) {
-    displayStatus = { label: t('orders.statusReturnPending'), color: "status-return-pending", icon: Clock };
+    displayStatus = {
+      label: t("orders.statusReturnPending"),
+      color: "status-return-pending",
+      icon: Clock,
+    };
   } else if (isReturnRejected) {
-    displayStatus = { label: t('orders.statusReturnRejected'), color: "status-return-rejected", icon: XCircle };
+    displayStatus = {
+      label: t("orders.statusReturnRejected"),
+      color: "status-return-rejected",
+      icon: XCircle,
+    };
   } else {
     displayStatus = statusConfig[order.status];
   }
@@ -646,23 +727,37 @@ export default function OrderDetailsPage() {
   const paymentStatusColor = getPaymentStatusColor(order.payment_status);
   const paymentStatusBg = getPaymentStatusBgColor(order.payment_status);
   const PaymentStatusIcon = getPaymentStatusIcon(order.payment_status);
-  const showRetryButton = shouldShowRetryButton(order.payment_status, order.payment_method);
+  const showRetryButton = shouldShowRetryButton(
+    order.payment_status,
+    order.payment_method,
+  );
 
   return (
     <>
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] page-with-padding">
         <div className="container mx-auto mb-3 px-4 md:px-8">
-          <h1 className="text-[18px] font-bold mb-2 md:text-xl text-[#180100]">{t('orders.orderDetails')}</h1>
-          
+          <h1 className="text-[18px] font-bold mb-2 md:text-xl text-[#180100]">
+            {t("orders.orderDetails")}
+          </h1>
+
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 md:mb-5">
-            <Link href="/account" className="hover:text-[#C092BD] transition">{t('account.myAccount')}</Link>
+            <Link href="/account" className="hover:text-[#C092BD] transition">
+              {t("account.myAccount")}
+            </Link>
             <ChevronRight className="w-4 h-4" />
-            <Link href="/account/orders" className="hover:text-[#C092BD] transition">{t('orders.title')}</Link>
+            <Link
+              href="/account/orders"
+              className="hover:text-[#C092BD] transition"
+            >
+              {t("orders.title")}
+            </Link>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-[#C092BD] font-medium">{t('orders.orderDetails')}</span>
+            <span className="text-[#C092BD] font-medium">
+              {t("orders.orderDetails")}
+            </span>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* العمود الأيمن */}
             <div className="lg:col-span-2 space-y-6">
@@ -672,52 +767,66 @@ export default function OrderDetailsPage() {
                   <div className="flex justify-between items-start">
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <div className="flex gap-2 sm:gap-4 items-center text-base sm:text-[20px] font-bold text-[#180100]">
-                        <h1 className="text-sm sm:text-base">{t('orders.orderNumber')}</h1>
+                        <h1 className="text-sm sm:text-base">
+                          {t("orders.orderNumber")}
+                        </h1>
                         <div className="flex gap-1 sm:gap-2 items-center">
                           <p className="font-bold text-gray-800 text-sm sm:text-base">
                             <span>
-                              {order.orderNumber.length > 10 ? order.orderNumber.substring(0, 10) + '...' : order.orderNumber}
+                              {order.orderNumber.length > 10
+                                ? order.orderNumber.substring(0, 10) + "..."
+                                : order.orderNumber}
                             </span>
                           </p>
-                          <IoCopyOutline 
-                            className={`w-4 h-4 sm:w-5 sm:h-5 cursor-pointer transition ${copied ? 'text-green-500' : 'hover:text-[#C092BD]'}`}
+                          <IoCopyOutline
+                            className={`w-4 h-4 sm:w-5 sm:h-5 cursor-pointer transition ${copied ? "text-green-500" : "hover:text-[#C092BD]"}`}
                             onClick={copyOrderNumber}
                           />
                         </div>
                       </div>
                     </div>
-                    <div className={`px-2 sm:px-3 py-1 rounded-full sm:text-sm text-[10px] font-medium flex items-center gap-1 sm:gap-1.5 ${displayStatus.color}`}>
+                    <div
+                      className={`px-2 sm:px-3 py-1 rounded-full sm:text-sm text-[10px] font-medium flex items-center gap-1 sm:gap-1.5 ${displayStatus.color}`}
+                    >
                       <StatusIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       {displayStatus.label}
                     </div>
                   </div>
-                  <p className="text-sm sm:text-[18px] text-[#333333]">{order.date}</p>
+                  <p className="text-sm sm:text-[18px] text-[#333333]">
+                    {order.date}
+                  </p>
                 </div>
               </div>
-              
+
               <br />
-              
+
               {/* المنتجات */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-bold text-gray-800 mb-4">{t('orders.products')} ({order.items.length})</h2>
+                <h2 className="text-lg font-bold text-gray-800 mb-4">
+                  {t("orders.products")} ({order.items.length})
+                </h2>
                 <div className="space-y-4">
                   {order.items.map((item, idx) => {
-                    const variantImage = item.variant?.variant_image 
-                      ? cleanImageUrl(item.variant.variant_image) 
+                    const variantImage = item.variant?.variant_image
+                      ? cleanImageUrl(item.variant.variant_image)
                       : null;
-                    
-                    const productImage = item.images && item.images.length > 0 
-                      ? cleanImageUrl(item.images[0]) 
-                      : PLACEHOLDER_IMAGE;
+
+                    const productImage =
+                      item.images && item.images.length > 0
+                        ? cleanImageUrl(item.images[0])
+                        : PLACEHOLDER_IMAGE;
 
                     const displayImage = variantImage || productImage;
-                    
+
                     const memory = getMemory(item);
                     const storage = getStorage(item);
                     const color = getColor(item);
-                    
+
                     return (
-                      <div key={idx} className="flex items-center gap-1 border border-gray-200 rounded-[8px] p-3">
+                      <div
+                        key={idx}
+                        className="flex items-center gap-1 border border-gray-200 rounded-[8px] p-3"
+                      >
                         <div className="w-20 h-20 bg-gray-100 rounded-[8px] overflow-hidden flex-shrink-0 relative">
                           <Image
                             src={displayImage}
@@ -726,36 +835,45 @@ export default function OrderDetailsPage() {
                             height={800}
                             className="object-cover w-full h-full"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE;
+                              (e.target as HTMLImageElement).src =
+                                PLACEHOLDER_IMAGE;
                             }}
                           />
                         </div>
                         <div className="flex-1">
                           <div className="flex flex-col md:flex-row gap-3 md:justify-between">
                             <div>
-                              <p className="font-bold text-gray-800">{item.title}</p>
-                              
+                              <p className="font-bold text-gray-800">
+                                {item.title}
+                              </p>
+
                               <div className="flex flex-wrap gap-2 mt-1.5">
                                 {memory && (
                                   <span className="inline-flex items-center gap-1 text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-700">
-                                    <span className="font-medium">{t('orders.memory')}:</span>
+                                    <span className="font-medium">
+                                      {t("orders.memory")}:
+                                    </span>
                                     <span>{memory}</span>
                                   </span>
                                 )}
-                                
+
                                 {storage && (
                                   <span className="inline-flex items-center gap-1 text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-700">
-                                    <span className="font-medium">{t('orders.storage')}:</span>
+                                    <span className="font-medium">
+                                      {t("orders.storage")}:
+                                    </span>
                                     <span>{storage}</span>
                                   </span>
                                 )}
-                                
+
                                 {color && (
                                   <span className="inline-flex items-center gap-1.5 text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-700">
-                                    <span className="font-medium">{t('orders.color')}:</span>
+                                    <span className="font-medium">
+                                      {t("orders.color")}:
+                                    </span>
                                     <span>{color.name}</span>
                                     {color.hex && (
-                                      <span 
+                                      <span
                                         className="w-3 h-3 rounded-full border border-gray-300 inline-block"
                                         style={{ backgroundColor: color.hex }}
                                       />
@@ -763,16 +881,31 @@ export default function OrderDetailsPage() {
                                   </span>
                                 )}
                               </div>
-                              
+
                               <div className="flex gap-1 md:gap-3 mt-2 text-xs text-black font-bold">
-                                <span>{t('orders.quantity')}: <span className="text-gray-500">x{item.quantity}</span></span>
-                                <span>{t('orders.price')}: <span className="text-gray-500">EGP {item.unit_price.toFixed(2)}</span></span>
+                                <span>
+                                  {t("orders.quantity")}:{" "}
+                                  <span className="text-gray-500">
+                                    x{item.quantity}
+                                  </span>
+                                </span>
+                                <span>
+                                  {t("orders.price")}:{" "}
+                                  <span className="text-gray-500">
+                                    {currencySymbol} {item.unit_price.toFixed(2)}
+                                  </span>
+                                </span>
                               </div>
                             </div>
                             <div className="text-left">
-                              <p className="font-bold text-[#C092BD]">EGP {item.total_price.toFixed(2)}</p>
+                              <p className="font-bold text-[#C092BD]">
+                                {currencySymbol} {item.total_price.toFixed(2)}
+                              </p>
                               {item.discount_amount > 0 && (
-                                <p className="text-xs text-gray-400">{t('orders.discount')}: {item.discount_amount.toFixed(2)}</p>
+                                <p className="text-xs text-gray-400">
+                                  {t("orders.discount")}:{" "}
+                                  {item.discount_amount.toFixed(2)}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -781,52 +914,76 @@ export default function OrderDetailsPage() {
                     );
                   })}
                 </div>
-                
+
                 {!isRefunded && !isReturnPending && !isReturnRejected && (
                   <div className="mt-6">
-                    <OrderTracker 
-                      currentStatus={order.status} 
+                    <OrderTracker
+                      currentStatus={order.status}
                       deliveryMethod={order.delivery_method}
                     />
                   </div>
                 )}
               </div>
-              
+
               <br />
-              
+
               {/* ملخص الطلب */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">{t('orders.orderSummary')}</h2>
+                <h2 className="text-xl font-bold text-gray-800 mb-4">
+                  {t("orders.orderSummary")}
+                </h2>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">{t('orders.subtotal')}</span>
-                    <span className="font-bold text-gray-800">EGP {order?.subtotal?.toFixed(2)}</span>
+                    <span className="text-gray-500">
+                      {t("orders.subtotal")}
+                    </span>
+                    <span className="font-bold text-gray-800">
+                      {currencySymbol} {order?.subtotal?.toFixed(2)}
+                    </span>
                   </div>
                   {order.coupon_discount_amount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">{t('orders.couponDiscount')}</span>
-                      <span className="font-bold text-[#C092BD]">-$ {order?.coupon_discount_amount?.toFixed(2)}</span>
+                      <span className="text-gray-500">
+                        {t("orders.couponDiscount")}
+                      </span>
+                      <span className="font-bold text-[#C092BD]">
+                        -{currencySymbol} {order?.coupon_discount_amount?.toFixed(2)}
+                      </span>
                     </div>
                   )}
                   {order.total_discount_amount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">{t('orders.totalDiscount')}</span>
-                      <span className="font-bold text-[#C092BD]">-$ {order?.total_discount_amount?.toFixed(2)}</span>
+                      <span className="text-gray-500">
+                        {t("orders.totalDiscount")}
+                      </span>
+                      <span className="font-bold text-[#C092BD]">
+                       -{currencySymbol} {order?.total_discount_amount?.toFixed(2)}
+                      </span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-gray-500">{t('orders.deliveryFee')}</span>
-                    <span className="font-bold text-gray-800">EGP {order?.shipping_amount?.toFixed(2)}</span>
+                    <span className="text-gray-500">
+                      {t("orders.deliveryFee")}
+                    </span>
+                    <span className="font-bold text-gray-800">
+                      {currencySymbol} {order?.shipping_amount?.toFixed(2)}
+                    </span>
                   </div>
                   {order.tax_amount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-gray-500">{t('orders.tax')}</span>
-                      <span className="font-bold text-gray-800">EGP {order?.tax_amount?.toFixed(2)}</span>
+                      <span className="text-gray-500">{t("orders.tax")}</span>
+                      <span className="font-bold text-gray-800">
+                        {currencySymbol} {order?.tax_amount?.toFixed(2)}
+                      </span>
                     </div>
                   )}
                   <div className="flex justify-between py-3 border-t border-gray-200 mt-2">
-                    <span className="text-lg font-bold text-gray-800">{t('orders.total')}</span>
-                    <span className="text-xl font-bold text-[#C092BD]">EGP {order?.total_amount?.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      {t("orders.total")}
+                    </span>
+                    <span className="text-xl font-bold text-[#C092BD]">
+                      {currencySymbol} {order?.total_amount?.toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -834,7 +991,32 @@ export default function OrderDetailsPage() {
 
             {/* العمود الأيسر */}
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 className="text-base font-bold text-gray-800 mb-4">
+                  {t("orders.contactInfo")}
+                </h2>
+                <div className="space-y-3">
+                  {order.additional_data?.name && (
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="font-bold">{t("orders.fullName")}</span>
+                      <span className="font-medium text-gray-600">
+                        {userName}
+                      </span>
+                    </div>
+                  )}
+
+                  {order.additional_data?.phone && (
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="font-bold">{t("orders.phone")}</span>
+                      <span className="font-medium text-gray-600" dir="ltr">
+                        {order.additional_data?.phone}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div> */}
+              {order.additional_data !=null && (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-base font-bold text-gray-800 mb-4">{t('orders.contactInfo')}</h2>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center text-sm">
@@ -848,14 +1030,19 @@ export default function OrderDetailsPage() {
                     </div>
                   )}
                 </div>
-              </div>
-              
+              </div> 
+            )}
+
               <br />
-              
+
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold mb-4">{t('orders.deliveryMethod')}</h2>
+                <h2 className="text-base font-bold mb-4">
+                  {t("orders.deliveryMethod")}
+                </h2>
                 <span className="font-medium text-gray-800">
-                  {order.delivery_method === "pickup" ? t('checkout.pickup') : t('checkout.delivery')}
+                  {order.delivery_method === "pickup"
+                    ? t("checkout.pickup")
+                    : t("checkout.delivery")}
                 </span>
                 {order.address && (
                   <div className="flex items-center gap-2 border rounded-[8px] px-2 py-3 mt-3">
@@ -866,12 +1053,14 @@ export default function OrderDetailsPage() {
                   </div>
                 )}
               </div>
-              
-              <br/>
-              
+
+              <br />
+
               {/* طريقة الدفع */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold mb-4">{t('orders.paymentMethod')}</h2>
+                <h2 className="text-base font-bold mb-4">
+                  {t("orders.paymentMethod")}
+                </h2>
                 <div className="flex items-center gap-3 p-2 border border-gray-300 rounded-[8px]">
                   <div className="w-10 h-10 bg-white rounded-[8px] flex items-center justify-center shadow-sm">
                     <GrMoney />
@@ -881,15 +1070,23 @@ export default function OrderDetailsPage() {
                   </div>
                 </div>
               </div>
-              
-              <br/>
+
+              <br />
 
               {/* ✅ حالة الدفع - تدعم العربية والإنجليزية */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold mb-4">{t('orders.paymentStatus') || 'حالة الدفع'}</h2>
-                <div className={`flex items-center gap-3 p-3 border border-gray-300 rounded-[8px] ${paymentStatusBg}`}>
-                  <div className={`w-12 h-12 rounded-[8px] flex items-center justify-center shadow-sm flex-shrink-0 ${paymentStatusBg}`}>
-                    <PaymentStatusIcon className={`w-5 h-5 ${paymentStatusColor}`} />
+                <h2 className="text-base font-bold mb-4">
+                  {t("orders.paymentStatus") || "حالة الدفع"}
+                </h2>
+                <div
+                  className={`flex items-center gap-3 p-3 border border-gray-300 rounded-[8px] ${paymentStatusBg}`}
+                >
+                  <div
+                    className={`w-12 h-12 rounded-[8px] flex items-center justify-center shadow-sm flex-shrink-0 ${paymentStatusBg}`}
+                  >
+                    <PaymentStatusIcon
+                      className={`w-5 h-5 ${paymentStatusColor}`}
+                    />
                   </div>
                   <div className="flex-1">
                     <p className={`font-medium text-sm ${paymentStatusColor}`}>
@@ -908,26 +1105,28 @@ export default function OrderDetailsPage() {
                     {isRetryingPayment ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        {t('orders.preparingPayment') || 'جاري التجهيز...'}
+                        {t("orders.preparingPayment") || "جاري التجهيز..."}
                       </>
                     ) : (
                       <>
                         <RefreshCw className="w-4 h-4" />
-                        {t('orders.retryPayment') || 'محاولة الدفع مجدداً'}
+                        {t("orders.retryPayment") || "محاولة الدفع مجدداً"}
                       </>
                     )}
                   </button>
                 )}
               </div>
-              
-              <br/>
-              
+
+              <br />
+
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold text-gray-800 mb-4">{t('orders.notes')}</h2>
+                <h2 className="text-base font-bold text-gray-800 mb-4">
+                  {t("orders.notes")}
+                </h2>
                 <textarea
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
-                  placeholder={t('orders.noNotes')}
+                  placeholder={t("orders.noNotes")}
                   className="w-full p-3 border border-gray-200 rounded-[8px] focus:outline-none focus:border-[#C092BD] resize-none bg-gray-50"
                   rows={3}
                   readOnly
@@ -935,46 +1134,79 @@ export default function OrderDetailsPage() {
               </div>
 
               <div className="flex gap-3 mt-3 md:mt-6 mx-2">
-                {!isRefunded && !isReturnPending && !isReturnRejected && order.status === "delivered" && (
-                  <button 
-                    onClick={handleReturnClick} 
-                    className="flex-1 border-2 border-[#000000] text-[#000000] py-3 rounded-[8px] font-medium hover:bg-red-50 transition"
-                  >
-                    {t('orders.return')}
-                  </button>
-                )}
-                
-                {!isRefunded && !isReturnPending && !isReturnRejected && order.status === "ordered" && (
-                  <button 
-                    onClick={openCancelModal}
-                    disabled={isCancelling}
-                    className="flex-1 border-2 border-red-500 text-red-600 py-3 rounded-[8px] font-medium hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {isCancelling ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
-                        {t('orders.cancelling')}
-                      </>
-                    ) : (
-                      t('orders.cancelOrder')
-                    )}
-                  </button>
-                )}
+                {!isRefunded &&
+                  !isReturnPending &&
+                  !isReturnRejected &&
+                  order.status === "delivered" && (
+                    <button
+                      onClick={handleReturnClick}
+                      className="flex-1 border-2 border-[#000000] text-[#000000] py-3 rounded-[8px] font-medium hover:bg-red-50 transition"
+                    >
+                      {t("orders.return")}
+                    </button>
+                  )}
+
+                {!isRefunded &&
+                  !isReturnPending &&
+                  !isReturnRejected &&
+                  order.status === "ordered" && (
+                    <button
+                      onClick={openCancelModal}
+                      disabled={isCancelling}
+                      className="flex-1 border-2 border-red-500 text-red-600 py-3 rounded-[8px] font-medium hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {isCancelling ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                          {t("orders.cancelling")}
+                        </>
+                      ) : (
+                        t("orders.cancelOrder")
+                      )}
+                    </button>
+                  )}
               </div>
             </div>
           </div>
         </div>
 
         <style jsx global>{`
-          .status-pending { background-color: #f181173D; color: #f18117; }
-          .status-processing { background-color: #ED89363D; color: #ED8936; }
-          .status-ready { background-color: #A0AEC03D; color: #A0AEC0; }
-          .status-delivering { background-color: #F6AD553D; color: #F6AD55; }
-          .status-delivered { background-color: #48BB783D; color: #48BB78; }
-          .status-cancelled { background-color: #F565653D; color: #F56565; }
-          .status-refunded { background-color: #9F7AEA3D; color: #9F7AEA; }
-          .status-return-pending { background-color: #F6AD553D; color: #F6AD55; }
-          .status-return-rejected { background-color: #F565653D; color: #F56565; }
+          .status-pending {
+            background-color: #f181173d;
+            color: #f18117;
+          }
+          .status-processing {
+            background-color: #ed89363d;
+            color: #ed8936;
+          }
+          .status-ready {
+            background-color: #a0aec03d;
+            color: #a0aec0;
+          }
+          .status-delivering {
+            background-color: #f6ad553d;
+            color: #f6ad55;
+          }
+          .status-delivered {
+            background-color: #48bb783d;
+            color: #48bb78;
+          }
+          .status-cancelled {
+            background-color: #f565653d;
+            color: #f56565;
+          }
+          .status-refunded {
+            background-color: #9f7aea3d;
+            color: #9f7aea;
+          }
+          .status-return-pending {
+            background-color: #f6ad553d;
+            color: #f6ad55;
+          }
+          .status-return-rejected {
+            background-color: #f565653d;
+            color: #f56565;
+          }
         `}</style>
       </div>
 
@@ -987,26 +1219,26 @@ export default function OrderDetailsPage() {
                 <XCircle className="w-8 h-8 text-red-600" />
               </div>
             </div>
-            
+
             <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
-              {t('orders.confirmCancel')}
+              {t("orders.confirmCancel")}
             </h3>
             <p className="text-center text-gray-600 text-sm mb-1">
-              {t('orders.confirmCancelMessage')}
+              {t("orders.confirmCancelMessage")}
             </p>
             <p className="text-center text-red-500 font-bold text-sm mb-4">
               #{order?.orderNumber}
             </p>
             <p className="text-center text-gray-400 text-xs mb-6">
-              {t('orders.cancelWarning')}
+              {t("orders.cancelWarning")}
             </p>
-            
+
             <div className="flex gap-3">
               <button
                 onClick={closeCancelModal}
                 className="flex-1 py-2.5 rounded-[8px] border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition"
               >
-                {t('orders.cancel')}
+                {t("orders.cancel")}
               </button>
               <button
                 onClick={confirmCancelOrder}
@@ -1016,10 +1248,10 @@ export default function OrderDetailsPage() {
                 {isCancelling ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {t('orders.cancelling')}
+                    {t("orders.cancelling")}
                   </>
                 ) : (
-                  t('orders.yesCancel')
+                  t("orders.yesCancel")
                 )}
               </button>
             </div>

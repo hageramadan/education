@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import Pagination from '@/components/products/Pagination';
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
-
+import { useCurrency } from "@/hooks/useCurrency";
 // ========== تعريف الأنواع ==========
 type OrderStatus = 
   | "ordered"
@@ -360,10 +360,12 @@ type FilterStatus = "all" | OrderStatus;
 
 export default function OrdersPage() {
   const { t } = useTranslation();
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+   const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   const [pagination, setPagination] = useState<PaginationData>({
     current_page: 1,
     last_page: 1,
@@ -698,13 +700,13 @@ export default function OrdersPage() {
                                     <div className="flex flex-wrap gap-2 sm:gap-3 mt-1 text-[10px] sm:text-xs text-gray-500">
                                       <span>{t('orders.quantity')}: x{item.quantity}</span>
                                       <span>
-                                        {t('orders.price')}: $ {item.unit_price.toFixed(2)}
+                                        {t('orders.price')}: {currencySymbol} {item.unit_price.toFixed(2)}
                                       </span>
                                     </div>
                                   </div>
                                   <div className="text-left sm:text-right">
                                     <p className="font-semibold text-[#000000] text-sm sm:text-base">
-                                      $ {item.total_price.toFixed(2)}
+                                      {currencySymbol} {item.total_price.toFixed(2)}
                                     </p>
                                   </div>
                                 </div>
@@ -726,7 +728,7 @@ export default function OrdersPage() {
                           </p>
                           <p className="text-base sm:text-xl font-bold text-[#C092BD]">
                             <span className="text-xs md:text-base font-bold text-[#C092BD]">
-                              $
+                              {currencySymbol}
                             </span>
                             {order.total_amount.toFixed(2)}
                           </p>

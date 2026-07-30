@@ -14,17 +14,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/hooks/useCurrency"; // ✅ استيراد useCurrency
 
 interface ColorOption {
   color: string;
   name: string;
-}
-
-interface Currency {
-  code: string;
-  symbol: string;
-  name: string;
-  rate: number;
 }
 
 interface ProductCardProps {
@@ -43,11 +37,11 @@ interface ProductCardProps {
   variantId?: number | null;
   hasVariants?: boolean;
   variants?: Array<{ id: number }>;
-  currency?: Currency;
   quantity?: number | null;
+  // ❌ إزالة currency من الـ Props
 }
 
-//  دالة للحصول على الترجمات حسب اللغة
+// دالة للحصول على الترجمات حسب اللغة
 const getTranslations = (lang: string) => {
   if (lang === 'en') {
     return {
@@ -75,8 +69,8 @@ const getTranslations = (lang: string) => {
     addedToCart: "تم إضافة المنتج إلى السلة",
     errorAddingToCart: "حدث خطأ أثناء إضافة المنتج إلى السلة",
     reviews: "تقييمات",
-    outOfStock: " نفذ من المخزون",
-    productUnavailable: "المنتج  نفذ من المخزون",
+    outOfStock: "نفذ من المخزون",
+    productUnavailable: "المنتج نفذ من المخزون",
   };
 };
 
@@ -96,10 +90,10 @@ export function ProductCard({
   variantId = null,
   hasVariants = false,
   variants = [],
-  currency,
   quantity,
 }: ProductCardProps) {
   const { language } = useLanguage();
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const t = getTranslations(language);
   
   const [isHovered, setIsHovered] = useState(false);
@@ -305,15 +299,6 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Out of Stock Badge */}
-          {/* {isOutOfStock && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 rounded-t-lg">
-              <p className="text-white text-sm sm:text-base font-bold bg-red-600 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg">
-                {t.outOfStock}
-              </p>
-            </div>
-          )} */}
-
           {/* Image with scale effect on hover */}
           <div className="overflow-hidden rounded-t-lg">
             {!imageLoaded && (
@@ -353,18 +338,21 @@ export function ProductCard({
           {/* Product Name */}
           <h3 
             id={`product-name-${id}`}
-            className="text-[11px] sm:text-[13px] md:text-[14px] font-medium line-clamp-2 mb-1" 
+            className="text-[11px] sm:text-[13px] md:text-[14px] font-medium line-clamp-2 lg:line-clamp-1 mb-1" 
             style={{ color: '#112B40' }}
           >
             {name}
           </h3>
 
-          {/* Price */}
+          {/* Price - ✅ استخدام العملة من الـ Hook */}
           <div className="flex items-center gap-2 mb-2">
             {originalPrice && originalPrice > price ? (
               <>
                 <span className="text-sm sm:text-base md:text-[17px] font-semibold" style={{ color: '#08B2A7' }}>
-                  {price.toLocaleString()} <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">{currency?.symbol || 'EGP'}</span>
+                  {price.toLocaleString()}{' '}
+                  <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">
+                    {currencyLoading ? '...' : currency || 'EGP'}
+                  </span>
                 </span>
                 <span className="text-[10px] sm:text-xs md:text-[12px] text-gray-400 line-through">
                   {originalPrice.toLocaleString()}
@@ -372,7 +360,10 @@ export function ProductCard({
               </>
             ) : (
               <span className="text-sm sm:text-base md:text-[17px] font-semibold" style={{ color: '#08B2A7' }}>
-                {price.toLocaleString()} <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">{currency?.symbol || 'EGP'}</span>
+                {price.toLocaleString()}{' '}
+                <span className="text-[10px] sm:text-xs md:text-[12px] font-semibold">
+                  {currencyLoading ? '...' : currency || 'EGP'}
+                </span>
               </span>
             )}
           </div>

@@ -192,18 +192,21 @@ export function CustomerReviews({ productId }: CustomerReviewsProps) {
     <section className="py-6 md:py-12 bg-white">
       <div className="container-custom">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
           <div className="flex gap-1 items-center">
-            <h1 className="text-xl font-bold text-[#181818]">
+            <h1 className="text-base lg:text-xl font-bold text-[#181818]">
               {t('reviews.productReviews')}
             </h1>
-            <div className="text-sm font-bold text-[#3A4980]">
+            {totalReviews > 0 &&(
+<div className="text-sm font-bold text-[#3A4980]">
               ({totalReviews} {t('reviews.reviews')})
             </div>
+            )}
+            
           </div>
           
-          <div className="grid grid-cols-2 gap-3 items-center">
-            {/* خيارات الترتيب */}
+          {/* <div className="grid grid-cols-2 gap-3 items-center">
+         
             {totalReviews > 0 && (
               <Select value={sortBy} onValueChange={handleSortChange}>
                 <SelectTrigger className="h-12 bg-[#F0F0F0] rounded-full focus:ring-[#C092BD] focus:ring-offset-0">
@@ -228,7 +231,7 @@ export function CustomerReviews({ productId }: CustomerReviewsProps) {
             <button className="bg-[#C092BD] text-white rounded-full px-1 lg:px-3 py-2.5 text-sm font-bold hover:bg-[#C092BD] transition-all duration-300">
               {t('reviews.addReview')}
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -236,10 +239,10 @@ export function CustomerReviews({ productId }: CustomerReviewsProps) {
           <div className="lg:col-span-2">
             {reviews.length === 0 ? (
               <div className="text-center py-12 bg-gray-50 rounded-[8px]">
-                <p className="text-gray-500">{t('reviews.noReviews')}</p>
-                <button className="mt-4 bg-[#C092BD] text-white px-6 py-2 rounded-full text-sm">
+                <p className="text-gray-500 text-sm">{t('reviews.noReviews')}</p>
+                {/* <button className="mt-4 bg-[#C092BD] text-white px-6 py-2 rounded-full text-sm">
                   {t('reviews.beFirst')}
-                </button>
+                </button> */}
               </div>
             ) : (
               <>

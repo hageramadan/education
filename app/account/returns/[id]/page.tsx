@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRouter as useNextRouter } from "next/navigation";
-
+import { useCurrency } from "@/hooks/useCurrency";
 // ========== تعريف الأنواع ==========
 interface ReturnProductItem {
   id: number;
@@ -280,10 +280,11 @@ const getReturnStatusConfig = (t: any) => ({
 
 export default function ReturnDetailsPage() {
   const { t } = useTranslation();
+   const { currency, isLoading: currencyLoading } = useCurrency();
   const params = useParams();
   const router = useRouter();
   const returnId = params.id as string;
-  
+  const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   const [returnData, setReturnData] = useState<ReturnDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [returnNotes, setReturnNotes] = useState("");
@@ -504,11 +505,11 @@ export default function ReturnDetailsPage() {
                             
                             <div className="flex gap-1 md:gap-3 mt-2 text-xs text-black font-bold">
                               <span>{t('returns.quantity')}: <span className="text-gray-500">x{item.quantity}</span></span>
-                              <span>{t('returns.price')}: <span className="text-gray-500">EGP {item.unit_price.toFixed(2)}</span></span>
+                              <span>{t('returns.price')}: <span className="text-gray-500">{currencySymbol} {item.unit_price.toFixed(2)}</span></span>
                             </div>
                           </div>
                           <div className="text-left">
-                            <p className="font-bold text-[#C092BD]">EGP {item.total_price.toFixed(2)}</p>
+                            <p className="font-bold text-[#C092BD]">{currencySymbol} {item.total_price.toFixed(2)}</p>
                             {item.discount_amount > 0 && (
                               <p className="text-xs text-gray-400">{t('orders.discount')}: {item.discount_amount.toFixed(2)}</p>
                             )}
@@ -529,33 +530,33 @@ export default function ReturnDetailsPage() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-500">{t('orders.subtotal')}</span>
-                  <span className="font-bold text-gray-800">EGP {returnData.order.subtotal.toFixed(2)}</span>
+                  <span className="font-bold text-gray-800">{currencySymbol} {returnData.order.subtotal.toFixed(2)}</span>
                 </div>
                 {returnData.order.coupon_discount_amount > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-500">{t('orders.couponDiscount')}</span>
-                    <span className="font-bold text-[#C092BD]">-$ {returnData.order.coupon_discount_amount.toFixed(2)}</span>
+                    <span className="font-bold text-[#C092BD]">-{currencySymbol} {returnData.order.coupon_discount_amount.toFixed(2)}</span>
                   </div>
                 )}
                 {returnData.order.total_discount_amount > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-500">{t('orders.totalDiscount')}</span>
-                    <span className="font-bold text-[#C092BD]">-$ {returnData.order.total_discount_amount.toFixed(2)}</span>
+                    <span className="font-bold text-[#C092BD]">-{currencySymbol} {returnData.order.total_discount_amount.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-gray-500">{t('orders.deliveryFee')}</span>
-                  <span className="font-bold text-gray-800">EGP {returnData.order.shipping_amount.toFixed(2)}</span>
+                  <span className="font-bold text-gray-800">{currencySymbol} {returnData.order.shipping_amount.toFixed(2)}</span>
                 </div>
                 {returnData.order.tax_amount > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-500">{t('orders.tax')}</span>
-                    <span className="font-bold text-gray-800">EGP {returnData.order.tax_amount.toFixed(2)}</span>
+                    <span className="font-bold text-gray-800">{currencySymbol} {returnData.order.tax_amount.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between py-3 border-t border-gray-200 mt-2">
                   <span className="text-lg font-bold text-gray-800">{t('returns.totalRefund')}</span>
-                  <span className="text-xl font-bold text-[#C092BD]">EGP {totalRefund.toFixed(2)}</span>
+                  <span className="text-xl font-bold text-[#C092BD]">{currencySymbol} {totalRefund.toFixed(2)}</span>
                 </div>
               </div>
             </div>

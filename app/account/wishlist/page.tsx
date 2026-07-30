@@ -320,7 +320,7 @@ export default function WishlistPage() {
                 hasVariants={item.hasVariants || false}
                 variants={item.variants || []}
                 variantId={item.variantId || null}
-                currency={item.currency}
+                // currency={item.currency}
                 quantity={item.quantity} // ✅ تمرير الكمية إلى ProductCard
               />
             </div>

@@ -199,7 +199,7 @@ export function PromoCodeInput({ onApply, onRemove, appliedCode }: PromoCodeInpu
           }}
           placeholder={t('promoCode.placeholder')}
           disabled={isLoading}
-          className={`px-2 md:px-4 py-2.5 w-[90%] lg:w-full border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#C092BD] focus:border-transparent text-sm disabled:bg-gray-100 ${
+          className={`px-2 md:px-4 py-2.5 w-[90%] lg:w-full border rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#C092BD] focus:border-[#C092BD] text-sm disabled:bg-gray-100 ${
             error ? 'border-red-500' : 'border-gray-200'
           }`}
         />

@@ -27,14 +27,9 @@ import { FaRegStar } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
-
+import { useCurrency } from "@/hooks/useCurrency";
 //  إضافة واجهة العملة
-interface Currency {
-  code: string;
-  symbol: string;
-  name: string;
-  rate: number;
-}
+
 
 interface VariantAttribute {
   id: number;
@@ -83,12 +78,13 @@ interface ProductDetailsProps {
     variants?: ProductVariant[];
     has_variants?: boolean;
     video?: string;
-    currency?: Currency;
+  
     quantity?: number | null; // ✅ إضافة الكمية الرئيسية للمنتج
   };
 }
 
 export function ProductDetails({ product }: ProductDetailsProps) {
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const { t } = useTranslation();
   const { language } = useLanguage();
   const isRTL = language === 'ar';
@@ -531,7 +527,7 @@ const getMaxQuantity = (): number => {
 
   //  الحصول على رمز العملة
   const getCurrencySymbol = (): string => {
-    return product.currency?.symbol || "$";
+     return currencyLoading ? '...' : (currency || 'EGP');
   };
 
   //  Add to cart - معدلة مع التحقق من الكمية
@@ -572,10 +568,10 @@ const getMaxQuantity = (): number => {
 
       if (success) {
         setQuantity(1);
-        toast.success(t("product.addedToCart"), {
-          duration: 3000,
-          position: "top-center",
-        });
+        // toast.success(t("product.addedToCart"), {
+        //   duration: 3000,
+        //   position: "top-center",
+        // });
       }
     } catch (error) {
       console.error("❌ Error adding to cart:", error);
@@ -654,7 +650,7 @@ const getMaxQuantity = (): number => {
           {t("products.home")}
         </Link>
         <span className="text-[#333333] font-bold">/</span>
-        <Link href="/products" className="text-[#726C6C] font-bold">
+        <Link href="/products" className="text-[#726C6C] font-bold text-sm line-clamp-1">
           {product.brand || t("products.title")}
         </Link>
         <span className="text-[#180100] font-bold">/</span>
@@ -803,11 +799,14 @@ const getMaxQuantity = (): number => {
 
           {/* Rating */}
           <div className="flex items-center gap-1.5 lg:mt-4">
-            <div className="flex items-center bg-[#EDF0F8] text-[#3A4980] font-bold text-xs rounded-full px-2 py-0.5 gap-1">
+              {product.reviewsCount > 0 && (
+ <div className="flex items-center bg-[#EDF0F8] text-[#3A4980] font-bold text-xs rounded-full px-2 py-0.5 gap-1">
               <IoChatboxEllipsesOutline className="w-3 h-3" />
               <span>{product.reviewsCount}</span>
               <span>{t("product.review")}</span>
             </div>
+              )}
+           
             {product.avg_rating > 0 && (
               <div className="flex items-center bg-[#FFF5F4] text-[#FA6054] font-bold text-xs rounded-full px-2 py-0.5 gap-1">
                 <FaRegStar className="w-2.5 h-2.5" />

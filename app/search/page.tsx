@@ -20,7 +20,7 @@ import {
 
 const API_URL = "https://education.admin.t-carts.com/api";
 
-//  تعريف واجهات
+// تعريف واجهات
 interface VariantAttribute {
   id: number;
   attribute_type: {
@@ -63,7 +63,7 @@ interface TransformedProduct {
   hasVariants?: boolean;
   variants?: ProductVariant[];
   variantId?: number | null;
-  quantity?: number | null; // ✅ إضافة الكمية
+  quantity?: number | null;
 }
 
 // دالة جلب التوكن
@@ -74,7 +74,7 @@ const getToken = (): string | null => {
   return null;
 };
 
-//  دالة استخراج الألوان من جميع الـ variants
+// دالة استخراج الألوان من جميع الـ variants
 const extractColorsFromVariants = (
   variants: ProductVariant[],
 ): Array<{ color: string; name: string }> => {
@@ -104,7 +104,7 @@ const extractColorsFromVariants = (
   }));
 };
 
-//  دالة جلب نتائج البحث المعدلة
+// دالة جلب نتائج البحث المعدلة
 const searchProducts = async (
   query: string,
   page: number = 1,
@@ -122,7 +122,6 @@ const searchProducts = async (
 
     const data = await response.json();
 
-    //  التأكد من أن البيانات بالشكل الصحيح
     if (data.result === true && data.data) {
       return {
         result: true,
@@ -149,14 +148,13 @@ const searchProducts = async (
   }
 };
 
-//  دالة تحويل المنتج لنفس صيغة ProductCard مع دعم الفاريانتات
+// دالة تحويل المنتج لنفس صيغة ProductCard مع دعم الفاريانتات
 const transformProductForCard = (product: any): TransformedProduct => {
   let colors: Array<{ color: string; name: string }> = [];
   let hasVariants = false;
   let variants: ProductVariant[] = [];
   let variantId: number | null = null;
 
-  //  استخراج المعلومات من الفاريانتات
   if (product.has_variants && product.variants && product.variants.length > 0) {
     hasVariants = true;
     variants = product.variants;
@@ -172,7 +170,6 @@ const transformProductForCard = (product: any): TransformedProduct => {
     return url;
   };
 
-  // حساب السعر النهائي
   const finalPrice =
     product.pricing?.final_price || product.pricing?.price || 0;
   const originalPrice = product.pricing?.price;
@@ -183,13 +180,10 @@ const transformProductForCard = (product: any): TransformedProduct => {
     discount = Math.round(((originalPrice - finalPrice) / originalPrice) * 100);
   }
 
-  // ✅ استخراج الكمية من المنتج
   let quantity: number | null = null;
   if (product.has_variants && product.variants && product.variants.length > 0) {
-    // إذا كان المنتج له متغيرات، نأخذ الكمية من أول متغير
     quantity = (product.variants[0] as ProductVariant)?.quantity ?? null;
   } else {
-    // إذا لم يكن له متغيرات، نأخذ الكمية من المنتج نفسه
     quantity = product.quantity ?? null;
   }
 
@@ -211,7 +205,7 @@ const transformProductForCard = (product: any): TransformedProduct => {
     hasVariants: hasVariants,
     variants: variants,
     variantId: variantId,
-    quantity: quantity, // ✅ إضافة الكمية
+    quantity: quantity,
   };
 };
 
@@ -224,7 +218,7 @@ function SearchContent() {
   const query = searchParams.get("q") || "";
 
   const [products, setProducts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -233,29 +227,31 @@ function SearchContent() {
   const [sortBy, setSortBy] = useState("");
 
   const perPage = 10;
-
-  const hasLoadedRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const isSearchChangeRef = useRef(false);
+  const isSearchingRef = useRef(false);
 
   // خيارات الترتيب باستخدام useTranslation
   const sortOptions = [
-    { value: t('search.sortNewest'), label: t('search.sortNewest') },
-    { value: t('search.sortPopular'), label: t('search.sortPopular') },
-    { value: t('search.sortPriceAsc'), label: t('search.sortPriceAsc') },
-    { value: t('search.sortPriceDesc'), label: t('search.sortPriceDesc') },
+    { value: "newest", label: t('search.sortNewest') },
+    { value: "popular", label: t('search.sortPopular') },
+    { value: "price_asc", label: t('search.sortPriceAsc') },
+    { value: "price_desc", label: t('search.sortPriceDesc') },
   ];
 
-  const fetchSearchResults = useCallback(async () => {
-    if (!query) {
+  // دالة جلب النتائج
+  const fetchSearchResults = useCallback(async (searchQuery: string, page: number) => {
+    // إذا لم يكن هناك استعلام، امسح النتائج
+    if (!searchQuery) {
       setProducts([]);
       setTotalProducts(0);
       setLastPage(1);
       setIsLoading(false);
       setIsFirstLoad(false);
+      isSearchingRef.current = false;
       return;
     }
 
+    // إلغاء الطلب السابق إذا كان موجوداً
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -263,8 +259,9 @@ function SearchContent() {
     abortControllerRef.current = new AbortController();
 
     setIsLoading(true);
+
     try {
-      const result = await searchProducts(query, currentPage, perPage);
+      const result = await searchProducts(searchQuery, page, perPage);
 
       if (!abortControllerRef.current?.signal.aborted) {
         if (result.result === true && result.data) {
@@ -272,15 +269,8 @@ function SearchContent() {
           const paginationData = result.data.pagination;
 
           setProducts(productsData);
-
-          if (paginationData) {
-            setLastPage(paginationData.last_page || 1);
-            setTotalProducts(paginationData.total || productsData.length);
-          } else {
-            setLastPage(1);
-            setTotalProducts(productsData.length);
-          }
-          hasLoadedRef.current = true;
+          setLastPage(paginationData?.last_page || 1);
+          setTotalProducts(paginationData?.total || productsData.length);
         } else {
           setProducts([]);
           setTotalProducts(0);
@@ -292,27 +282,29 @@ function SearchContent() {
         console.error("Error fetching search results:", error);
         toast.error(t('search.error'));
         setProducts([]);
+        setTotalProducts(0);
+        setLastPage(1);
       }
     } finally {
       if (!abortControllerRef.current?.signal.aborted) {
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsFirstLoad(false);
-        }, 200);
+        setIsLoading(false);
+        setIsFirstLoad(false);
+        isSearchingRef.current = false;
       }
     }
-  }, [query, currentPage, perPage, t]);
+  }, [perPage, t]);
 
+  // تحميل النتائج عند تغيير الاستعلام أو الصفحة
   useEffect(() => {
     if (query) {
-      setIsFirstLoad(true);
-      fetchSearchResults();
+      fetchSearchResults(query, currentPage);
     } else {
       setProducts([]);
       setTotalProducts(0);
       setLastPage(1);
       setIsLoading(false);
       setIsFirstLoad(false);
+      isSearchingRef.current = false;
     }
 
     return () => {
@@ -320,23 +312,16 @@ function SearchContent() {
         abortControllerRef.current.abort();
       }
     };
-  }, [query, fetchSearchResults]);
+  }, [query, currentPage, fetchSearchResults]);
 
+  // تحديث حقل البحث عند تغيير الاستعلام من الـ URL
   useEffect(() => {
-    if (query) {
-      isSearchChangeRef.current = true;
-      setCurrentPage(1);
-    }
+    setSearchInput(query);
   }, [query]);
 
+  // تطبيق الترتيب
   useEffect(() => {
-    if (currentPage > 1 && query) {
-      fetchSearchResults();
-    }
-  }, [currentPage, query, fetchSearchResults]);
-
-  useEffect(() => {
-    if (products.length > 0) {
+    if (products.length > 0 && sortBy) {
       const sortedProducts = [...products];
       switch (sortBy) {
         case "price_asc":
@@ -372,23 +357,37 @@ function SearchContent() {
     }
   }, [sortBy, products.length]);
 
+  // معالج البحث
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchInput.trim()) {
-      isSearchChangeRef.current = true;
-      setIsLoading(true);
-      setIsFirstLoad(true);
-      router.push(`/search?q=${encodeURIComponent(searchInput.trim())}`);
-    }
+    
+    const trimmedQuery = searchInput.trim();
+    if (!trimmedQuery) return;
+    
+    // منع التكرار
+    if (isSearchingRef.current) return;
+    if (trimmedQuery === query) return;
+    
+    isSearchingRef.current = true;
+    
+    // إعادة تعيين الصفحة إلى 1
+    setCurrentPage(1);
+    // تنظيف النتائج السابقة
+    setProducts([]);
+    setTotalProducts(0);
+    setLastPage(1);
+    setIsFirstLoad(true);
+    
+    // التوجيه إلى الرابط الجديد باستخدام replace
+    router.replace(`/search?q=${encodeURIComponent(trimmedQuery)}`, { scroll: false });
   };
 
   const handleSortChange = (value: string | null) => {
-    setSortBy(value || "s");
+    setSortBy(value || "newest");
   };
 
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= lastPage) {
-      setIsLoading(true);
+    if (page >= 1 && page <= lastPage && page !== currentPage) {
       setCurrentPage(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -401,7 +400,8 @@ function SearchContent() {
     return t('search.showingResults', { from, to, total: totalProducts });
   };
 
-  if (isFirstLoad) {
+  // عرض التحميل الأولي
+  if (isFirstLoad && query) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <LoadingSpinner size="lg" text={t('search.loading')} />
@@ -424,11 +424,11 @@ function SearchContent() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder={t('search.placeholder')}
-              className="w-full px-6 py-3 ps-2 border border-gray-200 rounded-[8px] focus:outline-none focus:ring-[#C092BD] focus:border-transparent"
+              className="w-full px-6 py-3 ps-4 border border-gray-200 rounded-[8px] focus:outline-none focus:ring-[#C092BD] focus:border-[#C092BD]"
             />
             <button
               type="submit"
-              className={`absolute ${language === 'en' ? ' end-3' : ' end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C092BD] transition`}
+              className={`absolute ${language === 'en' ? 'end-3' : 'end-3'} top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C092BD] transition`}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -443,14 +443,16 @@ function SearchContent() {
         {/* عدد النتائج وشريط الترتيب */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <p className="text-gray-600">
-            {totalProducts > 0 ? (
-              t('search.foundResults', { count: totalProducts, query })
-            ) : (
-              !isLoading && t('search.noResults', { query })
+            {!isLoading && query && (
+              totalProducts > 0 ? (
+                t('search.foundResults', { count: totalProducts, query })
+              ) : (
+                t('search.noResults', { query })
+              )
             )}
           </p>
           
-          {products.length > 0 && (
+          {products.length > 0 && !isLoading && (
             <Select value={sortBy} onValueChange={handleSortChange}>
               <SelectTrigger className="h-12 bg-[#F0F0F0] rounded-full focus:ring-[#C092BD] focus:ring-offset-0 w-[180px]">
                 <SelectValue placeholder={t('search.sortBy')} />
@@ -472,6 +474,7 @@ function SearchContent() {
           )}
         </div>
 
+        {/* مؤشر التحميل الإضافي */}
         {isLoading && products.length > 0 && (
           <div className="flex justify-center py-8">
             <div className="flex items-center gap-2">
@@ -482,7 +485,7 @@ function SearchContent() {
         )}
 
         {/* قائمة المنتجات */}
-        {!isLoading && products.length > 0 ? (
+        {!isLoading && products.length > 0 && (
           <>
             <div className="text-sm text-gray-500 mb-3">
               {getPaginationInfo()}
@@ -509,14 +512,14 @@ function SearchContent() {
                       hasVariants={cardData.hasVariants || false}
                       variants={cardData.variants || []}
                       variantId={cardData.variantId || null}
-                      quantity={cardData.quantity} // ✅ تمرير الكمية إلى ProductCard
+                      quantity={cardData.quantity}
                     />
                   </div>
                 );
               })}
             </div>
 
-            {/* الباجينشن - يظهر فقط لو في اكتر من صفحة */}
+            {/* الباجينشن */}
             {lastPage > 1 && (
               <div className="mt-12">
                 <Pagination
@@ -528,27 +531,27 @@ function SearchContent() {
               </div>
             )}
           </>
-        ) : (
-          !isLoading &&
-          !isFirstLoad && (
-            <div className="text-center py-16">
-              <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-12 h-12 mx-auto text-gray-400" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                {t('search.noResultsTitle')}
-              </h3>
-              <p className="text-gray-500 mb-3">
-                {t('search.noResultsMessage', { query })}
-              </p>
-              <button
-                onClick={() => router.push("/")}
-                className="inline-block bg-[#C092BD] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                {t('search.backToHome')}
-              </button>
+        )}
+
+        {/* رسالة عدم وجود نتائج */}
+        {!isLoading && !isFirstLoad && products.length === 0 && query && (
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Search className="w-12 h-12 mx-auto text-gray-400" />
             </div>
-          )
+            <h3 className="text-xl font-bold text-gray-800 mb-2">
+              {t('search.noResultsTitle')}
+            </h3>
+            <p className="text-gray-500 mb-3">
+              {t('search.noResultsMessage', { query })}
+            </p>
+            <button
+              onClick={() => router.replace("/")}
+              className="inline-block bg-[#C092BD] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#39abee] transition-all duration-300 shadow-md hover:shadow-lg"
+            >
+              {t('search.backToHome')}
+            </button>
+          </div>
         )}
       </div>
     </div>

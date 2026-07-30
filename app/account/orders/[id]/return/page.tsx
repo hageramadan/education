@@ -10,6 +10,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useCurrency } from "@/hooks/useCurrency";
 
 // ========== إعدادات API ==========
 const API_URL = 'https://education.admin.t-carts.com/api';
@@ -222,10 +223,11 @@ const formatDate = (dateString: string): string => {
 
 export default function ReturnRequestPage() {
   const { t } = useTranslation();
+   const { currency, isLoading: currencyLoading } = useCurrency(); 
   const params = useParams();
   const router = useRouter();
   const orderId = params.id as string;
-
+const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState("");
@@ -439,7 +441,7 @@ export default function ReturnRequestPage() {
                         </div>
                         <div>
                           <p className="font-bold text-gray-800 md:text-base text-xs flex gap-1">
-                            {(item.unit_price || item.price || 0).toFixed(2)} $
+                            {(item.unit_price || item.price || 0).toFixed(2)} {currencySymbol}
                           </p>
                         </div>
                       </div>

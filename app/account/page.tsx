@@ -29,7 +29,7 @@ export default function AccountPage() {
     const isEnglish = language === 'en';
   // حالات الرصيد
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
-  const [walletCurrency, setWalletCurrency] = useState<string>("$");
+  const [walletCurrency, setWalletCurrency] = useState<string>("Egp");
   const [loadingWallet, setLoadingWallet] = useState<boolean>(true);
 
   // دالة مساعدة لمعالجة رابط الصورة

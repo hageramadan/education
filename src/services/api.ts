@@ -1363,10 +1363,7 @@ export async function changePassword(data: ChangePasswordRequest): Promise<Chang
   try {
     const response = await fetch(`${API_URL}/auth/change-password`, {
       method: 'POST',
-       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+       headers: getHeaders(),
       body: JSON.stringify(data),
     });
 

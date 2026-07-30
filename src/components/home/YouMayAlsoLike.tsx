@@ -381,6 +381,7 @@ export function YouMayAlsoLike() {
                 hasVariants={product.hasVariants || false}
                 variants={product.variants || []}
                 variantId={product.variantId || null}
+                 quantity={product.quantity}
               />
             </div>
           ))}
