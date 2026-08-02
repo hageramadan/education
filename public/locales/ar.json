@@ -217,11 +217,12 @@
     "sending": "جاري الإرسال..."
   },
 
-  "countries": {
+   "countries": {
     "Egypt": "مصر",
     "SaudiArabia": "السعودية",
     "Iraq": "العراق",
-    "UAE": "الإمارات"
+    "UAE": "الإمارات",
+    "Kuwait": "الكويت"
   },
   "search": {
     "sortBy":"ترتيب",
