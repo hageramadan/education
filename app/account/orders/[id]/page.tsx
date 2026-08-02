@@ -1,4 +1,5 @@
 // app/account/orders/[id]/page.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,6 +13,7 @@ import {
   XCircle,
   ChevronRight,
   RefreshCw,
+  Star,
 } from "lucide-react";
 import { GrMoney } from "react-icons/gr";
 import Image from "next/image";
@@ -23,10 +25,14 @@ import toast from "react-hot-toast";
 import { getHeaders } from "@/services/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useCurrency } from "@/hooks/useCurrency";
+import { ProductReviewModal } from "@/components/products/ProductReviewModal";
+import { Product } from "@/types/product";
+
 // ========== تعريف الأنواع ==========
 interface OrderItem {
   id: number;
   title: string;
+  product?: Product | null;
   variant_id: number | null;
   quantity: number;
   unit_price: number;
@@ -116,7 +122,7 @@ const API_URL = "https://education.admin.t-carts.com/api";
 
 const getToken = (): string | null => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("auth_token6");
+    return localStorage.getItem("auth_token");
   }
   return null;
 };
@@ -137,7 +143,7 @@ const fetchOrderDetails = async (
 
     if (response.status === 401) {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("auth_token6");
+        localStorage.removeItem("auth_token");
         localStorage.removeItem("user_data");
       }
       throw new Error("UNAUTHORIZED");
@@ -182,7 +188,7 @@ const cancelOrder = async (orderId: number): Promise<boolean> => {
 
     if (response.status === 401) {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("auth_token6");
+        localStorage.removeItem("auth_token");
         localStorage.removeItem("user_data");
       }
       toast.error("جلسة غير صالحة، يرجى تسجيل الدخول مرة أخرى", {
@@ -342,7 +348,7 @@ const transformOrderDetails = (
     status_label: apiOrder.status_label,
     return_status_label: apiOrder.return_status_label || null,
     payment_method: mapPaymentMethod(apiOrder.payment_method),
-    payment_status: apiOrder.payment_status, // ✅ الاحتفاظ بالقيمة الأصلية (عربي أو إنجليزي)
+    payment_status: apiOrder.payment_status,
     delivery_method: mapDeliveryMethod(apiOrder.delivery_method),
     subtotal: apiOrder.subtotal,
     coupon_discount_amount: apiOrder.coupon_discount_amount,
@@ -354,7 +360,11 @@ const transformOrderDetails = (
     notes: apiOrder.notes,
     address: apiOrder.address,
     additional_data: apiOrder.additional_data,
-    items: apiOrder.items || [],
+    items: apiOrder.items.map((item: any) => ({
+      ...item,
+      product_id: item.product?.id || item.id,
+      product: item.product || null,
+    })),
     created_at: apiOrder.created_at,
   };
 };
@@ -432,7 +442,6 @@ const getPaymentStatusLabel = (paymentStatus: string, t: any): string => {
   if (isPaymentUnpaid(paymentStatus)) {
     return t("orders.paymentUnpaid") || "غير مدفوع";
   }
-  // إذا كانت القيمة غير معروفة، نرجعها كما هي
   return paymentStatus;
 };
 
@@ -493,7 +502,7 @@ const shouldShowRetryButton = (
 
 export default function OrderDetailsPage() {
   const { t } = useTranslation();
-   const { currency, isLoading: currencyLoading } = useCurrency();
+  const { currency, isLoading: currencyLoading } = useCurrency();
   const params = useParams();
   const router = useRouter();
   const orderId = params.id as string;
@@ -504,8 +513,13 @@ export default function OrderDetailsPage() {
   const [copied, setCopied] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [isRetryingPayment, setIsRetryingPayment] = useState(false);
-  const currencySymbol = currencyLoading ? '...' : (currency || 'EGP');
-  // State for Cancel Modal
+  const [reviewModal, setReviewModal] = useState<{
+    isOpen: boolean;
+    productId: number;
+    productName: string;
+  }>({ isOpen: false, productId: 0, productName: "" });
+  const [ratedProducts, setRatedProducts] = useState<Set<number>>(new Set());
+  const currencySymbol = currencyLoading ? "..." : currency || "EGP";
   const [showCancelModal, setShowCancelModal] = useState(false);
 
   // تكوين الحالات مع الترجمة
@@ -530,6 +544,30 @@ export default function OrderDetailsPage() {
       if (data?.notes) {
         setOrderNotes(data.notes);
       }
+
+      // جلب تقييمات المنتجات المحفوظة
+      if (data?.items) {
+        const savedRatings = JSON.parse(
+          localStorage.getItem("product_ratings") || "{}",
+        );
+        const ratedIds = new Set<number>();
+
+        data.items.forEach((item) => {
+          const productId =
+            typeof item.product?.id === "number"
+              ? item.product.id
+              : typeof item.id === "number"
+                ? item.id
+                : Number(item.id) || 0;
+
+          if (productId > 0 && savedRatings[productId]) {
+            ratedIds.add(productId); // productId هو number الآن
+          }
+        });
+
+        setRatedProducts(ratedIds);
+      }
+
       setLoading(false);
     };
 
@@ -594,7 +632,6 @@ export default function OrderDetailsPage() {
     try {
       setIsRetryingPayment(true);
 
-      // إظهار رسالة تحميل
       const toastId = toast.loading(
         t("orders.preparingPayment") || "جاري تجهيز بوابة الدفع...",
         {
@@ -602,15 +639,13 @@ export default function OrderDetailsPage() {
         },
       );
 
-      // ✅ استخدام الـ endpoint الجديد: /repay
       const response = await fetch(`${API_URL}/orders/${orderId}/repay`, {
         method: "POST",
         headers: getHeaders(),
       });
 
-      // التحقق من صلاحية التوكن
       if (response.status === 401) {
-        localStorage.removeItem("auth_token6");
+        localStorage.removeItem("auth_token");
         localStorage.removeItem("user_data");
         toast.error(
           t("orders.invalidSession") ||
@@ -625,16 +660,10 @@ export default function OrderDetailsPage() {
       }
 
       const data = await response.json();
-
-      // إخفاء رسالة التحميل
       toast.dismiss(toastId);
 
-      // ✅ التحقق من الـ response حسب الهيكل المحدد
       if (data.data?.redirect_url) {
-        // ✅ توجيه المستخدم إلى بوابة الدفع
         window.location.href = data.data.redirect_url;
-
-        // ✅ يمكن تسجيل وقت إنشاء رابط الدفع للتحليل
         console.log(
           "✅ Payment URL created at:",
           data.data.payment_url_created_at,
@@ -658,6 +687,44 @@ export default function OrderDetailsPage() {
     } finally {
       setIsRetryingPayment(false);
     }
+  };
+
+  // دالة فتح مودال التقييم
+  const openReviewModal = (productId: number, productName: string) => {
+    setReviewModal({
+      isOpen: true,
+      productId,
+      productName,
+    });
+  };
+
+  // دالة إغلاق مودال التقييم
+  const closeReviewModal = () => {
+    setReviewModal({
+      isOpen: false,
+      productId: 0,
+      productName: "",
+    });
+  };
+
+  // دالة عند إتمام التقييم
+  const handleReviewSubmitted = (productId: number) => {
+    // حفظ التقييم في localStorage
+    const savedRatings = JSON.parse(
+      localStorage.getItem("product_ratings") || "{}",
+    );
+    savedRatings[productId] = true;
+    localStorage.setItem("product_ratings", JSON.stringify(savedRatings));
+
+    // تحديث الحالة
+    const newRatedProducts = new Set(ratedProducts);
+    newRatedProducts.add(productId);
+    setRatedProducts(newRatedProducts);
+
+    toast.success(t("orders.ratingSaved") || "تم حفظ تقييمك للمنتج!", {
+      duration: 3000,
+      position: "top-center",
+    });
   };
 
   if (loading) {
@@ -822,6 +889,15 @@ export default function OrderDetailsPage() {
                     const storage = getStorage(item);
                     const color = getColor(item);
 
+                    // ✅ استخدام product_id الفعلي من product.id
+                    const productId =
+                      typeof item.product?.id === "number"
+                        ? item.product.id
+                        : typeof item.id === "number"
+                          ? item.id
+                          : Number(item.id) || 0;
+                    const hasRated = ratedProducts.has(productId);
+
                     return (
                       <div
                         key={idx}
@@ -892,7 +968,8 @@ export default function OrderDetailsPage() {
                                 <span>
                                   {t("orders.price")}:{" "}
                                   <span className="text-gray-500">
-                                    {currencySymbol} {item.unit_price.toFixed(2)}
+                                    {currencySymbol}{" "}
+                                    {item.unit_price.toFixed(2)}
                                   </span>
                                 </span>
                               </div>
@@ -909,6 +986,35 @@ export default function OrderDetailsPage() {
                               )}
                             </div>
                           </div>
+
+                          {/* ✅ زر تقييم المنتج - يظهر فقط إذا كان الطلب مسلم */}
+                          {order.status === "delivered" &&
+                            !isRefunded &&
+                            !isReturnPending &&
+                            !isReturnRejected &&
+                           (
+                              <div className="mt-2">
+                                {hasRated ? (
+                                  <div className="flex items-center gap-1 text-sm text-green-600">
+                                    <CheckCircle className="w-4 h-4" />
+                                    <span>
+                                      {t("orders.productRated") ||
+                                        "تم تقييم هذا المنتج"}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() =>
+                                      openReviewModal(productId, item.title)
+                                    }
+                                    className="flex items-center gap-1 text-sm text-[#C092BD] hover:text-[#a880a6] transition font-medium"
+                                  >
+                                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                    {t("orders.rateProduct") || "تقييم المنتج"}
+                                  </button>
+                                )}
+                              </div>
+                            )}
                         </div>
                       </div>
                     );
@@ -947,7 +1053,8 @@ export default function OrderDetailsPage() {
                         {t("orders.couponDiscount")}
                       </span>
                       <span className="font-bold text-[#C092BD]">
-                        -{currencySymbol} {order?.coupon_discount_amount?.toFixed(2)}
+                        -{currencySymbol}{" "}
+                        {order?.coupon_discount_amount?.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -957,7 +1064,8 @@ export default function OrderDetailsPage() {
                         {t("orders.totalDiscount")}
                       </span>
                       <span className="font-bold text-[#C092BD]">
-                       -{currencySymbol} {order?.total_discount_amount?.toFixed(2)}
+                        -{currencySymbol}{" "}
+                        {order?.total_discount_amount?.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -991,47 +1099,29 @@ export default function OrderDetailsPage() {
 
             {/* العمود الأيسر */}
             <div className="space-y-6">
-              {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold text-gray-800 mb-4">
-                  {t("orders.contactInfo")}
-                </h2>
-                <div className="space-y-3">
-                  {order.additional_data?.name && (
+              {order.additional_data != null && (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <h2 className="text-base font-bold text-gray-800 mb-4">
+                    {t("orders.contactInfo")}
+                  </h2>
+                  <div className="space-y-3">
                     <div className="flex justify-between items-center text-sm">
                       <span className="font-bold">{t("orders.fullName")}</span>
                       <span className="font-medium text-gray-600">
                         {userName}
                       </span>
                     </div>
-                  )}
-
-                  {order.additional_data?.phone && (
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="font-bold">{t("orders.phone")}</span>
-                      <span className="font-medium text-gray-600" dir="ltr">
-                        {order.additional_data?.phone}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div> */}
-              {order.additional_data !=null && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-base font-bold text-gray-800 mb-4">{t('orders.contactInfo')}</h2>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="font-bold">{t('orders.fullName')}</span>
-                    <span className="font-medium text-gray-600">{userName}</span>
+                    {order.additional_data?.phone && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="font-bold">{t("orders.phone")}</span>
+                        <span className="font-medium text-gray-600" dir="ltr">
+                          {order.additional_data?.phone}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  {order.additional_data?.phone && (
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="font-bold">{t('orders.phone')}</span>
-                      <span className="font-medium text-gray-600" dir="ltr">{order.additional_data?.phone}</span>
-                    </div>
-                  )}
                 </div>
-              </div> 
-            )}
+              )}
 
               <br />
 
@@ -1258,6 +1348,15 @@ export default function OrderDetailsPage() {
           </div>
         </div>
       )}
+
+      {/* ✅ استخدام مكون ProductReviewModal المنفصل */}
+      <ProductReviewModal
+        isOpen={reviewModal.isOpen}
+        onClose={closeReviewModal}
+        productId={reviewModal.productId}
+        productName={reviewModal.productName}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
     </>
   );
 }

@@ -735,6 +735,9 @@
     }
 },
   "orders": {
+     "rateProduct": "تقييم المنتج",
+    "productRated": "تم تقييم هذا المنتج",
+    "ratingSaved": "تم حفظ تقييمك للمنتج!",
     "paymentStatus": "حالة الدفع",
     "retryPayment": "محاولة الدفع مجدداً",
     "preparingPayment": "جاري تجهيز بوابة الدفع...",

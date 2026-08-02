@@ -822,7 +822,9 @@
     }
 },
   "orders": {
-       
+         "rateProduct": "Rate Product",
+    "productRated": "This product has been rated",
+    "ratingSaved": "Your product rating has been saved!",
     "paymentPaid": "Paid",
     "paymentPending": "Pending",
     "paymentUnpaid": "Unpaid",

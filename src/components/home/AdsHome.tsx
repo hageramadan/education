@@ -41,18 +41,22 @@ const getTranslations = (lang: string) => {
       minutes: "Minutes",
       seconds: "Seconds",
       offerExpired: "Offer expired",
+      limitedOffer: "Limited Offer",
+      dontMiss: "Don't miss the opportunity",
     };
   }
   // Arabic (default)
   return {
     loading: "جاري التحميل...",
-    shopNow: "احصل علي العرض",
+    shopNow: "تسوق الان",
     expiresIn: "سينتهي الخصم خلال",
     days: "أيام",
     hours: "ساعات",
     minutes: "دقائق",
     seconds: "ثواني",
     offerExpired: "انتهى العرض",
+    limitedOffer: "لفترة محدودة",
+    dontMiss: "لا تفوت الفرصة",
   };
 };
 
@@ -149,20 +153,16 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
     return () => clearInterval(timer);
   }, [activeAd]);
 
-  // استخراج قيمة الخصم من النص (مثل "خصم 32%")
-  const extractDiscount = (text: string) => {
-    const match = text.match(/(\d+)%/);
-    return match ? match[1] : null;
-  };
-
   // Format numbers to always show 2 digits
   const formatNumber = (num: number) => String(num).padStart(2, '0');
 
   // عرض شاشة تحميل
   if (loading) {
     return (
-      <section>
-       
+      <section className="bg-[#FDF2F8] py-12">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C092BD]"></div>
+        </div>
       </section>
     );
   }
@@ -170,7 +170,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
   // عرض نسخة ثابتة أثناء Hydration
   if (!isClient) {
     return (
-      <section className="bg-[#C092BD]">
+      <section className="bg-[#FDF2F8] py-12">
         <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-6 md:gap-10 min-h-[200px]">
           <div className="flex items-center justify-center w-full">
           </div>
@@ -188,60 +188,60 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
     return null;
   }
 
-  const discountValue = extractDiscount(activeAd.sub_title);
   const adImageUrl = getFullImageUrl(activeAd.image);
   const hasTimer = timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0;
 
   return (
-    <section className="bg-[#C092BD] container rounded-[8px]">
-      <div className="flex flex-col lg:flex-row items-end justify-end lg:items-stretch lg:justify-between gap-1 sm:gap-3 md:gap-10">
+    <section className="bg-[#FDF2F8] mb-5 md:mb-20 my-12">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
         
         {/* Left Content */}
-        <div className="flex items-center lg:items-start justify-center lg:justify-normal px-3 sm:px-4 pt-4 sm:pt-5 md:py-6  flex-col gap-1 sm:gap-2  w-full lg:w-1/2">
+        <div className="flex px-4 pb-5 sm:ps-[2%] md:ps-[4%] lg:ps-[10%] xl:ps-[13%] mx-auto flex-col gap-2 md:gap-[22px] w-full md:w-1/2 order-2 md:order-1">
           
-          <p className="text-[20px] md:text-[24px]  py-0.5 sm:py-1 px-2 sm:px-3 text-[#006D37] text-center lg:text-start">
-            {activeAd.name}
+          {/* Limited offer badge */}
+          <p className="text-[12px] md:text-[16px] font-semibold py-1 px-3 text-[#BE4646]">
+            {activeAd.name || t.limitedOffer}
           </p>
           
-          <div className="flex items-center gap-2">
-            <p className="text-[16px]  md:text-[18px]  py-0.5 sm:py-1 px-2 sm:px-3 text-[#191C1F] w-fit rounded-md">
+          {/* Discount badge */}
+          <div className="flex items-center gap-3">
+            <p className="text-[20px] md:text-[32px] font-bold py-1 px-3 text-[#191C1F] w-fit rounded-md">
               {activeAd.sub_title}
             </p>
           </div>
           
-        </div>
-        
-        {/* Right Image */}
-        <div className="w-full  lg:w-1/2 flex items-center justify-center  gap-2 lg:gap-5 flex-wrap lg:flex-nowrap p-2">
-
-          {/* Countdown Timer */}
+          <p className="text-sm md:text-[22px] text-[#191C1F] w-full md:w-[80%] leading-[1.5]">
+            {activeAd.description || t.dontMiss}
+          </p>
+          
+          {/* Countdown Timer - يظهر فقط إذا كان هناك وقت متبقي */}
           {hasTimer && (
-            <div className="mt-2 sm:mt-4 text-center lg:text-start">
-              <p className="text-[10px] sm:text-sm md:text-base text-gray-600 mb-1 sm:mb-3">{t.expiresIn}</p>
-              <div className="flex gap-2 sm:gap-3 md:gap-5">
+            <div className="mt-4">
+              <p className="text-sm md:text-base text-gray-600 mb-3">{t.expiresIn}</p>
+              <div className="flex gap-3 md:gap-5">
                 <div className="text-center">
-                  <div className="bg-[#006D37] text-white rounded-[8px] px-1 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 min-w-[35px] sm:min-w-[50px] md:min-w-[70px]">
-                    <span className="text-sm sm:text-xl md:text-3xl font-bold">{formatNumber(timeLeft.days)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
+                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.days)}</span>
                   </div>
-                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 mt-0.5 sm:mt-1">{t.days}</p>
+                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.days}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-[#006D37] text-white rounded-[8px] px-1 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 min-w-[35px] sm:min-w-[50px] md:min-w-[70px]">
-                    <span className="text-sm sm:text-xl md:text-3xl font-bold">{formatNumber(timeLeft.hours)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
+                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.hours)}</span>
                   </div>
-                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 mt-0.5 sm:mt-1">{t.hours}</p>
+                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.hours}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-[#006D37] text-white rounded-[8px] px-1 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 min-w-[35px] sm:min-w-[50px] md:min-w-[70px]">
-                    <span className="text-sm sm:text-xl md:text-3xl font-bold">{formatNumber(timeLeft.minutes)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
+                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.minutes)}</span>
                   </div>
-                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 mt-0.5 sm:mt-1">{t.minutes}</p>
+                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.minutes}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-[#006D37] text-white rounded-[8px] px-1 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 min-w-[35px] sm:min-w-[50px] md:min-w-[70px]">
-                    <span className="text-sm sm:text-xl md:text-3xl font-bold">{formatNumber(timeLeft.seconds)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
+                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.seconds)}</span>
                   </div>
-                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 mt-0.5 sm:mt-1">{t.seconds}</p>
+                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.seconds}</p>
                 </div>
               </div>
             </div>
@@ -251,13 +251,31 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
           <Button
             asChild
             aria-label='buy now'
-            className="flex w-full sm:w-[150px] md:w-[180px] md:h-[60px]  animate-in text-[11px] sm:text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-2 sm:mt-6"
-            style={{ backgroundColor: '#F79201' }}
+            className="w-full md:w-[180px] md:h-[60px] animate-in text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-4"
+            style={{ backgroundColor: '#08B2A7' }}
           >
             <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white">
               {t.shopNow}
+              {/* <FaArrowLeft className="h-4 w-4" /> */}
             </Link>
           </Button>
+        </div>
+        
+        {/* Right Image */}
+        <div className="w-full md:w-1/2 md:ps-30 order-1 md:order-2">
+          <Image 
+            src={adImageUrl} 
+            alt={activeAd.name || "Advertisement"} 
+            className="w-full h-auto md:w-[100%] md:h-[532px] object-cover" 
+            width={500} 
+            height={300} 
+            priority
+            onError={(e) => {
+              // في حال فشل تحميل الصورة، استخدم الصورة الافتراضية
+              const target = e.target as HTMLImageElement;
+              target.src = "/images/advs.png";
+            }}
+          />
         </div>
         
       </div>

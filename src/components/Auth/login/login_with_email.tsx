@@ -53,11 +53,11 @@ export default function LoginWithEmail() {
 
     if (result.success) {
       toast.success(result.message || t("auth.loginSuccess"), {
-        duration: 3000,
+        duration: 1000,
       });
       
       setTimeout(() => {
-        router.push(`/auth/verify-otp/email?email=${encodeURIComponent(formData.email)}&isLogin=true`);
+        router.push(`/`);
       }, 1500);
     } else {
       toast.error(result.message || t("auth.loginFailed"));

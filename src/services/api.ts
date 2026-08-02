@@ -6,7 +6,7 @@ const API_BASE_URL_Img="https://education.admin.t-carts.com";
 // ========== دوال مساعدة للمصادقة (يجب تعريفها أولاً) ==========
 export function getToken(): string | null {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token6');
+    return localStorage.getItem('auth_token');
   }
   return null;
 }
@@ -29,13 +29,13 @@ export function removeGuestToken(): void {
 }
 export function saveToken(token: string): void {
   if (typeof window !== 'undefined') {
-    localStorage.setItem('auth_token6', token);
+    localStorage.setItem('auth_token', token);
   }
 }
 
 export function removeToken(): void {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('auth_token6');
+    localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
   }
 }
@@ -1151,6 +1151,22 @@ export async function loginWithEmail(data: LoginWithEmailRequest): Promise<AuthR
         data: results.data || null,
       };
     }
+ if (results.result && results.errNum === 200 && results.data) {
+      const token = results.data.token;
+      const user = results.data.user;
+      
+      if (token) {
+        // استخدام saveToken بدلاً من التخزين المباشر
+        saveToken(token);
+        console.log('✅ Token stored successfully:', token);
+      }
+      
+      if (user) {
+        // استخدام saveUserData للتخزين بشكل صحيح
+        saveUserData({ user: user });
+        console.log('✅ User data stored successfully:', user);
+      }
+    }
 
     // const result: AuthResponse = await response.json();
     return results;
@@ -1172,7 +1188,19 @@ export async function loginWithPhone(data: LoginWithPhoneRequest): Promise<AuthR
       headers: getHeaders(false),
       body: JSON.stringify(data),
     });
-    const results: AuthResponse = await response.json();
+    
+    // محاولة قراءة الرد
+    let results: AuthResponse;
+    try {
+      results = await response.json();
+    } catch (parseError) {
+      return {
+        result: false,
+        errNum: response.status,
+        message: `خطأ في استجابة الخادم (${response.status})`,
+        data: null,
+      };
+    }
 
     if (!response.ok) {
       return {
@@ -1181,6 +1209,22 @@ export async function loginWithPhone(data: LoginWithPhoneRequest): Promise<AuthR
         message: results.message || `فشل في تسجيل الدخول (${response.status})`,
         data: results.data || null,
       };
+    }
+
+    // ✅ التعديل: تخزين التوكن وبيانات المستخدم عند نجاح تسجيل الدخول
+    if (results.result && results.errNum === 200 && results.data) {
+      const token = results.data.token;
+      const user = results.data.user;
+      
+      if (token) {
+        saveToken(token);
+        console.log('✅ Token stored successfully:', token);
+      }
+      
+      if (user) {
+        saveUserData({ user: user });
+        console.log('✅ User data stored successfully:', user);
+      }
     }
 
     return results;
@@ -1241,7 +1285,7 @@ export async function logoutAndCleanup(redirectTo?: string): Promise<boolean> {
     const result = await logout();
     
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token6');
+      localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
       
       if (redirectTo) {
@@ -1254,7 +1298,7 @@ export async function logoutAndCleanup(redirectTo?: string): Promise<boolean> {
     console.error('Error in logoutAndCleanup:', error);
     
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token6');
+      localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
       
       if (redirectTo) {

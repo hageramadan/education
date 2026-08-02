@@ -69,7 +69,7 @@ interface TransformedProduct {
 // دالة جلب التوكن
 const getToken = (): string | null => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("auth_token6");
+    return localStorage.getItem("auth_token");
   }
   return null;
 };

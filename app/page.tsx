@@ -18,7 +18,7 @@ export default function Home() {
     categories: false,
     bestProducts: false,
     latestProducts: false,
-    // ads: false,
+    ads: false,
     bestDiscounts: false,
   });
 
@@ -68,7 +68,7 @@ export default function Home() {
         <CategoriesSection onLoad={handleCategoriesLoad} />
         <BestProducts onLoad={handleBestProductsLoad} />
         <LatestProducts onLoad={handleLatestProductsLoad} />
-        {/* <AdsHome onLoad={handleAdsLoad} /> */}
+        <AdsHome onLoad={handleAdsLoad} />
         <BestDiscounts onLoad={handleBestDiscountsLoad} />
       </div>
     </>
