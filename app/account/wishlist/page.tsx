@@ -225,7 +225,7 @@ export default function WishlistPage() {
       setShowClearConfirm(false);
       //  إعادة تحميل البيانات من خلال refetch
       await refetch();
-      toast.success(t("wishlist.clearSuccess"));
+      // toast.success(t("wishlist.clearSuccess"));
     } catch (error) {
       console.error("❌ Error clearing favorites:", error);
       toast.error(t("wishlist.clearError"));
@@ -369,9 +369,9 @@ export default function WishlistPage() {
                 <p className="text-gray-500 text-sm">
                   {t("wishlist.confirmWarning")}{" "}
                   <span className="font-bold text-[#EC221F]">
-                    {items.length}
+                    {/* {items.length} */}
                   </span>{" "}
-                  {items.length > 2
+                  {items.length > 0
                     ? t("wishlist.itemsCount", { count: items.length })
                     : t("wishlist.itemCount", { count: items.length })}{" "}
                   {t("wishlist.fromWishlist")}
