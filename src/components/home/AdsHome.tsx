@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-import { FaArrowLeft } from 'react-icons/fa'
 import Image from 'next/image'
 import { getAds, getFullImageUrl } from '@/services/api'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -29,23 +28,21 @@ interface AdsHomeProps {
   onLoad?: () => void;
 }
 
-// دالة للحصول على الترجمات حسب اللغة
 const getTranslations = (lang: string) => {
   if (lang === 'en') {
     return {
       loading: "Loading...",
       shopNow: "Get the Offer",
       expiresIn: "Expires in",
-      days: "Days",
-      hours: "Hours",
-      minutes: "Minutes",
-      seconds: "Seconds",
+      days: "D",
+      hours: "H",
+      minutes: "M",
+      seconds: "S",
       offerExpired: "Offer expired",
       limitedOffer: "Limited Offer",
       dontMiss: "Don't miss the opportunity",
     };
   }
-  // Arabic (default)
   return {
     loading: "جاري التحميل...",
     shopNow: "تسوق الان",
@@ -76,7 +73,6 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
     seconds: 0
   });
 
-  // ✅ استدعاء onLoad بعد تحميل البيانات
   useEffect(() => {
     if (!loading && !isDataLoaded && onLoad) {
       setIsDataLoaded(true);
@@ -88,7 +84,6 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
     setIsClient(true);
   }, []);
 
-  // جلب الإعلانات من API
   useEffect(() => {
     const loadAds = async () => {
       setLoading(true);
@@ -96,14 +91,11 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
       setAds(data);
       setLoading(false);
     };
-
     loadAds();
   }, []);
 
-  // استخدام أول إعلان نشط
   const activeAd = ads.find(ad => ad.is_active === 1) || ads[0];
 
-  // حساب الوقت المتبقي من end_date من الـ API
   useEffect(() => {
     if (!activeAd) return;
 
@@ -153,33 +145,26 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
     return () => clearInterval(timer);
   }, [activeAd]);
 
-  // Format numbers to always show 2 digits
   const formatNumber = (num: number) => String(num).padStart(2, '0');
 
-  // عرض شاشة تحميل
   if (loading) {
     return (
-      <section className="bg-[#FDF2F8] py-12">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C092BD]"></div>
+      <section className="bg-[#FDF2F8] py-8 md:py-12">
+        <div className="flex justify-center items-center h-48 md:h-64">
+          <div className="animate-spin rounded-full h-10 w-10 md:h-12 md:w-12 border-b-2 border-[#C092BD]"></div>
         </div>
       </section>
     );
   }
 
-  // عرض نسخة ثابتة أثناء Hydration
   if (!isClient) {
     return (
-      <section className="bg-[#FDF2F8] py-12">
-        <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-6 md:gap-10 min-h-[200px]">
-          <div className="flex items-center justify-center w-full">
-          </div>
-        </div>
+      <section className="bg-[#FDF2F8] py-8 md:py-12">
+        <div className="min-h-[200px]"></div>
       </section>
     );
   }
 
-  // إذا لم يوجد إعلانات أو انتهى العرض
   if (!activeAd || isExpired) {
     if (!isDataLoaded && onLoad) {
       setIsDataLoaded(true);
@@ -192,90 +177,90 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
   const hasTimer = timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0;
 
   return (
-    <section className="bg-[#FDF2F8] mb-5 md:mb-20 my-12">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
+    <section className="bg-[#FDF2F8] mb-4 md:mb-20 my-6 md:my-12 px-3 md:px-0">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-10">
         
-        {/* Left Content */}
-        <div className="flex px-4 pb-5 sm:ps-[2%] md:ps-[4%] lg:ps-[10%] xl:ps-[13%] mx-auto flex-col gap-2 md:gap-[22px] w-full md:w-1/2 order-2 md:order-1">
+        {/* Left Content - يظهر أولاً على الموبايل */}
+        <div className="flex px-3 md:px-4 pb-4 md:pb-5 md:ps-[4%] lg:ps-[10%] xl:ps-[13%] flex-col gap-2 md:gap-[5px] w-full md:w-1/2 order-2 md:order-1">
           
           {/* Limited offer badge */}
-          <p className="text-[12px] md:text-[16px] font-semibold py-1 px-3 text-[#BE4646]">
+          <p className="text-[10px] md:text-[16px] font-semibold py-1 px-2 md:px-3 text-[#BE4646]">
             {activeAd.name || t.limitedOffer}
           </p>
           
           {/* Discount badge */}
-          <div className="flex items-center gap-3">
-            <p className="text-[20px] md:text-[32px] font-bold py-1 px-3 text-[#191C1F] w-fit rounded-md">
+          <div className="flex items-center gap-2 md:gap-3">
+            <p className="text-[18px] md:text-[32px] font-bold py-1 px-2 md:px-3 text-[#191C1F] w-fit rounded-md">
               {activeAd.sub_title}
             </p>
           </div>
           
-          <p className="text-sm md:text-[22px] text-[#191C1F] w-full md:w-[80%] leading-[1.5]">
+          <p className="text-xs md:text-[22px] text-[#191C1F] w-full md:w-[80%] leading-[1.5] line-clamp-3 md:line-clamp-none">
             {activeAd.description || t.dontMiss}
           </p>
           
-          {/* Countdown Timer - يظهر فقط إذا كان هناك وقت متبقي */}
+          {/* Countdown Timer - مُحسَّن للموبايل */}
           {hasTimer && (
-            <div className="mt-4">
-              <p className="text-sm md:text-base text-gray-600 mb-3">{t.expiresIn}</p>
-              <div className="flex gap-3 md:gap-5">
+            <div className="mt-2 md:mt-4">
+              <p className="text-[10px] md:text-base text-gray-600 mb-2 md:mb-3">{t.expiresIn}</p>
+              <div className="flex gap-2 md:gap-5">
                 <div className="text-center">
-                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
-                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.days)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-1.5 py-1 md:px-4 md:py-2 min-w-[35px] md:min-w-[70px]">
+                    <span className="text-base md:text-3xl font-bold">{formatNumber(timeLeft.days)}</span>
                   </div>
-                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.days}</p>
+                  <p className="text-[8px] md:text-xs text-gray-500 mt-0.5 md:mt-1">{t.days}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
-                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.hours)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-1.5 py-1 md:px-4 md:py-2 min-w-[35px] md:min-w-[70px]">
+                    <span className="text-base md:text-3xl font-bold">{formatNumber(timeLeft.hours)}</span>
                   </div>
-                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.hours}</p>
+                  <p className="text-[8px] md:text-xs text-gray-500 mt-0.5 md:mt-1">{t.hours}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
-                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.minutes)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-1.5 py-1 md:px-4 md:py-2 min-w-[35px] md:min-w-[70px]">
+                    <span className="text-base md:text-3xl font-bold">{formatNumber(timeLeft.minutes)}</span>
                   </div>
-                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.minutes}</p>
+                  <p className="text-[8px] md:text-xs text-gray-500 mt-0.5 md:mt-1">{t.minutes}</p>
                 </div>
                 <div className="text-center">
-                  <div className="bg-white text-[#191C1F] rounded-lg px-2 py-1 md:px-4 md:py-2 min-w-[50px] md:min-w-[70px]">
-                    <span className="text-xl md:text-3xl font-bold">{formatNumber(timeLeft.seconds)}</span>
+                  <div className="bg-white text-[#191C1F] rounded-lg px-1.5 py-1 md:px-4 md:py-2 min-w-[35px] md:min-w-[70px]">
+                    <span className="text-base md:text-3xl font-bold">{formatNumber(timeLeft.seconds)}</span>
                   </div>
-                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">{t.seconds}</p>
+                  <p className="text-[8px] md:text-xs text-gray-500 mt-0.5 md:mt-1">{t.seconds}</p>
                 </div>
               </div>
             </div>
           )}
           
-          {/* Shop Button */}
+          {/* Shop Button - عرض كامل على الموبايل */}
           <Button
             asChild
             aria-label='buy now'
-            className="w-full md:w-[180px] md:h-[60px] animate-in text-[12px] md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-4"
+            className="w-full md:w-[180px] md:h-[60px] animate-in text-sm md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-3 md:mt-4"
             style={{ backgroundColor: '#08B2A7' }}
           >
-            <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white">
+            <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white py-3 md:py-0">
               {t.shopNow}
-              {/* <FaArrowLeft className="h-4 w-4" /> */}
             </Link>
           </Button>
         </div>
         
-        {/* Right Image */}
+        {/* Right Image - صورة متجاوبة بالكامل */}
         <div className="w-full md:w-1/2 md:ps-30 order-1 md:order-2">
-          <Image 
-            src={adImageUrl} 
-            alt={activeAd.name || "Advertisement"} 
-            className="w-full h-auto md:w-[100%] md:h-[532px] object-cover" 
-            width={500} 
-            height={300} 
-            priority
-            onError={(e) => {
-              // في حال فشل تحميل الصورة، استخدم الصورة الافتراضية
-              const target = e.target as HTMLImageElement;
-              target.src = "/images/advs.png";
-            }}
-          />
+          <div className="relative w-full aspect-[16/10] md:aspect-auto md:h-[432px]">
+            <Image 
+              src={adImageUrl} 
+              alt={activeAd.name || "Advertisement"} 
+              className="w-full h-full object-cover rounded-lg md:rounded-none" 
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/images/advs.png";
+              }}
+            />
+          </div>
         </div>
         
       </div>

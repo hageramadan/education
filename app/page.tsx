@@ -67,8 +67,9 @@ export default function Home() {
         <Hero onLoad={handleHeroLoad} />
         <CategoriesSection onLoad={handleCategoriesLoad} />
         <BestProducts onLoad={handleBestProductsLoad} />
-        <LatestProducts onLoad={handleLatestProductsLoad} />
+     
         <AdsHome onLoad={handleAdsLoad} />
+           <LatestProducts onLoad={handleLatestProductsLoad} />
         <BestDiscounts onLoad={handleBestDiscountsLoad} />
       </div>
     </>

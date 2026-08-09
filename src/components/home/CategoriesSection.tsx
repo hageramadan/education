@@ -102,7 +102,7 @@ export function CategoriesSection({ onLoad }: CategoriesSectionProps) {
     <section className="py-8 container mx-auto px-4" style={{ minHeight: '816px' }}>
       {/* <h2 className="text-3xl font-bold text-center mb-12 text-[#112B40]">اختر حسب الفئة</h2> */}
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 auto-rows-[400px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 auto-rows-[200px] lg:auto-rows-[400px]">
         {categories.slice(0, 5).map((category, index) => {
           const layout = getCategoryLayout(index, category);
           return (
