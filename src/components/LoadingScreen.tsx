@@ -32,9 +32,9 @@ export const LoadingScreen = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
-      <div className="flex flex-col items-center space-y-8">
+      <div className="flex flex-col items-center space-y-2">
         {/* اللوجو */}
-         <div className="relative w-32 h-32 lg:w-48 lg:h-48 mx-auto">
+         <div className="relative w-32 h-32  mx-auto">
           <Image
             src="/logo.png" // ✅ غيري المسار حسب مكان اللوجو عندك
             alt="اللوجو"

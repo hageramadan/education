@@ -386,7 +386,7 @@ export function Navbar() {
         style={{ backgroundColor: styles.backgroundColor }}
       >
         <div className="container-custom">
-          <div className="flex h-16 lg:h-20 items-center justify-between gap-4">
+          <div className="flex h-20 items-center justify-between gap-4">
             {/* Logo */}
             <Link
               href="/"
@@ -397,7 +397,7 @@ export function Navbar() {
                 alt="Logo"
                 width={1000}
                 height={700}
-                className="object-contain w-20 h-20 lg:w-32 lg:h-32"
+                className="object-contain w-20 h-20 "
               />
               {/* Logo */}
             </Link>
@@ -747,7 +747,7 @@ export function Navbar() {
               alt="Logo"
               width={2000}
               height={500}
-              className="object-contain w-20 h-20"
+              className="object-contain w-14 h-14"
             />
             {/* Logo */}
           </Link>
