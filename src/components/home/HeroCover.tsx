@@ -522,7 +522,7 @@ export function Hero({ onLoad }: HeroProps) {
     
           {/* الأزرار - pointer-events-auto للسماح بالنقر */}
           <div className="flex gap-4 pointer-events-auto">
-            <Button
+            {/* <Button
               asChild
               className="text-white text-[14px] sm:text-[16px] font-bold rounded-xl hover:scale-105 transition-transform duration-300"
               style={{
@@ -537,7 +537,7 @@ export function Hero({ onLoad }: HeroProps) {
               >
                 {t.shopNow}
               </Link>
-            </Button>
+            </Button> */}
 
         
           </div>
