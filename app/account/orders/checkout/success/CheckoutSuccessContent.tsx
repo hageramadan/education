@@ -12,7 +12,7 @@ const API_URL = 'https://education.admin.t-carts.com/api';
 
 const getToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem('auth_token2');
   }
   return null;
 };
@@ -203,7 +203,7 @@ const { t, isClient } = useTranslation();
         </p>
         <button
           onClick={() => router.push('/account/orders')}
-          className="bg-[#2D93CA] text-white px-6 py-2 rounded-lg hover:bg-[#349ad1] transition"
+          className="bg-main text-white px-6 py-2 rounded-lg hover:bg-main-dark transition"
         >
           {t('checkout.success.viewOrdersButton')}
         </button>

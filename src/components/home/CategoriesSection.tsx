@@ -74,7 +74,7 @@ export function CategoriesSection({ onLoad }: CategoriesSectionProps) {
       <section className="py-8 container mx-auto px-4" style={{ minHeight: '816px' }}>
         {/* <h2 className="text-3xl font-bold text-center mb-12 text-[#112B40]">اختر حسب الفئة</h2> */}
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C092BD]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       </section>
     );

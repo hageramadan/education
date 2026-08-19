@@ -149,9 +149,9 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
 
   if (loading) {
     return (
-      <section className="bg-[#FDF2F8] py-8 md:py-12">
+      <section className="bg-main-light py-8 md:py-12">
         <div className="flex justify-center items-center h-48 md:h-64">
-          <div className="animate-spin rounded-full h-10 w-10 md:h-12 md:w-12 border-b-2 border-[#C092BD]"></div>
+          <div className="animate-spin rounded-full h-10 w-10 md:h-12 md:w-12 border-b-2 border-primary"></div>
         </div>
       </section>
     );
@@ -159,7 +159,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
 
   if (!isClient) {
     return (
-      <section className="bg-[#FDF2F8] py-8 md:py-12">
+      <section className="bg-main-light py-8 md:py-12">
         <div className="min-h-[200px]"></div>
       </section>
     );
@@ -177,7 +177,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
   const hasTimer = timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 || timeLeft.seconds > 0;
 
   return (
-    <section className="bg-[#FDF2F8] mb-4 md:mb-20 my-6 md:my-12 px-3 md:px-0">
+    <section className="bg-main-light mb-4 md:mb-20 my-6 md:my-12 px-3 md:px-0">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-10">
         
         {/* Left Content - يظهر أولاً على الموبايل */}
@@ -237,7 +237,7 @@ export function AdsHome({ onLoad }: AdsHomeProps) {
             asChild
             aria-label='buy now'
             className="w-full md:w-[180px] md:h-[60px] animate-in text-sm md:text-[16px] font-bold fade-in slide-in-from-bottom-5 duration-700 delay-200 rounded-xl mt-3 md:mt-4"
-            style={{ backgroundColor: '#08B2A7' }}
+            style={{ backgroundColor: 'var(--secondary-color)' }}
           >
             <Link href={activeAd.link || '/products'} className="flex items-center justify-center gap-2 text-white py-3 md:py-0">
               {t.shopNow}

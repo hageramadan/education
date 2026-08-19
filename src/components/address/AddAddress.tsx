@@ -137,7 +137,7 @@ export default function AddAddress({
     const fetchGovernorates = async () => {
       setIsLoadingGovernorates(true);
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("auth_token2");
 
         const response = await fetch(`${API_URL}/governates`, {
           headers: getHeaders(),
@@ -179,7 +179,7 @@ export default function AddAddress({
 
       setIsLoadingCities(true);
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("auth_token2");
 
         const response = await fetch(`${API_URL}/governates/${formData.governorateId}/cities`, {
           headers: getHeaders(),
@@ -413,7 +413,7 @@ export default function AddAddress({
         type: formData.addressType,
       };
 
-      const token = localStorage.getItem("auth_token");
+      const token = localStorage.getItem("auth_token2");
 
       let url = `${API_URL}/addresses`;
       let method = "POST";
@@ -762,7 +762,7 @@ export default function AddAddress({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 px-4 py-2 bg-[#C092BD] text-white rounded-[8px] hover:bg-[#C092BD] transition disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-main text-white rounded-[8px] hover:bg-main-light transition disabled:opacity-50"
                   >
                     {isSubmitting
                       ? t('address.saving')
@@ -796,7 +796,7 @@ export default function AddAddress({
                   </div>
                 )}
                 {selectedLocation && (
-                  <div className="mt-3 p-3 bg-pink-50 border border-green-200 rounded-[8px]">
+                  <div className="mt-3 p-3 bg-main-light border border-green-200 rounded-[8px]">
                     <p className="text-sm text-green-800 font-medium">
                       {t('address.selectedFromMap')}:
                     </p>

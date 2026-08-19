@@ -246,7 +246,7 @@ export function Footer() {
           <div className="flex md:flex-row flex-col justify-center gap-5 items-center text-[14px]">
             <Link
               href="/"
-              className="font-bold hover:text-[#C092BD] transition-colors"
+              className="font-bold hover:text-primary transition-colors"
             >
               {t.home}
             </Link>
@@ -258,7 +258,7 @@ export function Footer() {
                   setShowCategoriesDropdown(!showCategoriesDropdown)
                 }
                 onMouseEnter={() => setShowCategoriesDropdown(true)}
-                className="flex items-center gap-1 hover:text-[#C092BD] transition-colors"
+                className="flex items-center gap-1 hover:text-primary transition-colors"
               >
                 {t.categories}
                 <ChevronDown
@@ -285,7 +285,7 @@ export function Footer() {
                           style={{ color: "#112B40" }}
                           onClick={() => setShowCategoriesDropdown(false)}
                           onMouseEnter={(e) =>
-                            (e.currentTarget.style.color = "#C092BD")
+                            (e.currentTarget.style.color = "var(--main-color)")
                           }
                           onMouseLeave={(e) =>
                             (e.currentTarget.style.color = "#112B40")
@@ -306,7 +306,7 @@ export function Footer() {
 
             <Link
               href="/contact"
-              className="hover:text-[#C092BD] transition-colors"
+              className="hover:text-primary transition-colors"
             >
               {t.contactUs}
             </Link>
@@ -321,13 +321,13 @@ export function Footer() {
             <div className="flex gap-6">
               <Link 
                 href={settings?.terms_and_conditions ? "/terms" : "#"} 
-                className="hover:text-[#C092BD] text-white text-sm"
+                className="hover:text-primary text-white text-sm"
               >
                 {settingsLoading ? t.loading : settings?.terms_and_conditions || t.terms}
               </Link>
               <Link 
                 href={settings?.privacy_policy ? "/privacy" : "#"} 
-                className="hover:text-[#C092BD] text-white text-sm"
+                className="hover:text-primary text-white text-sm"
               >
                 {settingsLoading ? t.loading : settings?.privacy_policy || t.privacy}
               </Link>
