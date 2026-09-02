@@ -647,7 +647,7 @@ export function Navbar() {
                     onClick={() => setShowUserDropdown(!showUserDropdown)}
                     className="flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-200 hover:bg-gray-100"
                   >
-                    <div className="w-8 h-8 rounded-full bg-main from-[var(--main-color)] via-[#bd99ba] to-[var(--main-color)] flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-8 h-8 rounded-full bg-main from-[var(--main-color)]  to-[var(--main-color)] flex items-center justify-center text-white font-bold text-sm">
                       {getUserInitial()}
                     </div>
                     <ChevronDown
@@ -1199,7 +1199,7 @@ export function Navbar() {
                 setShowMobileCategoriesSheet(false);
               }}
             >
-              <div className="w-5 h-5 rounded-full bg-main from-[var(--main-color)] to-[#f0278f] flex items-center justify-center text-white font-bold text-[10px]">
+              <div className="w-5 h-5 rounded-full bg-main from-[var(--main-color)]  flex items-center justify-center text-white font-bold text-[10px]">
                 {getUserInitial()}
               </div>
               <span

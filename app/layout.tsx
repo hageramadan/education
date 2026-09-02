@@ -13,7 +13,7 @@ import { getSettings } from "@/services/settingsApi";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { ThemeProvider } from "@/contexts/ThemeContext"; // ✅ إضافة
 import { ThemeStyles } from "@/components/ThemeStyles"; // ✅ إضافة
-
+import Script from "next/script";
 const almarai = Almarai({
   subsets: ["arabic"],
   weight: ["300", "400", "700", "800"],
@@ -71,6 +71,22 @@ export default function RootLayout({
 }) {
   return (
     <html>
+      <head>
+        {/* Google Analytics */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-V0EBZWJ9B6"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-V0EBZWJ9B6');
+          `}
+        </Script>
+      </head>
       <body className={almarai.className}>
         <ThemeProvider>
           <ThemeStyles />

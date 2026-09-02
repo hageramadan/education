@@ -444,7 +444,7 @@ export default function EditProfilePage() {
                       }}
                     />
                   ) : (
-                    <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-main from-[#ff6b6b] to-[var(--main-color)] flex items-center justify-center shadow-lg">
+                    <div className="h-16 w-16 md:w-24 md:h-24 rounded-full bg-main  to-[var(--main-color)] flex items-center justify-center shadow-lg">
                       <span className="text-white text-base md:text-2xl font-bold">
                         {getUserInitial()}
                       </span>

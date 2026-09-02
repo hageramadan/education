@@ -149,7 +149,7 @@ const { t, isClient } = useTranslation();
     return (
       <div className="min-h-screen bg-gradient-to-l from-[#bdcbf12a] to-[#feecea3b] flex items-center justify-center px-4">
         <div className="text-center">
-          <Loader2 className="w-16 h-16 text-[#2D93CA] animate-spin mx-auto mb-4" />
+          <Loader2 className="w-16 h-16 text-primary animate-spin mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('checkout.success.confirmingPayment')}</h2>
           <p className="text-gray-500">{t('checkout.success.pleaseWait')}</p>
           {orderNumber && (
@@ -172,11 +172,11 @@ const { t, isClient } = useTranslation();
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('checkout.success.paymentSuccessTitle')}</h2>
           <p className="text-gray-500 mb-2">
-            {t('checkout.success.orderNumber')}: <span className="font-bold text-[#2D93CA]">{orderNumber}</span>
+            {t('checkout.success.orderNumber')}: <span className="font-bold text-primary">{orderNumber}</span>
           </p>
           <p className="text-gray-400 text-sm mb-6">{t('checkout.success.redirectingToOrderDetails')}</p>
           <div className="flex justify-center">
-            <div className="w-8 h-8 border-2 border-[#2D93CA] border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </div>

@@ -388,7 +388,7 @@ export function BestDiscounts({ onLoad }: BestDiscountsProps) {
         <div className="mb-2 md:mb-5 flex justify-between items-center">
           <div>
             <h2
-              className="text-base md:text-xl font-bold"
+              className="text-base  md:text-xl font-bold"
               style={{ color: "#112B40" }}
             >
               {sectionName || t.defaultSectionName}

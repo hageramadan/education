@@ -381,7 +381,7 @@ export function ProductCard({
               className={`w-full text-[11px] sm:text-[14px] md:text-[16px] font-semibold rounded-[24px] transition-all duration-300 text-white py-1.5 sm:py-2 md:py-2.5 px-4 border-2 flex items-center justify-center gap-2 hover:scale-[1.02] h-auto ${
                 isOutOfStock 
                   ? 'bg-gray-400 border-gray-400 cursor-not-allowed' 
-                  : 'bg-main hover:bg-main-light border-primary hover:border-primary'
+                  : 'bg-main hover:bg-main-dark border-primary hover:border-primary-dark'
               }`}
             >
               {isAddingToCart || cartLoading ? (
